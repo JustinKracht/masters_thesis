@@ -17,8 +17,11 @@ source(here("R", "functions", "binary_data_generator.R"))
 data_dir <- here("Data")
 error_dir <- here("Data", "errors.txt")
 
+# Set simulation options --------------------------------------------------
+cores <- detectCores() - 1 # increase number of cores for parallel processing
+save_partial <- TRUE # save RDS files for each condition in case of a crash
+
 # Define conditions -------------------------------------------------------
-cores <- detectCores() - 2 # increase number of cores for parallel processing
 reps <- 5
 subjects_per_item <- c(5, 10, 15)
 items_per_factor <- c(5, 10)
@@ -50,7 +53,7 @@ set.seed(314159)
 binary_data <- pbmclapply(
   X = 1:nrow(conditions_matrix),
   FUN = function(i) {
-    binary_data_generator(
+    binary_data_out <- binary_data_generator(
       reps = reps,
       subjects_per_item = conditions_matrix$subjects_per_item[i],
       items_per_factor = conditions_matrix$items_per_factor[i],
@@ -60,6 +63,17 @@ binary_data <- pbmclapply(
       test_type = conditions_matrix$test_type[i],
       diff_range = diff_range
     )
+    # If save_partial is TRUE, save an RDS file for each condition
+    if (save_partial) saveRDS(binary_data_out, 
+                              file = paste0(data_dir, 
+                                            "/binary_data/",
+                                            "binary_data",
+                                            formatC(i, 
+                                                    width = 3, 
+                                                    format = "d", 
+                                                    flag = "0"), 
+                                            ".RDS"))
+    binary_data_out
   },
   mc.cores = cores
 )
@@ -69,15 +83,28 @@ tetcor_matrices <- pbmclapply(
   X = 1:nrow(conditions_matrix),
   FUN = function(i) {
     tryCatch(
-      expr = lapply(X = binary_data[[i]],
-                    FUN = function(x) {
-                      fungible::tetcor(x,
-                                       BiasCorrect = TRUE,
-                                       stderror = FALSE,
-                                       Smooth = FALSE,
-                                       max.iter = 2e4,
-                                       PRINT = FALSE)$r
-                    }),
+      expr = {
+        tetcor_out <- lapply(X = binary_data[[i]],
+                      FUN = function(x) {
+                        fungible::tetcor(x,
+                                         BiasCorrect = TRUE,
+                                         stderror = FALSE,
+                                         Smooth = FALSE,
+                                         max.iter = 2e4,
+                                         PRINT = FALSE)$r
+                      })
+        # If save_partial is TRUE, save an RDS file for each condition
+        if (save_partial) saveRDS(tetcor_out, 
+                                  file = paste0(data_dir, 
+                                                "/tetcor_matrices/",
+                                                "tetcor_matrices",
+                                                formatC(i, 
+                                                        width = 3, 
+                                                        format = "d", 
+                                                        flag = "0"), 
+                                                ".RDS"))
+        tetcor_out
+      },
       error = function(err.msg) {
         # Add error message to log file
         write(toString(c(err.msg, " Condition:", i)),
@@ -86,3 +113,5 @@ tetcor_matrices <- pbmclapply(
   },
   mc.cores = cores
 )
+
+# Conduct the factor analyses ---------------------------------------------
