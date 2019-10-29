@@ -1,0 +1,14 @@
+#PBS -S /bin/bash
+#PBS -q batch
+#PBS -l nodes=1:ppn=10
+#PBS -l mem=16gb
+#PBS -l walltime=48:00:00
+#PBS -N simulation_main
+#PBS -o simulation_main.out
+#PBS -e simulation_main.err
+#PBS -m abe
+#PBS -M krach018@umn.edu
+
+cd $PBS_O_WORKDIR/Data/
+module load R/3.5.1
+Rscript --vanilla simulation_main.R
