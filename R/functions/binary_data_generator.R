@@ -45,20 +45,21 @@ binary_data_generator <- function(reps = NULL,
   
   # Generate reps sample binary datasets; if any items in a dataset have zero
   # variance, toss the dataset and generate a new one
-  replicate(n = reps,
-            expr = {
-              zero_var <- TRUE
-              while(zero_var) {
-                sample_data <- fungible::simFA(Model = Model,
-                                               Loadings = Loadings,
-                                               CrossLoadings = CrossLoadings,
-                                               ModelError = ModelError,
-                                               MonteCarlo = MonteCarlo,
-                                               FactorScores = FactorScores,
-                                               Missing = Missing)$Monte$MCDataME[[1]]
-                item_var <- apply(sample_data, MARGIN = 2, FUN = var)
-                zero_var <- any(item_var == 0)
-              }
-              sample_data
-            })
+  lapply(X = 1:reps,
+         FUN = function(i) {
+           zero_var <- TRUE
+           while(zero_var) {
+             sample_data <- fungible::simFA(Model = Model,
+                                            Loadings = Loadings,
+                                            CrossLoadings = CrossLoadings,
+                                            ModelError = ModelError,
+                                            MonteCarlo = MonteCarlo,
+                                            FactorScores = FactorScores,
+                                            Missing = Missing)$Monte$MCDataME[[1]]
+             item_var <- apply(sample_data, MARGIN = 2, FUN = var)
+             zero_var <- any(item_var == 0)
+           }
+           sample_data
+         }
+  )
 }

@@ -18,8 +18,8 @@ data_dir <- here("Data")
 error_dir <- here("Data", "errors.txt")
 
 # Define conditions -------------------------------------------------------
-cores <- detectCores() - 1 # increase number of cores for parallel processing
-reps <- 10
+cores <- detectCores() - 2 # increase number of cores for parallel processing
+reps <- 5
 subjects_per_item <- c(5, 10, 15)
 items_per_factor <- c(5, 10)
 factors <- c(1, 3, 5, 10)
@@ -64,3 +64,23 @@ binary_data <- pbmclapply(
   mc.cores = cores
 )
 
+# Compute tetrachoric correlation matrices --------------------------------
+tetcor_matrices <- pbmclapply(
+  X = 1:nrow(conditions_matrix),
+  FUN = function(i) {
+    tryCatch(
+      expr = lapply(X = binary_data[[i]],
+                    FUN = fungible::tetcor,
+                    BiasCorrect = TRUE,
+                    stderror = FALSE,
+                    Smooth = FALSE,
+                    max.iter = 2e4,
+                    PRINT = FALSE),
+      error = function(err.msg) {
+        # Add error message to log file
+        write(toString(c(err.msg, " Condition:", i)),
+              error_dir, append = TRUE)
+      })
+  },
+  mc.cores = cores
+)
