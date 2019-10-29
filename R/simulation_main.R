@@ -70,12 +70,14 @@ tetcor_matrices <- pbmclapply(
   FUN = function(i) {
     tryCatch(
       expr = lapply(X = binary_data[[i]],
-                    FUN = fungible::tetcor,
-                    BiasCorrect = TRUE,
-                    stderror = FALSE,
-                    Smooth = FALSE,
-                    max.iter = 2e4,
-                    PRINT = FALSE),
+                    FUN = function(x) {
+                      fungible::tetcor(x,
+                                       BiasCorrect = TRUE,
+                                       stderror = FALSE,
+                                       Smooth = FALSE,
+                                       max.iter = 2e4,
+                                       PRINT = FALSE)$r
+                    }),
       error = function(err.msg) {
         # Add error message to log file
         write(toString(c(err.msg, " Condition:", i)),
