@@ -9,6 +9,6 @@
 #PBS -m abe
 #PBS -M krach018@umn.edu
 
-cd $PBS_O_WORKDIR/Data/
-module load R/3.5.1
-Rscript --vanilla simulation_main.R
+cd $PBS_O_WORKDIR
+module load R/3.6.1
+Rscript --vanilla R/simulation_main.R
