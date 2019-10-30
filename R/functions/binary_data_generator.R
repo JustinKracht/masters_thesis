@@ -49,17 +49,21 @@ binary_data_generator <- function(reps = NULL,
          FUN = function(i) {
            zero_var <- TRUE
            while(zero_var) {
-             sample_data <- fungible::simFA(Model = Model,
+             simFA_sample <- fungible::simFA(Model = Model,
                                             Loadings = Loadings,
                                             CrossLoadings = CrossLoadings,
                                             ModelError = ModelError,
                                             MonteCarlo = MonteCarlo,
                                             FactorScores = FactorScores,
-                                            Missing = Missing)$Monte$MCDataME[[1]]
-             item_var <- apply(sample_data, MARGIN = 2, FUN = var)
+                                            Missing = Missing)
+             item_var <- apply(simFA_sample$Monte$MCDataME[[1]], 
+                               MARGIN = 2,
+                               FUN = var)
              zero_var <- any(item_var == 0)
            }
-           sample_data
+           list(sample_data = simFA_sample$Monte$MCDataME[[1]],
+                Rpop = simFA_sample$RpopME,
+                loadings = simFA_sample$loadings)
          }
   )
 }
