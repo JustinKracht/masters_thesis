@@ -12,6 +12,7 @@ pacman::p_load(fungible,
 
 # Source required functions -----------------------------------------------
 source(here("R", "functions", "binary_data_generator.R"))
+source(here("R", "functions", "npd_checker.R"))
 
 # Set data and error paths ------------------------------------------------
 data_dir <- here("Data")
@@ -43,6 +44,12 @@ conditions_matrix <- expand.grid(subjects_per_item = subjects_per_item,
                                  factor_loading = factor_loading,
                                  model_error = model_error,
                                  test_type = test_type)
+
+# Calculate number of items and subjects for each condition
+conditions_matrix$items <- 
+  conditions_matrix$items_per_factor * conditions_matrix$factors
+conditions_matrix$subjects <- 
+  conditions_matrix$subjects_per_item * conditions_matrix$items
 
 # Set seed ----------------------------------------------------------------
 # If using parallel processing, need to use L'Ecuyer-CMRG
@@ -94,7 +101,7 @@ tetcor_matrices <- pbmclapply(
       expr = {
         tetcor_out <- lapply(X = binary_data[[i]],
                       FUN = function(x) {
-                        fungible::tetcor(x,
+                        fungible::tetcor(x$sample_data,
                                          BiasCorrect = TRUE,
                                          stderror = FALSE,
                                          Smooth = FALSE,
@@ -122,4 +129,19 @@ tetcor_matrices <- pbmclapply(
   mc.cores = cores
 )
 
-# Conduct the factor analyses ---------------------------------------------
+# Apply matrix smoothing to NPD matrices ----------------------------------
+# Compute a vector indicating which tetrachoric matrices are NPD for each
+# condition.
+npd_list <- lapply(tetcor_matrices,
+                   FUN = function (x) {
+                     npd_vec <- lapply(X = x, FUN = npd_checker)
+                     as.numeric(npd_vec == TRUE)
+                   })
+npd_list <- do.call(rbind, npd_list) # convert npd_list to a matrix
+
+# Smooth NPD matrices using all three smoothing algorithms
+smoothed_matrices <- pbmclapply(X = 1:nrow(conditions_matrix),
+                                FUN = function(i) {
+                                  rAPA <- lapply(X = tetcor_matrices[[i]],
+                                                 FUN = )
+                                })
