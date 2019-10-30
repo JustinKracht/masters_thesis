@@ -130,18 +130,17 @@ tetcor_matrices <- pbmclapply(
 )
 
 # Apply matrix smoothing to NPD matrices ----------------------------------
-# Compute a vector indicating which tetrachoric matrices are NPD for each
-# condition.
-npd_list <- lapply(tetcor_matrices,
-                   FUN = function (x) {
-                     npd_vec <- lapply(X = x, FUN = npd_checker)
-                     as.numeric(npd_vec == TRUE)
-                   })
-npd_list <- do.call(rbind, npd_list) # convert npd_list to a matrix
-
 # Smooth NPD matrices using all three smoothing algorithms
-smoothed_matrices <- pbmclapply(X = 1:nrow(conditions_matrix),
-                                FUN = function(i) {
-                                  rAPA <- lapply(X = tetcor_matrices[[i]],
-                                                 FUN = )
-                                })
+smoothed_matrices <- pbmclapply(
+  X = 1:nrow(conditions_matrix),
+  FUN = function(i) {
+    tryCatch(
+      expr = lapply(tetcor_matrices[[i]], 
+               FUN = smoothing_applicator), 
+      error = function(err.msg) {
+        # Add error message to log file
+        write(toString(c(err.msg, " Condition:", i)),
+              error_dir, append = TRUE)
+      })
+  }, mc.cores = cores
+)
