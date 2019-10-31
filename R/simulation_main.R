@@ -12,7 +12,7 @@ pacman::p_load(fungible,
 
 # Source required functions -----------------------------------------------
 source(here("R", "functions", "binary_data_generator.R"))
-source(here("R", "functions", "npd_checker.R"))
+source(here("R", "functions", "smoothing_applicator.R"))
 
 # Set data and error paths ------------------------------------------------
 data_dir <- here("Data")
