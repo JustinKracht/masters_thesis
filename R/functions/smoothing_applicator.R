@@ -2,7 +2,7 @@
 # and then returns a list of smoothed correlation matrices.
 smoothing_applicator <- function(r) {
   # Check if the correlation matrix is NPD
-  npd <- (RSpectra::eigs_sym(A = r, k = 1, which = "SA")$values < 0)
+  npd <- (min(eigen(r)$values) < 0)
   
   # If the matrix is NPD, smooth using the three smoothing algorithms
   if (npd == TRUE) {

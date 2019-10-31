@@ -144,3 +144,5 @@ smoothed_matrices <- pbmclapply(
       })
   }, mc.cores = cores
 )
+
+# Estimate factor loading matrices ----------------------------------------
