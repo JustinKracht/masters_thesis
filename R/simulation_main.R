@@ -160,17 +160,19 @@ loading_matrix_list <- pbmcapply::pbmclapply(
     lapply(X = 1:reps,
            FUN = function(j) {
              tryCatch(
-               expr = loadings_estimator(
-                 rsm_list = smoothed_matrix_list[[i]][[j]]$smoothed_matrices,
-                 sample_data = binary_data[[i]][[j]]$sample_data,
-                 sample_size = conditions_matrix$sample_size[i],
-                 factors = conditions_matrix$factors[i],
-                 method = c("fapa", "fals", "faml")
+               expr = suppressWarnings(
+                 loadings_estimator(
+                   rsm_list = smoothed_matrix_list[[i]][[j]]$smoothed_matrices,
+                   sample_data = binary_data[[i]][[j]]$sample_data,
+                   sample_size = conditions_matrix$sample_size[i],
+                   factors = conditions_matrix$factors[i],
+                   method = c("fapa", "fals", "faml")
+                 )
                ), error = function(err.msg) {
                  # Add error message to log file
                  write(toString(c(err.msg, " Condition:", i, "Rep:", j)),
                        error_dir, append = TRUE)
-               }, warning = function(w) NULL
+               }
              )
            })
   }, mc.cores = cores
