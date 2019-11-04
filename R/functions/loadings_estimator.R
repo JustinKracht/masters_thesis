@@ -11,11 +11,17 @@ loadings_estimator <- function(rsm_list,
   names(out_list) <- names(rsm_list)
   
   for (i in 1:length(rsm_list)) {
-    if (!is.na(dim(rsm_list[[i]]$R)[1])) {
+    if (!anyNA(rsm_list[[i]]$R)) {
       r <- rsm_list[[i]]$R
     } else {
       # If the tetrachoric matrix is not NPD, the smoothed matrices will be NA
-      out_list[[i]] <- NA
+      out <- rep(list(list(loadings = NA,
+                           h2 = NA,
+                           heywood = NA,
+                           convergence = NA)),
+                 times = length(method))
+      names(out) <- method
+      out_list[[i]] <- out
       next
     }
     

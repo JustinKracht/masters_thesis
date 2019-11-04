@@ -51,7 +51,7 @@ conditions_matrix <- expand.grid(subjects_per_item = subjects_per_item,
 # Calculate number of items and subjects for each condition
 conditions_matrix$items <- 
   conditions_matrix$items_per_factor * conditions_matrix$factors
-conditions_matrix$subjects <- 
+conditions_matrix$sample_size <- 
   conditions_matrix$subjects_per_item * conditions_matrix$items
 
 # Set seed ----------------------------------------------------------------
@@ -97,7 +97,7 @@ binary_data <- pbmcapply::pbmclapply(
 )
 
 # Compute tetrachoric correlation matrices --------------------------------
-tetcor_matrices <- pbmcapply::pbmclapply(
+tetcor_matrix_list <- pbmcapply::pbmclapply(
   X = 1:nrow(conditions_matrix),
   FUN = function(i) {
     tryCatch(
@@ -135,15 +135,15 @@ tetcor_matrices <- pbmcapply::pbmclapply(
 # Apply matrix smoothing to NPD matrices ----------------------------------
 # Load data generated previously, if applicable
 binary_data <- readRDS(file = paste0(data_dir, "/binary_data/binary_data.RDS"))
-tetcor_matrices <- readRDS(file = paste0(data_dir, 
+tetcor_matrix_list <- readRDS(file = paste0(data_dir, 
                                          "/tetcor_matrices/tetcor_matrices.RDS"))
 
 # Smooth NPD matrices using all three smoothing algorithms
-smoothed_matrices <- pbmclapply(
+smoothed_matrix_list <- pbmclapply(
   X = 1:nrow(conditions_matrix),
   FUN = function(i) {
     tryCatch(
-      expr = lapply(tetcor_matrices[[i]], 
+      expr = lapply(tetcor_matrix_list[[i]], 
                FUN = smoothing_applicator), 
       error = function(err.msg) {
         # Add error message to log file
@@ -154,16 +154,16 @@ smoothed_matrices <- pbmclapply(
 )
 
 # Estimate factor loading matrices ----------------------------------------
-loading_matrices <- pbmcapply::pbmclapply(
+loading_matrix_list <- pbmcapply::pbmclapply(
   X = 1:nrow(conditions_matrix),
   FUN = function(i) {
     lapply(X = 1:reps,
            FUN = function(j) {
              tryCatch(
                expr = loadings_estimator(
-                 rsm_list = smoothed_matrices[[i]][[j]],
+                 rsm_list = smoothed_matrix_list[[i]][[j]]$smoothed_matrices,
                  sample_data = binary_data[[i]][[j]]$sample_data,
-                 sample_size = conditions_matrix$subjects[i],
+                 sample_size = conditions_matrix$sample_size[i],
                  factors = conditions_matrix$factors[i],
                  method = c("fapa", "fals", "faml")
                ), error = function(err.msg) {

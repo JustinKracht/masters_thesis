@@ -44,11 +44,13 @@ binary_data_generator <- function(reps = NULL,
   Missing <- list(Missing = FALSE)
   
   # Generate reps sample binary datasets; if any items in a dataset have zero
-  # variance, toss the dataset and generate a new one
+  # variance, toss the dataset and generate a new one. Similarly, generate new
+  # data if any two items are perfectly correlated.
   lapply(X = 1:reps,
          FUN = function(i) {
            zero_var <- TRUE
-           while(zero_var) {
+           singular <- TRUE
+           while(zero_var | singular) {
              simFA_sample <- fungible::simFA(Model = Model,
                                             Loadings = Loadings,
                                             CrossLoadings = CrossLoadings,
@@ -60,6 +62,9 @@ binary_data_generator <- function(reps = NULL,
                                MARGIN = 2,
                                FUN = var)
              zero_var <- any(item_var == 0)
+             r <- cor(simFA_sample$Monte$MCDateME[[1]])
+             diag(r) <- 0
+             singular <- any(r == 1)
            }
            list(sample_data = simFA_sample$Monte$MCDataME[[1]],
                 Rpop = simFA_sample$RpopME,
