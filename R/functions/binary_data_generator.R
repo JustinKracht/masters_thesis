@@ -62,7 +62,7 @@ binary_data_generator <- function(reps = NULL,
                                MARGIN = 2,
                                FUN = var)
              zero_var <- any(item_var == 0)
-             r <- cor(simFA_sample$Monte$MCDateME[[1]])
+             r <- cor(simFA_sample$Monte$MCDataME[[1]])
              diag(r) <- 0
              singular <- any(r == 1)
            }

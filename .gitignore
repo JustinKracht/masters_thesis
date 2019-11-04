@@ -1,8 +1,7 @@
 # Ignore all data files
 .Rproj.user
 .Rhistory
-.RData
+*.RData
 .Ruserdata
-.RDS
-Data/
+*.RDS
 testing.RData
