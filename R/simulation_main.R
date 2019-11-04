@@ -3,7 +3,8 @@
 # November 2019
 
 # Load packages -----------------------------------------------------------
-pacman::p_load(here,
+pacman::p_load(mirt,
+               here,
                parallel,
                pbmcapply)
 pacman::p_load(fungible,
