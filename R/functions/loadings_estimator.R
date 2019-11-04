@@ -40,7 +40,7 @@ loadings_estimator <- function(rsm_list,
                           itemtype = "2PL", 
                           SE = FALSE,
                           method = est_method,
-                          technical = list(NCYCLES = 2000,
+                          technical = list(NCYCLES = 5000,
                                            keep_vcov_PD = TRUE),
                           verbose = FALSE)
         
