@@ -13,6 +13,8 @@ pacman::p_load(fungible,
 # Source required functions -----------------------------------------------
 source(here("R", "functions", "binary_data_generator.R"))
 source(here("R", "functions", "smoothing_applicator.R"))
+source(here("R", "functions", "loadings_estimator.R"))
+source(here("R", "functions", "get_uniqueness_init.R"))
 
 # Set data and error paths ------------------------------------------------
 data_dir <- here("Data")
@@ -57,7 +59,7 @@ if (cores > 1) RNGkind("L'Ecuyer-CMRG")
 set.seed(314159)
 
 # Generate binary data ----------------------------------------------------
-binary_data <- pbmclapply(
+binary_data <- pbmcapply::pbmclapply(
   X = 1:nrow(conditions_matrix),
   FUN = function(i) {
     tryCatch(
@@ -94,7 +96,7 @@ binary_data <- pbmclapply(
 )
 
 # Compute tetrachoric correlation matrices --------------------------------
-tetcor_matrices <- pbmclapply(
+tetcor_matrices <- pbmcapply::pbmclapply(
   X = 1:nrow(conditions_matrix),
   FUN = function(i) {
     tryCatch(
@@ -130,6 +132,11 @@ tetcor_matrices <- pbmclapply(
 )
 
 # Apply matrix smoothing to NPD matrices ----------------------------------
+# Load data generated previously, if applicable
+binary_data <- readRDS(file = paste0(data_dir, "/binary_data/binary_data.RDS"))
+tetcor_matrices <- readRDS(file = paste0(data_dir, 
+                                         "/tetcor_matrices/tetcor_matrices.RDS"))
+
 # Smooth NPD matrices using all three smoothing algorithms
 smoothed_matrices <- pbmclapply(
   X = 1:nrow(conditions_matrix),
@@ -146,3 +153,24 @@ smoothed_matrices <- pbmclapply(
 )
 
 # Estimate factor loading matrices ----------------------------------------
+loading_matrices <- pbmcapply::pbmclapply(
+  X = 1:nrow(conditions_matrix),
+  FUN = function(i) {
+    lapply(X = 1:reps,
+           FUN = function(j) {
+             tryCatch(
+               expr = loadings_estimator(
+                 rsm_list = smoothed_matrices[[i]][[j]],
+                 sample_data = binary_data[[i]][[j]]$sample_data,
+                 sample_size = conditions_matrix$subjects[i],
+                 factors = conditions_matrix$factors[i],
+                 method = c("fapa", "fals", "faml")
+               ), error = function(err.msg) {
+                 # Add error message to log file
+                 write(toString(c(err.msg, " Condition:", i, "Rep:", j)),
+                       error_dir, append = TRUE)
+               }, warning = function(w) NULL
+             )
+           })
+  }, mc.cores = cores
+)
