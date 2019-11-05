@@ -4,7 +4,8 @@ loadings_estimator <- function(rsm_list,
                                sample_data,
                                sample_size,
                                factors,
-                               method = c("fapa", "fals", "faml")) {
+                               method = c("fapa", "fals", "faml"),
+                               rotate) {
   
   # Create an empty list to store output
   out_list <- vector(mode = "list", length = length(rsm_list))
@@ -41,9 +42,12 @@ loadings_estimator <- function(rsm_list,
           faControl = list(treatHeywood = TRUE,
                            communality = "maxr",
                            epsilon = 1e-4))
-        loading_matrix_list[[j]] <- list(loadings = out$loadings,
-                                         h2 = out$h2,
-                                         heywood = out$faFit$Heywood,
+        rotated_loadings <- fungible::faMain(urLoadings = out$loadings,
+                                             numFactors = factors,
+                                             rotate = rotate)
+        loading_matrix_list[[j]] <- list(loadings = rotated_loadings$loadings,
+                                         h2 = rotated_loadings$h2,
+                                         heywood = any(rotated_loadings$h2 >= 1),
                                          convergence = out$faFit$converged)
       }  else if (method[j] == "faml") {
         # Initialize communality estimates as the maximum (absolute) correlation
@@ -67,10 +71,14 @@ loadings_estimator <- function(rsm_list,
         loadings <- unclass(out$loadings)
         attributes(loadings) <- NULL
         
+        rotated_loadings <- fungible::faMain(urLoadings = loadings,
+                                             numFactors = factors,
+                                             rotate = rotate)
+        
         loading_matrix_list[[j]] <- list(
-            loadings = loadings,
-            h2 = 1 - out$uniquenesses,
-            heywood = any(out$uniquenesses <= 0),
+            loadings = rotated_loadings$loadings,
+            h2 = rotated_loadings$h2,
+            heywood = any(rotated_loadings$h2 >= 1),
             convergence = out$converged
           )
       }
