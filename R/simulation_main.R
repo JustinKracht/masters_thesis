@@ -15,7 +15,6 @@ pacman::p_load(fungible,
 source(here("R", "functions", "binary_data_generator.R"))
 source(here("R", "functions", "smoothing_applicator.R"))
 source(here("R", "functions", "loadings_estimator.R"))
-source(here("R", "functions", "get_uniqueness_init.R"))
 
 # Set data and error paths ------------------------------------------------
 data_dir <- here("Data")
