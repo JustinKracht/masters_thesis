@@ -42,10 +42,16 @@ loadings_estimator <- function(rsm_list,
           faControl = list(treatHeywood = TRUE,
                            communality = "maxr",
                            epsilon = 1e-4))
+        
+        # Rotate and align factor loadings
         rotated_loadings <- fungible::faMain(urLoadings = out$loadings,
                                              numFactors = factors,
                                              rotate = rotate)
-        loading_matrix_list[[j]] <- list(loadings = rotated_loadings$loadings,
+        aligned_loadings <- fungible::faAlign(F1 = binary_data[[i]][[j]]$loadings,
+                                              F2 = rotated_loadings$loadings,
+                                              MatchMethod = "LS")
+        
+        loading_matrix_list[[j]] <- list(loadings = aligned_loadings$F2,
                                          h2 = rotated_loadings$h2,
                                          heywood = any(rotated_loadings$h2 >= 1),
                                          convergence = out$faFit$converged)
@@ -71,16 +77,20 @@ loadings_estimator <- function(rsm_list,
         loadings <- unclass(out$loadings)
         attributes(loadings) <- NULL
         
+        # Rotate and align loadings to the population loadings matrix
         rotated_loadings <- fungible::faMain(urLoadings = loadings,
                                              numFactors = factors,
                                              rotate = rotate)
+        aligned_loadings <- fungible::faAlign(F1 = binary_data[[i]][[j]]$loadings,
+                                              F2 = rotated_loadings$loadings,
+                                              MatchMethod = "LS")
         
         loading_matrix_list[[j]] <- list(
-            loadings = rotated_loadings$loadings,
-            h2 = rotated_loadings$h2,
-            heywood = any(rotated_loadings$h2 >= 1),
-            convergence = out$converged
-          )
+          loadings = aligned_loadings$F2,
+          h2 = rotated_loadings$h2,
+          heywood = any(rotated_loadings$h2 >= 1),
+          convergence = out$converged
+        )
       }
     }
     out_list[[i]] <- loading_matrix_list
