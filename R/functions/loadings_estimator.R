@@ -2,6 +2,7 @@
 # loading matrices from a correlation matrix using all of the specified methods.
 loadings_estimator <- function(rsm_list,
                                sample_data,
+                               pop_loadings,
                                sample_size,
                                factors,
                                method = c("fapa", "fals", "faml"),
@@ -47,11 +48,15 @@ loadings_estimator <- function(rsm_list,
         rotated_loadings <- fungible::faMain(urLoadings = out$loadings,
                                              numFactors = factors,
                                              rotate = rotate)
-        aligned_loadings <- fungible::faAlign(F1 = binary_data[[i]][[j]]$loadings,
-                                              F2 = rotated_loadings$loadings,
-                                              MatchMethod = "LS")
+        if (factors > 1) {
+          rotated_loadings$loadings <- fungible::faAlign(
+            F1 = pop_loadings,
+            F2 = rotated_loadings$loadings,
+            MatchMethod = "LS"
+          )$F2
+        }
         
-        loading_matrix_list[[j]] <- list(loadings = aligned_loadings$F2,
+        loading_matrix_list[[j]] <- list(loadings = rotated_loadings$loadings,
                                          h2 = rotated_loadings$h2,
                                          heywood = any(rotated_loadings$h2 >= 1),
                                          convergence = out$faFit$converged)
@@ -77,16 +82,20 @@ loadings_estimator <- function(rsm_list,
         loadings <- unclass(out$loadings)
         attributes(loadings) <- NULL
         
-        # Rotate and align loadings to the population loadings matrix
-        rotated_loadings <- fungible::faMain(urLoadings = loadings,
+        # Rotate and align factor loadings
+        rotated_loadings <- fungible::faMain(urLoadings = out$loadings,
                                              numFactors = factors,
                                              rotate = rotate)
-        aligned_loadings <- fungible::faAlign(F1 = binary_data[[i]][[j]]$loadings,
-                                              F2 = rotated_loadings$loadings,
-                                              MatchMethod = "LS")
+        if (factors > 1) {
+          rotated_loadings$loadings <- fungible::faAlign(
+            F1 = pop_loadings,
+            F2 = rotated_loadings$loadings,
+            MatchMethod = "LS"
+          )$F2
+        }
         
         loading_matrix_list[[j]] <- list(
-          loadings = aligned_loadings$F2,
+          loadings = rotated_loadings$loadings,
           h2 = rotated_loadings$h2,
           heywood = any(rotated_loadings$h2 >= 1),
           convergence = out$converged
