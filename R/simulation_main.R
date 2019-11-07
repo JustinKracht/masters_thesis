@@ -6,15 +6,23 @@
 pacman::p_load(mirt,
                here,
                parallel,
-               pbmcapply)
+               pbmcapply,
+               stringr)
 pacman::p_load(fungible,
                install = FALSE,
                update = FALSE)
 
 # Source required functions -----------------------------------------------
-source(here("R", "functions", "binary_data_generator.R"))
-source(here("R", "functions", "smoothing_applicator.R"))
-source(here("R", "functions", "loadings_estimator.R"))
+function_dir <- here("R", "functions")
+source(paste0(function_dir, "/binary_data_generator.R"))
+source(paste0(function_dir, "/smoothing_applicator.R"))
+source(paste0(function_dir, "/loadings_estimator.R"))
+source(paste0(function_dir, "/tetrachoric_step.R"))
+source(paste0(function_dir, "/data_generation_step.R"))
+source(paste0(function_dir, "/smoothing_step.R"))
+source(paste0(function_dir, "/loading_estimation_step.R"))
+source(paste0(function_dir, "/unsaved_condition_finder.R"))
+source(paste0(function_dir, "/do_step.R"))
 
 # Set data and error paths ------------------------------------------------
 data_dir <- here("Data")
@@ -25,7 +33,7 @@ cores <- detectCores() - 1 # increase number of cores for parallel processing
 save_image <- TRUE # save environment at the end of the simulation
 
 # Define conditions -------------------------------------------------------
-reps <- 5
+reps <- 3
 subjects_per_item <- c(5, 10, 15)
 items_per_factor <- c(5, 10)
 factors <- c(1, 3, 5, 10)
@@ -58,173 +66,36 @@ if (cores > 1) RNGkind("L'Ecuyer-CMRG")
 set.seed(314159)
 
 # Generate binary data ----------------------------------------------------
-pbmcapply::pbmclapply(
-  X = 1:nrow(conditions_matrix),
-  FUN = function(i) {
-    tryCatch(
-      expr = {
-        binary_data_out <- binary_data_generator(
-          reps = reps,
-          subjects_per_item = conditions_matrix$subjects_per_item[i],
-          items_per_factor = conditions_matrix$items_per_factor[i],
-          factors = conditions_matrix$factors[i],
-          factor_loading = conditions_matrix$factor_loading[i],
-          model_error = conditions_matrix$model_error[i],
-          test_type = conditions_matrix$test_type[i],
-          diff_range = diff_range
-        )
-        
-        # If save_partial is TRUE, save an RDS file for each condition
-        saveRDS(binary_data_out, 
-                file = paste0(data_dir, 
-                              "/binary_data",
-                              "/binary_data",
-                              formatC(i, 
-                                      width = 3, 
-                                      format = "d", 
-                                      flag = "0"), 
-                              ".RDS"))
-      }, error = function(err.msg) {
-        # Add error message to log file
-        write(toString(c("Error in binary data generation: ", err.msg, 
-                         " Condition:", i)),
-              error_dir, append = TRUE)
-      })
-  },
-  mc.cores = cores
-)
+do_step(step = data_generation_step,
+        conditions = 1:nrow(conditions_matrix),
+        step_dir = paste0(data_dir, "/binary_data"),
+        data_dir = data_dir,
+        error_dir = error_dir,
+        cores = cores)
 
 # Compute tetrachoric correlation matrices --------------------------------
-pbmcapply::pbmclapply(
-  X = 1:nrow(conditions_matrix),
-  FUN = function(i) {
-    tryCatch(
-      expr = {
-        binary_data <- readRDS(paste0(data_dir, 
-                                      "/binary_data",
-                                      "/binary_data", 
-                                      formatC(i, width = 3, flag = 0), 
-                                      ".RDS"))
-        tetcor_out <- lapply(X = binary_data,
-                             FUN = function(x) {
-                               fungible::tetcor(x$sample_data,
-                                                BiasCorrect = TRUE,
-                                                stderror = FALSE,
-                                                Smooth = FALSE,
-                                                max.iter = 2e4,
-                                                PRINT = FALSE)$r
-                             })
-        # If save_partial is TRUE, save an RDS file for each condition
-        saveRDS(tetcor_out, 
-                file = paste0(data_dir, 
-                              "/tetcor_matrices",
-                              "/tetcor_matrices",
-                              formatC(i, 
-                                      width = 3, 
-                                      format = "d", 
-                                      flag = "0"), 
-                              ".RDS"))
-      },
-      error = function(err.msg) {
-        # Add error message to log file
-        write(toString(c("Error in tetcor: ", err.msg, " Condition:", i)),
-              error_dir, append = TRUE)
-      })
-  },
-  mc.cores = cores
-)
+do_step(step = tetrachoric_step,
+        conditions = 1:nrow(conditions_matrix),
+        step_dir = paste0(data_dir, "/tetcor_matrices"),
+        data_dir = data_dir,
+        error_dir = error_dir,
+        cores = cores)
 
 # Apply matrix smoothing to NPD matrices ----------------------------------
-# # Load data generated previously, if applicable
-# binary_data <- readRDS(file = paste0(data_dir, "/binary_data/binary_data.RDS"))
-# tetcor_matrix_list <- readRDS(file = paste0(data_dir, 
-#                                             "/tetcor_matrices/tetcor_matrix_list.RDS"))
-
 # Smooth NPD matrices using all three smoothing algorithms
-pbmclapply::pbmclapply(
-  X = 1:nrow(conditions_matrix),
-  FUN = function(i) {
-    tryCatch(
-      expr = {
-        tetcor_matrix_list <- readRDS(paste0(data_dir, 
-                                             "/tetcor_matrices",
-                                             "/tetcor_matrix_list", 
-                                             formatC(i, width = 3, flag = 0), 
-                                             ".RDS"))
-        smoothed_matrices_out <- lapply(tetcor_matrix_list, 
-                                        FUN = smoothing_applicator)
-        # If save_partial is TRUE, save an RDS file for each condition
-        saveRDS(smoothed_matrices_out, 
-                file = paste0(data_dir, 
-                              "/smoothed_matrices",
-                              "/smoothed_matrix_list",
-                              formatC(i, 
-                                      width = 3, 
-                                      format = "d", 
-                                      flag = "0"), 
-                              ".RDS"))
-      }, 
-      error = function(err.msg) {
-        # Add error message to log file
-        write(toString(c("Error in matrix smoothing: ", err.msg, 
-                         " Condition:", i)),
-              error_dir, append = TRUE)
-      })
-  }, mc.cores = cores
-)
+do_step(step = smoothing_step,
+        conditions = 1:nrow(conditions_matrix),
+        step_dir = paste0(data_dir, "/smoothed_matrices"),
+        data_dir = data_dir,
+        error_dir = error_dir,
+        cores = cores)
 
 # Estimate loading matrices -----------------------------------------------
-pbmcapply::pbmclapply(
-  X = 1:nrow(conditions_matrix),
-  FUN = function(i) {
-    lapply(X = 1:reps,
-           FUN = function(j) {
-             tryCatch(
-               expr = {
-                 smoothed_matrix_list <- readRDS(
-                   paste0(data_dir, 
-                          "/smoothed_matrices",
-                          "/smoothed_matrix_list", 
-                          formatC(i, width = 3, flag = 0), 
-                          ".RDS")
-                 )
-                 binary_data <- readRDS(
-                   paste0(data_dir, 
-                          "/binary_data",
-                          "/binary_data", 
-                          formatC(i, width = 3, flag = 0), 
-                          ".RDS")
-                 )
-                 loading_matrices_out <- suppressWarnings(
-                   loadings_estimator(
-                     rsm_list = smoothed_matrix_list[[j]]$smoothed_matrices,
-                     sample_data = binary_data[[j]]$sample_data,
-                     pop_loadings = binary_data[[j]]$loadings,
-                     sample_size = conditions_matrix$sample_size[i],
-                     factors = conditions_matrix$factors[i],
-                     method = c("fapa", "fals", "faml"),
-                     rotate = "quartimin"
-                   ))
-                 
-                 # If save_partial is TRUE, save an RDS file for each condition
-                 saveRDS(loading_matrices_out, 
-                         file = paste0(data_dir, 
-                                       "/loading_matrices",
-                                       "/loading_matrix_list",
-                                       formatC(i, 
-                                               width = 3, 
-                                               format = "d", 
-                                               flag = "0"), 
-                                       ".RDS"))
-               }, error = function(err.msg) {
-                 # Add error message to log file
-                 write(toString(c("Error in loading matrix estimation: ", 
-                                  err.msg, " Condition:", i, "Rep:", j)),
-                       error_dir, append = TRUE)
-               }
-             )
-           })
-  }, mc.cores = cores
-)
+do_step(step = loading_estimation_step,
+        conditions = 1:nrow(conditions_matrix),
+        step_dir = paste0(data_dir, "/loading_matrices"),
+        data_dir = data_dir,
+        error_dir = error_dir,
+        cores = cores)
 
 if (save_image) save.image(file = "environment.RDS")
