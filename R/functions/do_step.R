@@ -2,7 +2,8 @@
 # executes that function in a while loop to make sure that all conditions are
 # completed.
 do_step <- function(step, conditions, step_dir, 
-                    data_dir, error_dir, cores, max_iter = 50) {
+                    data_dir, error_dir, cores, max_iter = 50,
+                    check_incomplete = TRUE) {
   conditions_to_do <- conditions
   incomplete_conditions <- TRUE
   iter <- 0
@@ -24,5 +25,6 @@ do_step <- function(step, conditions, step_dir,
       stop("Exceeded maximum number of iterations (", max_iter, ").")
     }
     if (length(conditions_to_do) == 0) incomplete_conditions <- FALSE
+    if (check_incomplete == FALSE) incomplete_conditions <- FALSE
   }
 }

@@ -33,7 +33,7 @@ cores <- detectCores() - 1 # increase number of cores for parallel processing
 save_image <- TRUE # save environment at the end of the simulation
 
 # Define conditions -------------------------------------------------------
-reps <- 3
+reps <- 1000
 subjects_per_item <- c(5, 10, 15)
 items_per_factor <- c(5, 10)
 factors <- c(1, 3, 5, 10)
