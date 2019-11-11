@@ -57,9 +57,25 @@ output            : papaja::apa6_pdf
 library("papaja")
 ```
 
-### Three matrix smoothing algorithms
+## Matrix Smoothing Algorithms
+
+### Higham Alternating Projections Algorithm (APA; 2002)
+
+### Bentler-Yuan Algorithm (BY; 2011)
+
+### Knol-Berger Algorithm (KB; 1991)
+
+## Factor Estimation Methods
+
+### Principal Axes Factor Analysis
+
+### Least-Squares Factor Analysis
+
+### Maximum-Likelihood Factor Analysis
 
 # Methods
+
+
 
 # Results
 
@@ -68,6 +84,7 @@ library("papaja")
 \newpage
 
 # References
+
 ```{r create_r-references}
 r_refs(file = "r-references.bib")
 ```
