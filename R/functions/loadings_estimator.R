@@ -102,26 +102,6 @@ loadings_estimator <- function(rsm_list,
           heywood = any(rotated_loadings$h2 >= 1),
           convergence = out$converged
         )
-      }  else if (method[j] == "fiml") {
-        if (factors >= 3) {
-          est_method <- "QMCEM"
-        } else est_method <- "EM"
-        
-        out <- mirt::mirt(as.data.frame(sample_data), 
-                          model = factors, 
-                          itemtype = "2PL", 
-                          SE = FALSE,
-                          method = est_method,
-                          technical = list(NCYCLES = 2000,
-                                           keep_vcov_PD = TRUE),
-                          verbose = FALSE)
-        
-        loading_matrix_list[[j]] <- list(
-          loadings = extract.mirt(out, what = "F"),
-          h2 = extract.mirt(out, what = "h2"),
-          heywood = any(extract.mirt(out, what = "h2") >= 1),
-          convergence = extract.mirt(out, what = "converged")
-        )
       }
     }
     out_list[[i]] <- loading_matrix_list

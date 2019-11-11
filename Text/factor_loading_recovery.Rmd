@@ -57,6 +57,8 @@ output            : papaja::apa6_pdf
 library("papaja")
 ```
 
+Tetrachoric correlation matrices [@olsson1979maximum] are often recommended for use in item factor analysis [@wirth2007item]. However, tetrachoric correlation matrices are frequently *non-positive definite* (NPD), having one or more negative eigenvalues. 
+
 ## Matrix Smoothing Algorithms
 
 ### Higham Alternating Projections Algorithm (APA; 2002)
@@ -74,8 +76,6 @@ library("papaja")
 ### Maximum-Likelihood Factor Analysis
 
 # Methods
-
-
 
 # Results
 
