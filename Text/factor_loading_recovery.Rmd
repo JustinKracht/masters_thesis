@@ -57,7 +57,7 @@ output            : papaja::apa6_pdf
 library("papaja")
 ```
 
-Tetrachoric correlation matrices [@olsson1979maximum] are often recommended for use in item factor analysis [@wirth2007item]. However, tetrachoric correlation matrices are frequently *non-positive definite* (NPD), having one or more negative eigenvalues. 
+Tetrachoric correlation matrices [@olsson1979maximum] are often recommended for use in item factor analysis [@wirth2007item]. However, tetrachoric correlation matrices are frequently *non-positive definite* (NPD), having one or more negative eigenvalues.
 
 ## Matrix Smoothing Algorithms
 
