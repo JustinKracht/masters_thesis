@@ -27,6 +27,8 @@ smoothing_applicator <- function(r) {
     
     # If the BY algorithm did not converge, set R to NA
     if (RBY$convergence != TRUE) RBY$R <- NA
+    if (is.null(RBY$outStatus)) RBY$outStatus <- NA
+    if (is.null(RBY$constant)) RBY$constant <- NA
     
     # Apply the Knol-Berger algorithm (KB; Knol & Berger, 1991)
     RKB <- fungible::smoothKB(R = r)$RKB
