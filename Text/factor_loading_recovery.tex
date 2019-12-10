@@ -1,0 +1,271 @@
+\documentclass[man]{apa6}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Factor Loading Recovery for Smoothed Non-positive Definite Correlation Matrices},
+            pdfauthor={Justin D. Kracht},
+            pdfkeywords={keywords},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx}
+% grffile has become a legacy package: https://ctan.org/pkg/grffile
+\IfFileExists{grffile.sty}{%
+\usepackage{grffile}
+}{}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+
+  \title{Factor Loading Recovery for Smoothed Non-positive Definite Correlation Matrices}
+    \author{Justin D. Kracht\textsuperscript{1}}
+    \date{}
+  
+\shorttitle{Loading Recovery for Smoothed Matrices}
+\affiliation{
+\vspace{0.5cm}
+\textsuperscript{1} University of Minnesota}
+\keywords{keywords\newline\indent Word count: X}
+\usepackage{csquotes}
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+\usepackage{longtable}
+\usepackage{lscape}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage[flushleft]{threeparttable}
+\usepackage{threeparttablex}
+
+\newenvironment{lltable}{\begin{landscape}\begin{center}\begin{ThreePartTable}}{\end{ThreePartTable}\end{center}\end{landscape}}
+
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+
+\DeclareDelayedFloatFlavor{ThreePartTable}{table}
+\DeclareDelayedFloatFlavor{lltable}{table}
+\DeclareDelayedFloatFlavor*{longtable}{table}
+\makeatletter
+\renewcommand{\efloat@iwrite}[1]{\immediate\expandafter\protected@write\csname efloat@post#1\endcsname{}}
+\makeatother
+\usepackage{lineno}
+
+\linenumbers
+
+\authornote{Enter author note here.
+
+Correspondence concerning this article should be addressed to Justin D. Kracht, Department of Psychology, University of Minnesota, N218 Elliott Hall 75 East River Road, Minneapolis, MN 55455. E-mail: \href{mailto:krach018@umn.edu}{\nolinkurl{krach018@umn.edu}}}
+
+\abstract{
+One or two sentences providing a \textbf{basic introduction} to the field, comprehensible to a scientist in any discipline.
+
+Two to three sentences of \textbf{more detailed background}, comprehensible to scientists in related disciplines.
+
+One sentence clearly stating the \textbf{general problem} being addressed by this particular study.
+
+One sentence summarizing the main result (with the words ``\textbf{here we show}'' or their equivalent).
+
+Two or three sentences explaining what the \textbf{main result} reveals in direct comparison to what was thought to be the case previously, or how the main result adds to previous knowledge.
+
+One or two sentences to put the results into a more \textbf{general context}.
+
+Two or three sentences to provide a \textbf{broader perspective}, readily comprehensible to a scientist in any discipline.
+
+
+}
+
+\begin{document}
+\maketitle
+
+\newcommand{\Rsm}{\mathbf{R}_{\textrm{Sm}}}
+
+Tetrachoric correlation matrices (Olsson, 1979) are often recommended for use in item factor analysis (Wirth \& Edwards, 2007). However, tetrachoric correlation matrices are frequently \emph{non-positive definite} (NPD), having one or more negative eigenvalues.
+
+\hypertarget{matrix-smoothing-algorithms}{%
+\subsection{Matrix Smoothing Algorithms}\label{matrix-smoothing-algorithms}}
+
+\hypertarget{higham-alternating-projections-algorithm-apa-2002}{%
+\subsubsection{Higham Alternating Projections Algorithm (APA; 2002)}\label{higham-alternating-projections-algorithm-apa-2002}}
+
+\hypertarget{bentler-yuan-algorithm-by-2011}{%
+\subsubsection{Bentler-Yuan Algorithm (BY; 2011)}\label{bentler-yuan-algorithm-by-2011}}
+
+\hypertarget{knol-berger-algorithm-kb-1991}{%
+\subsubsection{Knol-Berger Algorithm (KB; 1991)}\label{knol-berger-algorithm-kb-1991}}
+
+\hypertarget{factor-estimation-methods}{%
+\subsection{Factor Estimation Methods}\label{factor-estimation-methods}}
+
+\hypertarget{principal-axes-factor-analysis}{%
+\subsubsection{Principal Axes Factor Analysis}\label{principal-axes-factor-analysis}}
+
+\hypertarget{least-squares-factor-analysis}{%
+\subsubsection{Least-Squares Factor Analysis}\label{least-squares-factor-analysis}}
+
+\hypertarget{maximum-likelihood-factor-analysis}{%
+\subsubsection{Maximum-Likelihood Factor Analysis}\label{maximum-likelihood-factor-analysis}}
+
+\hypertarget{methods}{%
+\section{Methods}\label{methods}}
+
+I designed and ran a simulation study to evaluate four approaches to dealing with NPD tetrachoric correlation matrices in the context of exploratory factor analysis. Namely, I conducted exploratory factor analyses on tetrachoric correlation matrices smoothed using the Higham (2002), the Bentler-Yuan (2011), Knol-Berger (1991) algorithms and on unsmoothed (NPD and PSD) tetrachoric correlation matrices. I designed the simulation study with two primary purposes in mind. First, I wanted to know which smoothing method (Higham, Bentler-Yuan, Knol-Berger, or None) produced (possibly) smoothed correlation matrices (\(\mathbf{R}_{\textrm{Sm}}\)) that most closely approximated the corresponding population correlation matrices. Second, I wanted to know which smoothing method produced correlation matrices that led to the best estimates of the population factor loading matrix when used in exploratory factor analyses. With these two purposes in mind, I conducted our simulation study as follows.
+
+In the first step of the simulation, I generated random sets of binary data randomly generated from a variety of orthogonal factor models. The factor models had varying numbers of major common factors, \(\textrm{Factors} \in \{1, 3, 5, 10 \}\). Following the procedure of (Tucker, Koopman, \& Linn, 1969), I also incorporated the effects of model approximation error into the data by including 150 minor common factors in each population model. In total, these 150 minor common factors accounted for 0\%, 10\%, or 30\% (\(\textrm{Error} \in \{ 0, .1, .3 \}\)) of the uniqueness variance of the error-free model (i.e., the model with only the major common factors). According to Briggs and MacCallum (2003), these conditions represent models with perfect, good, or moderate model fit. Including these three levels of model approximation error in the simulation ensured that both ideal (\(\textrm{Error} = 0\)) and the more empirically-plausible levels of model approximation error (\(\textrm{Error} \in \{ .1, .3\}\)) were considered in this study.
+
+In addition to systematically varying the number of major factors and the proportion of variance accounted for by model approximation error, I also systematically varied the number of factor indicators (i.e., items loading on each factor) , \(\textrm{Items/Factor} \in \{5, 10 \}\), and the number of subjects per item, \(\textrm{Subjects/Item} \in \{ 5, 10, 15\}\). The total numbers of items and sample sizes for each factor number condition can be found in Table \ref{tab:items-subjects-table}. Each item loaded on only one factor and item factor loadings were uniformly fixed at one of three levels, \(\textrm{Loading} \in \{ .3, .5, .8 \}\). Though \enquote{rules-of-thumb} for factor loadings vary, Hair, Andersen, Tatham, and Black (1998, p. 111) note that \enquote{factor loadings greater than \(\pm 0.3\) are considered to meet the minimal level \ldots{} if the loadings are \(\pm 0.5\) or greater, they are considered practically significant.} Factor loadings of \(\pm 0.8\) are considered to be high (e.g., MacCallum, Widaman, Preacher, \& Hong, 2001). Thus, the three factor loadings investigated in this study were chosen to represent low, moderate, and high levels of factor saliency.
+
+
+
+\begin{longtable}[t]{rrrrr}
+\caption{\label{tab:items-subjects-table}Number of items and subjects resulting from each combination of number of factors (Factors), number of items per factor (Items/Factor), and subjects per item (Subjects/Item).}\\
+\toprule
+Factors & Items/Factor & Subjects/Item & Items & Sample Size\\
+\midrule
+1 & 5 & 5 & 5 & 25\\
+3 & 5 & 5 & 15 & 75\\
+5 & 5 & 5 & 25 & 125\\
+10 & 5 & 5 & 50 & 250\\
+15 & 5 & 5 & 75 & 375\\
+\addlinespace
+1 & 10 & 5 & 10 & 50\\
+3 & 10 & 5 & 30 & 150\\
+5 & 10 & 5 & 50 & 250\\
+10 & 10 & 5 & 100 & 500\\
+15 & 10 & 5 & 150 & 750\\
+\addlinespace
+1 & 5 & 10 & 5 & 50\\
+3 & 5 & 10 & 15 & 150\\
+5 & 5 & 10 & 25 & 250\\
+10 & 5 & 10 & 50 & 500\\
+15 & 5 & 10 & 75 & 750\\
+\addlinespace
+1 & 10 & 10 & 10 & 100\\
+3 & 10 & 10 & 30 & 300\\
+5 & 10 & 10 & 50 & 500\\
+10 & 10 & 10 & 100 & 1000\\
+15 & 10 & 10 & 150 & 1500\\
+\addlinespace
+1 & 5 & 15 & 5 & 75\\
+3 & 5 & 15 & 15 & 225\\
+5 & 5 & 15 & 25 & 375\\
+10 & 5 & 15 & 50 & 750\\
+15 & 5 & 15 & 75 & 1125\\
+\addlinespace
+1 & 10 & 15 & 10 & 150\\
+3 & 10 & 15 & 30 & 450\\
+5 & 10 & 15 & 50 & 750\\
+10 & 10 & 15 & 100 & 1500\\
+15 & 10 & 15 & 150 & 2250\\
+\bottomrule
+\end{longtable}
+
+The combinations of the independent variables specified above resulted in a fully-crossed design with \(4 \: (\textrm{Factors}) \times 3 \: (\textrm{Error}) \times 2 \: (\textrm{Items/Factor}) \times 3 \: (\textrm{Subjects/Item}) \times 3 \: (\textrm{Loading}) = 216\) unique conditions. For each of these conditions, I used the \texttt{simFA} function in the R \texttt{fungible} library (R Core Team, 2019, @waller2019a) to generate 1,000 random sets of data in accordance with the factor model corresponding to that condition. To obtain binary responses from continuous observed scores, items were assigned classical item difficulties (\(p\); i.e., the expected proportion of correct responses, Crocker \& Algina, 1986) at equal intervals between 0.15 and 0.85. For example, items in a five-item data set were assigned classical item difficulties of .150, .325, .500, .675, and .850. The classical item difficulties were used to obtain threshold values, \(t\), such that \(P(X > t) = p\) where \(X \sim N(0,1)\). I then used the thresholds to dichotomize the continuous observed scores and obtain simulated binary response data. If a data set had any homogeneous item response vectors (i.e., had one or more items with zero variance), the data set was discarded and a new sample of data was generated until all items had non-homogeneous response vectors. This procedure was necessary to calculate tetrachoric correlation matrices in the next step of the simulation.
+
+In the second step of the simulation procedure, I calculated a tetrachoric correlation matrix for each simulated binary data set. Tetrachoric correlation matrices were calculated using the \texttt{tetcor} function in the R \texttt{fungible} library (Waller, 2019), which computes maximum likelihood tetrachoric correlation coefficients corrected for bias using the method of Brown and Benedetti (1977). If a tetrachoric correlation matrix was NPD, the Higham (2002), Benler-Yuan (2011), and Knol-Berger (1991) matrix smoothing algorithms were applied to the NPD tetrachoric correlation matrix to produce three smoothed, PSD correlation matrices.
+
+In the third and final step of the simulation procedure, I applied three exploratory factor extraction algorithms (principal axes {[}PA{]}, ordinary least squares {[}OLS{]}, and maximum likelihood {[}ML{]} factor analysis) to each of the PSD and NPD tetrachoric correlation matrices and the smoothed correlation matrices. Each of the factor solutions were then rotated using a quartimin rotation and aligned to match the corresponding population factor loading matrix such that the least squares discrepency between the matrices was minimized. The alignment step ensured that the elements of each estimated factor loading matrix were matched (in order and sign) to the elements of the corresponding population factor loading matrix.
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+\newpage
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-briggs2003}{}%
+Briggs, N. E., \& MacCallum, R. C. (2003). Recovery of weak common factors by maximum likelihood and ordinary least squares estimation. \emph{Multivariate Behavioral Research}, \emph{38}(1), 25--56.
+
+\leavevmode\hypertarget{ref-brown1977mean}{}%
+Brown, M. B., \& Benedetti, J. K. (1977). On the mean and variance of the tetrachoric correlation coefficient. \emph{Psychometrika}, \emph{42}(3), 347--355.
+
+\leavevmode\hypertarget{ref-CrockerAlgina}{}%
+Crocker, L., \& Algina, J. (1986). \emph{Introduction to classical and modern test theory.} ERIC.
+
+\leavevmode\hypertarget{ref-hair1998}{}%
+Hair Jr., J. F., Anderson, R. E., Tatham, R. L., \& William, C. (1998). \emph{Multivariate data analysis} (5th ed.). Upper Saddle River, NJ: Prentice-Hall, Inc.
+
+\leavevmode\hypertarget{ref-maccallum2001a}{}%
+MacCallum, R. C., Widaman, K. F., Preacher, K. J., \& Hong, S. (2001). Sample size in factor analysis: The role of model error. \emph{Multivariate Behav. Res.}, \emph{36}(4), 611--637.
+
+\leavevmode\hypertarget{ref-olsson1979maximum}{}%
+Olsson, U. (1979). Maximum likelihood estimation of the polychoric correlation coefficient. \emph{Psychometrika}, \emph{44}(4), 443--460.
+
+\leavevmode\hypertarget{ref-R-base}{}%
+R Core Team. (2019). \emph{R: A language and environment for statistical computing}. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from \url{https://www.R-project.org/}
+
+\leavevmode\hypertarget{ref-tucker1969}{}%
+Tucker, L. R., Koopman, R. F., \& Linn, R. L. (1969). Evaluation of factor analytic research procedures by means of simulated correlation matrices. \emph{Psychometrika}, \emph{34}(4), 421--459.
+
+\leavevmode\hypertarget{ref-waller2019a}{}%
+Waller, N. G. (2019). \emph{Fungible: Psychometric functions from the Waller lab}.
+
+\leavevmode\hypertarget{ref-wirth2007item}{}%
+Wirth, R., \& Edwards, M. C. (2007). Item factor analysis: Current approaches and future directions. \emph{Psychological Methods}, \emph{12}(1), 58.
+
+\endgroup
+
+
+\end{document}

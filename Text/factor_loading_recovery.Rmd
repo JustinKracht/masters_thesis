@@ -6,16 +6,14 @@ author:
   - name          : "Justin D. Kracht"
     affiliation   : "1"
     corresponding : yes
-    address       : "Postal address"
+    address       : "Department of Psychology, University of Minnesota, N218 Elliott Hall 75 East River Road, Minneapolis, MN 55455"
     email         : "krach018@umn.edu"
 
 affiliation:
   - id            : "1"
-    institution   : "Department of Psychology, University of Minnesota"
+    institution   : "University of Minnesota"
 
 authornote: |
-  Add complete departmental affiliations for each author here. Each new line herein must be indented, like this line.
-
   Enter author note here.
 
 abstract: |
@@ -57,6 +55,8 @@ output            : papaja::apa6_pdf
 library("papaja")
 ```
 
+\newcommand{\Rsm}{\mathbf{R}_{\textrm{Sm}}}
+
 Tetrachoric correlation matrices [@olsson1979maximum] are often recommended for use in item factor analysis [@wirth2007item]. However, tetrachoric correlation matrices are frequently *non-positive definite* (NPD), having one or more negative eigenvalues.
 
 ## Matrix Smoothing Algorithms
@@ -77,7 +77,41 @@ Tetrachoric correlation matrices [@olsson1979maximum] are often recommended for 
 
 # Methods
 
+I designed and ran a simulation study to evaluate four approaches to dealing with NPD tetrachoric correlation matrices in the context of exploratory factor analysis. Namely, I conducted exploratory factor analyses on tetrachoric correlation matrices smoothed using the Higham (2002), the Bentler-Yuan (2011), Knol-Berger (1991) algorithms and on unsmoothed (NPD and PSD) tetrachoric correlation matrices. I designed the simulation study with two primary purposes in mind. First, I wanted to know which smoothing method (Higham, Bentler-Yuan, Knol-Berger, or None) produced (possibly) smoothed correlation matrices ($\Rsm$) that most closely approximated the corresponding population correlation matrices. Second, I wanted to know which smoothing method produced correlation matrices that led to the best estimates of the population factor loading matrix when used in exploratory factor analyses. With these two purposes in mind, I conducted our simulation study as follows.
+
+In the first step of the simulation, I generated random sets of binary data randomly generated from a variety of orthogonal factor models. The factor models had varying numbers of major common factors, $\textrm{Factors} \in \{1, 3, 5, 10 \}$. Following the procedure of [@tucker1969], I also incorporated the effects of model approximation error into the data by including 150 minor common factors in each population model. In total, these 150 minor common factors accounted for 0%, 10%, or 30% ($\textrm{Error} \in \{ 0, .1, .3 \}$) of the uniqueness variance of the error-free model (i.e., the model with only the major common factors). According to Briggs and MacCallum [-@briggs2003], these conditions represent models with perfect, good, or moderate model fit. Including these three levels of model approximation error in the simulation ensured that both ideal ($\textrm{Error} = 0$) and the more empirically-plausible levels of model approximation error ($\textrm{Error} \in \{ .1, .3\}$) were considered in this study.
+
+In addition to systematically varying the number of major factors and the proportion of variance accounted for by model approximation error, I also systematically varied the number of factor indicators (i.e., items loading on each factor) , $\textrm{Items/Factor} \in \{5, 10 \}$, and the number of subjects per item, $\textrm{Subjects/Item} \in \{ 5, 10, 15\}$. The total numbers of items and sample sizes for each factor number condition can be found in Table \@ref(tab:items-subjects-table). Each item loaded on only one factor and item factor loadings were uniformly fixed at one of three levels, $\textrm{Loading} \in \{ .3, .5, .8 \}$. Though "rules-of-thumb" for factor loadings vary, Hair, Andersen, Tatham, and Black [-@hair1998, p. 111] note that "factor loadings greater than $\pm 0.3$ are considered to meet the minimal level ... if the loadings are $\pm 0.5$ or greater, they are considered practically significant." Factor loadings of $\pm 0.8$ are considered to be high [e.g., @maccallum2001a]. Thus, the three factor loadings investigated in this study were chosen to represent low, moderate, and high levels of factor saliency.
+
+(ref:items-subjects-table-caption) Number of items and subjects resulting from each combination of number of factors (Factors), number of items per factor (Items/Factor), and subjects per item (Subjects/Item).
+
+```{r items-subjects-table, echo = FALSE, results = "asis"}
+# Create a table giving the total numbers of items and subjects in each factor
+# number condition
+x <- expand.grid("Factors" = c(1, 3, 5, 10, 15),
+                 "Items/Factor" = c(5, 10),
+                 "Subjects/Item" = c(5, 10, 15))
+x$'Items' <- x$Factors * x$`Items/Factor`
+x$'Sample Size' <- x$Items * x$`Subjects/Item`
+
+knitr::kable(
+  x = x, 
+  caption = "(ref:items-subjects-table-caption)",
+  digits = 0,
+  longtable = TRUE,
+  booktabs = TRUE
+)
+```
+
+The combinations of the independent variables specified above resulted in a fully-crossed design with $4 \: (\textrm{Factors}) \times 3 \: (\textrm{Error}) \times 2 \: (\textrm{Items/Factor}) \times 3 \: (\textrm{Subjects/Item}) \times 3 \: (\textrm{Loading}) = 216$ unique conditions. For each of these conditions, I used the `simFA` function in the R `fungible` library [@R-base, @waller2019a] to generate 1,000 random sets of data in accordance with the factor model corresponding to that condition. To obtain binary responses from continuous observed scores, items were assigned classical item difficulties [$p$; i.e., the expected proportion of correct responses, @CrockerAlgina] at equal intervals between 0.15 and 0.85. For example, items in a five-item data set were assigned classical item difficulties of .150, .325, .500, .675, and .850. The classical item difficulties were used to obtain threshold values, $t$, such that $P(X > t) = p$ where $X \sim N(0,1)$. I then used the thresholds to dichotomize the continuous observed scores and obtain simulated binary response data. If a data set had any homogeneous item response vectors (i.e., had one or more items with zero variance), the data set was discarded and a new sample of data was generated until all items had non-homogeneous response vectors. This procedure was necessary to calculate tetrachoric correlation matrices in the next step of the simulation.
+
+In the second step of the simulation procedure, I calculated a tetrachoric correlation matrix for each simulated binary data set. Tetrachoric correlation matrices were calculated using the `tetcor` function in the R `fungible` library [@waller2019a], which computes maximum likelihood tetrachoric correlation coefficients corrected for bias using the method of Brown and Benedetti [-@brown1977mean]. If a tetrachoric correlation matrix was NPD, the Higham (2002), Benler-Yuan (2011), and Knol-Berger (1991) matrix smoothing algorithms were applied to the NPD tetrachoric correlation matrix to produce three smoothed, PSD correlation matrices.
+
+In the third and final step of the simulation procedure, I applied three exploratory factor extraction algorithms (principal axes [PA], ordinary least squares [OLS], and maximum likelihood [ML] factor analysis) to each of the PSD and NPD tetrachoric correlation matrices and the smoothed correlation matrices. Each of the factor solutions were then rotated using a quartimin rotation and aligned to match the corresponding population factor loading matrix such that the least squares discrepency between the matrices was minimized. The alignment step ensured that the elements of each estimated factor loading matrix were matched (in order and sign) to the elements of the corresponding population factor loading matrix.
+
 # Results
+
+
 
 # Discussion
 

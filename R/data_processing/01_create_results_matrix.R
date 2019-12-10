@@ -3,7 +3,7 @@ pacman::p_load(tidyverse, here)
 
 # Load data
 project_dir <- here()
-load(paste0(project_dir, "/environment.RData"))
+load(paste0(project_dir, "/Data", "/environment.RData"))
 data_dir <- here("Data")
 
 # Create a data frame with a row for each rep (observation) ---------------
@@ -83,7 +83,6 @@ extract_condition_data <- function(condition) {
                       names_to = "smoothing_method",
                       values_to = "distance_Rpop_Rsm")
 }
-
 
 # Save data extracted from smoothed_matrix_list RDS objects ---------------
 saveRDS(map_dfr(1:nrow(conditions_matrix), .f = extract_condition_data),
@@ -211,6 +210,41 @@ results_matrix$fa_method_rec <- fct_recode(results_matrix$fa_method,
 results_matrix$factors_rec <- factor(results_matrix$factors_rec, 
                                      levels=c("Factors: 1", "Factors: 3", 
                                               "Factors: 5", "Factors: 10"))
+
+
+# Add proportion of negative variance variable ----------------------------
+eigvals_list <- lapply(1:216,
+                       FUN = function(i) {
+                         tetcor_file <- paste0(data_dir,
+                                               "/tetcor_matrices",
+                                               "/tetcor_matrix_list",
+                                               formatC(i, digits = 2, flag = "0"),
+                                               ".RDS")
+                         tetcor_list <- readRDS(tetcor_file)
+                         lapply(tetcor_list, FUN = function(R) { 
+                           eigen(R, symmetric = TRUE, only.values = TRUE)$values
+                         }
+                         ) 
+                       }
+)
+
+prop_neg_var_vec <- unlist(
+  lapply(eigvals_list, function(X) {
+    unlist(
+      lapply(X,
+             function(eigs) {
+               if (any(eigs < 0)) {
+                 prop_neg_var <- abs(sum(eigs[eigs < 0])) / sum(eigs)
+               } else {
+                 prop_neg_var <- 0
+               }
+               prop_neg_var
+             })
+    )
+  })
+)
+
+results_matrix$prop_neg_var <- prop_neg_var_vec
 
 # Save results matrix -----------------------------------------------------
 saveRDS(results_matrix, file = paste0(data_dir, "/results_matrix.RDS"))
