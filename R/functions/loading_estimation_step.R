@@ -1,7 +1,8 @@
 loading_estimation_step <- function(conditions, data_dir, error_dir, 
-                                    cores, reps = 1:1000) {
+                                    cores, reps = 1:1000, 
+                                    conditions_matrix = conditions_matrix, ...) {
   pbmcapply::pbmclapply(
-    X = 1:nrow(conditions_matrix),
+    X = conditions,
     FUN = function(i) {
       # Read in smoothed matrix list for condition i
       smoothed_matrix_list <- readRDS(

@@ -1,4 +1,4 @@
-smoothing_step <- function(conditions, data_dir, error_dir, cores) {
+smoothing_step <- function(conditions, data_dir, error_dir, cores, ...) {
   pbmcapply::pbmclapply(
     X = conditions,
     FUN = function(i) {

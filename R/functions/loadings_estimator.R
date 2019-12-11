@@ -69,39 +69,52 @@ loadings_estimator <- function(rsm_list,
                                        FUN = function(X) {
                                          as.matrix(max(abs(X)))
                                        })
-        out <- factanal(x = sample_data,
-                        factors = factors,
-                        n.obs = sample_size,
-                        start = communality_estimates,
-                        scores = "none",
-                        rotation = "none",
-                        control = list(trace = FALSE,
-                                       lower = 0.005))
         
-        # Unclass loadings matrix and strip attributes
-        loadings <- unclass(out$loadings)
-        attributes(loadings) <- NULL
-        
-        # Rotate and align factor loadings
-        rotated_loadings <- fungible::faMain(urLoadings = out$loadings,
-                                             numFactors = factors,
-                                             rotate = rotate)
-        if (factors > 1) {
-          rotated_loadings$loadings <- fungible::faAlign(
-            F1 = pop_loadings,
-            F2 = rotated_loadings$loadings,
-            MatchMethod = "LS"
-          )$F2
-        } else {
-          rotated_loadings$loadings <- unclass(rotated_loadings$loadings)
-        }
-        
-        loading_matrix_list[[j]] <- list(
-          loadings = rotated_loadings$loadings,
-          h2 = rotated_loadings$h2,
-          heywood = any(rotated_loadings$h2 >= 1),
-          convergence = out$converged
+        out <- tryCatch(
+          expr = factanal(x = sample_data,
+                          factors = factors,
+                          n.obs = sample_size,
+                          start = communality_estimates,
+                          scores = "none",
+                          rotation = "none",
+                          control = list(trace = FALSE,
+                                         lower = 0.005)),
+          error = function(e) NA
         )
+        
+        if (!is.na(out)) {
+          # Unclass loadings matrix and strip attributes
+          loadings <- unclass(out$loadings)
+          attributes(loadings) <- NULL
+          
+          # Rotate and align factor loadings
+          rotated_loadings <- fungible::faMain(urLoadings = out$loadings,
+                                               numFactors = factors,
+                                               rotate = rotate)
+          if (factors > 1) {
+            rotated_loadings$loadings <- fungible::faAlign(
+              F1 = pop_loadings,
+              F2 = rotated_loadings$loadings,
+              MatchMethod = "LS"
+            )$F2
+          } else {
+            rotated_loadings$loadings <- unclass(rotated_loadings$loadings)
+          }
+          
+          loading_matrix_list[[j]] <- list(
+            loadings = rotated_loadings$loadings,
+            h2 = rotated_loadings$h2,
+            heywood = any(rotated_loadings$h2 >= 1),
+            convergence = out$converged
+          )
+        } else {
+          loading_matrix_list[[j]] <- list(
+            loadings = NA,
+            h2 = NA,
+            heywood = NA,
+            convergence = FALSE
+          )
+        }
       }
     }
     out_list[[i]] <- loading_matrix_list

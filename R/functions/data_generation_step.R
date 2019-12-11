@@ -1,6 +1,6 @@
-data_generation_step <- function(conditions, data_dir, error_dir, cores) {
+data_generation_step <- function(conditions, data_dir, error_dir, cores, conditions_matrix, reps, ...) {
   pbmcapply::pbmclapply(
-    X = 1:nrow(conditions_matrix),
+    X = conditions,
     FUN = function(i) {
       tryCatch(
         expr = {

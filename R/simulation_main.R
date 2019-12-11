@@ -92,10 +92,13 @@ do_step(step = smoothing_step,
 
 # Estimate loading matrices -----------------------------------------------
 do_step(step = loading_estimation_step,
-        conditions = 1:nrow(conditions_matrix),
+        conditions = c(20, 21, 92, 93), # 1:nrow(conditions_matrix),
         step_dir = paste0(data_dir, "/loading_matrices"),
         data_dir = data_dir,
         error_dir = error_dir,
-        cores = cores)
+        cores = cores,
+        conditions_matrix = conditions_matrix,
+        reps = 1000,
+        check_incomplete = FALSE)
 
 if (save_image) save.image(file = "environment.RDS")

@@ -3,7 +3,8 @@
 # completed.
 do_step <- function(step, conditions, step_dir, 
                     data_dir, error_dir, cores, max_iter = 50,
-                    check_incomplete = TRUE) {
+                    check_incomplete = TRUE, reps = NULL, 
+                    conditions_matrix = conditions_matrix) {
   conditions_to_do <- conditions
   incomplete_conditions <- TRUE
   iter <- 0
@@ -12,7 +13,10 @@ do_step <- function(step, conditions, step_dir,
     step(conditions = conditions_to_do,
          data_dir = data_dir,
          error_dir = error_dir,
-         cores = cores)
+         cores = cores,
+         conditions_matrix = conditions_matrix,
+         reps = reps)
+    
     # Make a list of missing conditions (if there are any)
     conditions_to_do <- unsaved_condition_finder(
       conditions = conditions,

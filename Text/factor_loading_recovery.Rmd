@@ -61,6 +61,10 @@ Tetrachoric correlation matrices [@olsson1979maximum] are often recommended for 
 
 ## Matrix Smoothing Algorithms
 
+One approach to resolving the problem of NPD tetrachoric correlation matrices is to obtain a PSD correlation matrix that can be reasonably substituted for an NPD tetrachroic correlation matrix. The process obtaining a PSD correlation matrix to substitute for an NPD correlation matrix is often referred to as *matrix smoothing*. Many algorithms, referred to as *matrix smoothing algorithms* (or simply, *smoothing algorithms*), have been proposed in the psychometric literature and elsewhere [@bentler2011,@fushiki2009,@higham2002,@knol1991,@li2010,@lurie1998,@qi2006,@devlin1975robust,@dong1985non]. However, despite the variety of smoothing algorithms available, the frequent occurence of NPD tetrachoric correlation matrices in psychometric research [@bock1988, p. 261], and suggestions to use matrix smoothing algorithms as a remedy to NPD tetrachoric correlation matrices [@wothke1993, @bentler2011, @knol1991], few studies have evaluated the effectiveness of matrix smoothing algorithms in the context of item factor analysis of NPD tetrachoric correlation matrices (**citations needed**). Morever, only two studies have compared the relative performance of matrix smoothing algorithms in the context of factor analysis [@debelak2013, @debelak2016].
+
+In the first of these two comparisions, 
+
 ### Higham Alternating Projections Algorithm (APA; 2002)
 
 ### Bentler-Yuan Algorithm (BY; 2011)
