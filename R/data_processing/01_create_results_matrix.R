@@ -21,7 +21,10 @@ rmsd_extractor <- function(rep_list, Rpop) {
   map_dfc(.x = rep_list$smoothed_matrices,
           .f = function(X) {
             if (!anyNA(X$R)) {
-              out <- fungible::rmsd(X$R, Rpop)
+              out <- fungible::rmsd(X$R, 
+                                    Rpop, 
+                                    Symmetric = TRUE, 
+                                    IncludeDiag = FALSE)
             } else {
               out <- NA
             }
@@ -84,9 +87,44 @@ extract_condition_data <- function(condition) {
                       values_to = "distance_Rpop_Rsm")
 }
 
+# Add proportion of negative variance variable ----------------------------
+eigvals_list <- lapply(1:216,
+                       FUN = function(i) {
+                         tetcor_file <- paste0(data_dir,
+                                               "/tetcor_matrices",
+                                               "/tetcor_matrix_list",
+                                               formatC(i, digits = 2, flag = "0"),
+                                               ".RDS")
+                         tetcor_list <- readRDS(tetcor_file)
+                         lapply(tetcor_list, FUN = function(R) { 
+                           eigen(R, symmetric = TRUE, only.values = TRUE)$values
+                         }
+                         ) 
+                       }
+)
+
+prop_neg_var_vec <- unlist(
+  lapply(eigvals_list, function(X) {
+    unlist(
+      lapply(X,
+             function(eigs) {
+               if (any(eigs < 0)) {
+                 prop_neg_var <- abs(sum(eigs[eigs < 0])) / sum(eigs)
+               } else {
+                 prop_neg_var <- 0
+               }
+               prop_neg_var
+             })
+    )
+  })
+)
+
 # Save data extracted from smoothed_matrix_list RDS objects ---------------
-saveRDS(map_dfr(1:nrow(conditions_matrix), .f = extract_condition_data),
-        file = "./Data/smoothed_results.RDS")
+smoothing_results <- map_dfr(1:nrow(conditions_matrix), 
+                             .f = extract_condition_data)
+smoothing_results$prop_neg_var <- rep(prop_neg_var_vec, each = 4)
+saveRDS(smoothing_results,
+        file = "./Data/smoothing_results.RDS")
 
 # Save data extracted from loading_matrix_list RDS objects ----------------
 extract_factor_loadings_by_condition <- function(condition, data_dir = data_dir) {
@@ -144,10 +182,12 @@ extract_factor_loadings_by_condition <- function(condition, data_dir = data_dir)
                                 })
           })
 }
-saveRDS(map_dfr(1:nrow(conditions_matrix), 
-                .f = extract_factor_loadings_by_condition,
-                data_dir = data_dir),
-        file = "./Data/loadings_results.RDS")
+
+loading_results <- map_dfr(1:nrow(conditions_matrix), 
+                           .f = extract_factor_loadings_by_condition,
+                           data_dir = data_dir)
+saveRDS(loading_results,
+        file = "./Data/loading_results.RDS")
 
 # smoothing_results <- readRDS(here("Data", "smoothing_results.RDS"))
 # loading_results <- readRDS(here("Data", "loading_results.RDS"))
@@ -157,7 +197,7 @@ results_matrix <- right_join(x = smoothing_results, y = loading_results)
 results_matrix <- results_matrix %>%
   select(id, rep, condition, subjects_per_item:test_type, npd:BY_outstatus, 
          smoothing_method, fa_method, fa_convergence, heywood, distance_Rpop_Rsm,
-         loading_rmsd)
+         loading_rmsd, prop_neg_var)
 
 # Add "None (PSD)" as a smoothing method to allow comparison with the other
 # methods
@@ -208,43 +248,10 @@ results_matrix$fa_method_rec <- fct_recode(results_matrix$fa_method,
                                            "Maximum Likelihood" = "faml")
 ## Reordering results_matrix$factors_rec
 results_matrix$factors_rec <- factor(results_matrix$factors_rec, 
-                                     levels=c("Factors: 1", "Factors: 3", 
+                                     levels = c("Factors: 1", "Factors: 3", 
                                               "Factors: 5", "Factors: 10"))
-
-
-# Add proportion of negative variance variable ----------------------------
-eigvals_list <- lapply(1:216,
-                       FUN = function(i) {
-                         tetcor_file <- paste0(data_dir,
-                                               "/tetcor_matrices",
-                                               "/tetcor_matrix_list",
-                                               formatC(i, digits = 2, flag = "0"),
-                                               ".RDS")
-                         tetcor_list <- readRDS(tetcor_file)
-                         lapply(tetcor_list, FUN = function(R) { 
-                           eigen(R, symmetric = TRUE, only.values = TRUE)$values
-                         }
-                         ) 
-                       }
-)
-
-prop_neg_var_vec <- unlist(
-  lapply(eigvals_list, function(X) {
-    unlist(
-      lapply(X,
-             function(eigs) {
-               if (any(eigs < 0)) {
-                 prop_neg_var <- abs(sum(eigs[eigs < 0])) / sum(eigs)
-               } else {
-                 prop_neg_var <- 0
-               }
-               prop_neg_var
-             })
-    )
-  })
-)
-
-results_matrix$prop_neg_var <- prop_neg_var_vec
 
 # Save results matrix -----------------------------------------------------
 saveRDS(results_matrix, file = paste0(data_dir, "/results_matrix.RDS"))
+saveRDS(dplyr::filter(results_matrix, npd == TRUE), 
+        file = paste0(data_dir, "/results_matrix_npd.RDS"))
