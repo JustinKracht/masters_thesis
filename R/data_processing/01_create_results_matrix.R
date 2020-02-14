@@ -243,13 +243,25 @@ results_matrix$model_error_rec <- fct_recode(results_matrix$model_error_rec,
                                              "Error: 0.3" = "0.3")
 ## Recoding results_matrix$fa_method into results_matrix$fa_method_rec
 results_matrix$fa_method_rec <- fct_recode(results_matrix$fa_method,
-                                           "Principal Axes" = "fapa",
-                                           "Least Squares" = "fals",
-                                           "Maximum Likelihood" = "faml")
+                                           "PA" = "fapa",
+                                           "ULS" = "fals",
+                                           "ML" = "faml")
 ## Reordering results_matrix$factors_rec
 results_matrix$factors_rec <- factor(results_matrix$factors_rec, 
                                      levels = c("Factors: 1", "Factors: 3", 
                                               "Factors: 5", "Factors: 10"))
+
+## Reordering results_matrix_npd$subjects_per_item_rec
+results_matrix_npd$subjects_per_item_rec <- factor(
+  results_matrix_npd$subjects_per_item_rec, 
+  levels = c("Subjects/item: 5", "Subjects/item: 10", "Subjects/item: 15")
+)
+
+## Reordering results_matrix_npd$items_per_factor_rec
+results_matrix_npd$items_per_factor_rec <- factor(
+  results_matrix_npd$items_per_factor_rec, 
+  levels = c("Items/factor: 5", "Items/factor: 10")
+)
 
 # Save results matrix -----------------------------------------------------
 saveRDS(results_matrix, file = paste0(data_dir, "/results_matrix.RDS"))
