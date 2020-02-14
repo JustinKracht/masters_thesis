@@ -1,8 +1,12 @@
 # Ignore all data files
-.Rproj.user
-.Rhistory
+*.Rproj.user
+*.Rhistory
 *.RData
-.Ruserdata
+*.Ruserdata
 *.RDS
-testing.RData
+*.fff
+*.log
+*.pdf
+*.tex
 /Misc
+/Text/factor_loading_recovery_cache
