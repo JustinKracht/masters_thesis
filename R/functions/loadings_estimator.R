@@ -34,7 +34,7 @@ loadings_estimator <- function(rsm_list,
     
     # Apply each of the chosen factor extraction methods
     for (j in 1:length(method)) {
-      if (!(method[j] %in% c("faml", "fiml"))) {
+      if (method[j] != "faml") {
         out <- fungible::faX(
           R = r, 
           n = sample_size, 
