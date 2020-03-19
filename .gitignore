@@ -10,3 +10,4 @@
 *.tex
 /Misc
 /Text/factor_loading_recovery_cache
+.Rproj.user

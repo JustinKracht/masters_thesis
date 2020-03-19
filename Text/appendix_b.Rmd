@@ -1,0 +1,241 @@
+---
+output: pdf_document
+---
+
+```{r appx-b-setup, echo = TRUE, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+generate_figs <- FALSE
+
+pacman::p_load(ggplot2,
+               here,
+               merTools,
+               dplyr,
+               tidyr)
+
+results_matrix_npd <- readRDS(paste0(project_dir, 
+                                     "/Data", 
+                                     "/results_matrix_npd.RDS"))
+```
+
+# Regression Diagnostics
+
+## Model 1: Regression model predicting $\log \textrm{D}_s(\mathbf{R}_{\textrm{Pop}}, \mathbf{R}_{\textrm{Sm}})$
+
+```{r RpopRsm-mod-fit, echo = FALSE, eval = FALSE}
+# Import simulation data
+sim_data <- readRDS(here("Data", "results_matrix.RDS"))
+sim_data <- sim_data %>% 
+  dplyr::filter(npd == TRUE, # only keep npd matrices
+                !is.na(distance_Rpop_Rsm)) %>% # remove missing values
+  select(id:npd, smoothing_method, distance_Rpop_Rsm) %>%
+  distinct() # keep only unique observations of smoothed matrices
+
+# Standardize all numeric predictors
+sim_data <- mutate_at(sim_data,
+                      .vars = c("subjects_per_item", "items_per_factor", 
+                                "factors", "factor_loading", "model_error"),
+                      .funs = function(x) as.vector(scale(x)))
+
+# Fit the linear mixed effects model with a random intercept for each NPD
+# tetrachoric correlation matrix
+RpopRsm_model <- lme4::lmer(
+  log(distance_Rpop_Rsm) ~ (subjects_per_item + items_per_factor + 
+                              factors + factor_loading + model_error + 
+                              smoothing_method)^2 + (1|id),
+  data = sim_data
+)
+```
+
+Model 1 was a linear mixed-effects model predicting the (log) scaled distance between the smoothed and model-implied population correlation matrix and was fit using the R `lme4` package  (Bates, Mächler, Bolker, & Walker, 2015). Diagnostic plots showing standardized residuals plotted against fitted values for the model, a quantile-quantile plot for the residuals, and a quantile-quantile plot for the random intercept terms are shown in Figures \@ref(fig:residuals-vs-fitted-RpopRsm), \@ref(fig:qq-plot-RpopRsm), and \@ref(fig:qq-plot-randInt-RpopRsm) respectively. These plots showed that some assumptions of the linear mixed-effects model seemed not to be reasonable for the model I fit, even after using a log-transformation on the response variable. First, Figure \@ref(fig:residuals-vs-fitted-RpopRsm) showed that the variance of the residuals was not constant over the range of fitted values. In particular, there was little variation near the edges of the range of fitted values and a large amount of variation near the center of the distribution of fitted values. Therefore, the homoscedasticity assumption of the linear mixed-effects model seemed to have been violated. Moreover, Figure \@ref(fig:qq-plot-RpopRsm) showed that the assumption of normally-distributed errors also seemed likely to have been violated. In particular, Figure \@ref(fig:qq-plot-RpopRsm) showed that the distribution of residuals had heavy tails and was positively skewed. Finally, Figure \@ref(fig:qq-plot-randInt-RpopRsm) shows that the random effects (random intercepts) were also not normally distributed --- the distribution was positively skewed. To address these violations of the model assumptions, I first attempted to fit a robust linear mixed-effects model using `rlmer` function in the R `robustlmm` package (Koller, 2016). Unfortunately, the data were too large for the `rlmer` function to handle. I also tried a more complex transformation of the dependent variable (using a Box-Cox power transformation; Box & Cox, 1964), but it produced no discernable benefit compared to a log transformation.
+
+The apparent violations of the assumptions of the linear mixed-effects model were concerning. However, inference for the fixed effects in mixed-effects models seems to be somewhat robust to these violations. In particular, Jacqmin-Gadda, Sibillot, Proust, Molina, & Thiébaut (2007) showed that inference for fixed effects was robust for non-gaussian and heteroscedastic errors. Moreover,  Jacqmin-Gadda et al. (2007) cite several studies that indicate that inference for fixed effects are also robust to non-gaussian random effects  (Butler & Louis, 1992; Verbeke & Lesaffre, 1997; Zhang & Davidian, 2001). Finally, the purpose of this analysis was to obtain rough estimates of the (relative) effects of matrix smoothing methods (and the interactions between smoothing methods and the other design factors) on population correlation matrix recovery. Neither $p$-values nor confidence intervals were of primary concern. Therefore, the apparent violation of some model assumptions does not seem likely to have affected the main results of the study.
+
+```{r RpopRsm-diagnostics, echo = FALSE, warning = FALSE, message = FALSE}
+if (generate_figs) {
+  # Load the model
+  RpopRsm_model <- readRDS(here("Data", "RpopRsm_model.RDS"))
+  
+  # Create diagnostic plots
+  resid_vals <- resid(RpopRsm_model, type = "pearson")
+  fitted_vals <- fitted(RpopRsm_model)
+  RpopRsm_diagnostic <- data.frame(fitted = fitted_vals,
+                                   resid  = resid_vals)
+  ranef_vals <- ranef(RpopRsm_model, drop = TRUE, condVar = FALSE)
+  ranef_vals <- data.frame(ranef_vals = ranef_vals$id)
+
+  resid_vs_fitted <- ggplot(RpopRsm_diagnostic, aes(x = fitted, y = resid)) +
+    geom_hex(bins = 100) +
+    scale_fill_continuous(type = "viridis") +
+    labs(x = "Fitted value",
+         y = "Standardized Residual") +
+    theme_minimal()
+
+  resid_qq <- ggplot(RpopRsm_diagnostic, aes(sample = resid)) +
+    geom_qq(geom = "point") +
+    geom_qq_line() +
+    theme_minimal() +
+    labs(title = "QQ Plot of Residuals")
+
+  ranef_qq <- ggplot(ranef_vals, aes(sample = ranef_vals)) +
+    geom_qq(geom = "point") +
+    geom_qq_line() +
+    theme_minimal() +
+    labs(title = "QQ Plot of Random Intercepts")
+  
+  ggsave(filename = "RpopRsm_resid_vs_fitted.png",
+         path = here("Text", "figs"),
+         plot = resid_vs_fitted,
+         dpi = "retina",
+         width = 7,
+         height = 5)
+  
+  ggsave(filename = "RpopRsm_resid_qq.png",
+         path = here("Text", "figs"),
+         plot = resid_qq,
+         dpi = "retina",
+         width = 7,
+         height = 5)
+  
+  ggsave(filename = "RpopRsm_ranef_qq.png",
+         path = here("Text", "figs"),
+         plot = ranef_qq,
+         dpi = "retina",
+         width = 7,
+         height = 5)
+}
+```
+
+```{r residuals-vs-fitted-RpopRsm, fig.width = 5.5, echo = FALSE, fig.cap = "Standardized residuals plotted against fitted values for the linear mixed-effects model predicting $\\log \\textrm{D}_{s}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "RpopRsm_resid_vs_fitted.png"),
+  dpi = 320
+)
+```
+
+```{r qq-plot-RpopRsm, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot of residuals for the linear mixed-effects model predicting $\\log \\textrm{D}_{s}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "RpopRsm_resid_qq.png"),
+  dpi = 400
+)
+```
+
+```{r qq-plot-randInt-RpopRsm, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot of random intercept terms for the for the model predicting $\\log \\textrm{D}_{s}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "RpopRsm_ranef_qq.png"),
+  dpi = 400
+)
+```
+
+## Model 2: Regression model predicting $\log \textrm{RMSE}(\mathbf{\Lambda}, \hat{\mathbf{\Lambda}})$
+
+```{r loadings-mod-fit, eval = FALSE, echo = FALSE}
+# Import simulation data
+sim_data <- readRDS(here("Data", "results_matrix.RDS"))
+sim_data <- sim_data %>% 
+  dplyr::filter(npd == TRUE, # only keep npd matrices
+                !is.na(loading_rmsd), # remove obs. with missing values
+                fa_convergence == TRUE) %>% # only keep obs. where FA converged
+  select(id:npd, smoothing_method, fa_method, loading_rmsd)
+
+# Standardize all numeric predictors
+sim_data <- mutate_at(sim_data,
+                      .vars = c("subjects_per_item", "items_per_factor", 
+                                "factors", "factor_loading", "model_error"),
+                      .funs = function(x) as.vector(scale(x)))
+
+# Fit the linear mixed effects model with a random intercept for each NPD
+# tetrachoric correlation matrix
+loading_model <- lme4::lmer(
+  log(loading_rmsd) ~ (subjects_per_item + items_per_factor + 
+                         factors + factor_loading + model_error + 
+                         smoothing_method + fa_method)^2 + (1|id),
+  data = sim_data
+)
+```
+
+Model 2 was a linear mixed-effects model predicting $\log \textrm{RMSE}(\mathbf{\Lambda}, \hat{\mathbf{\Lambda}})$ fit using the R `lme4` package. As with Model 1, diagnostic plots showing standardized residuals plotted against fitted values for the model, a quantile-quantile plot for the residuals, and a quantile-quantile plot for the random intercept terms are shown in Figures \@ref(fig:residuals-vs-fitted-RpopRsm), \@ref(fig:qq-plot-loading-recovery), and \@ref(fig:qq-plot-randInt-loadings) respectively. These plots indicate many of the same issues in Model 2 as were seen for Model 1. First, Figure \@ref(fig:residuals-vs-fitted-RpopRsm) shows clear evidence of non-homogenous conditional error variance. The residual variance seemed generally to be larger for larger fitted values. Second, Figure \@ref(fig:qq-plot-loading-recovery) showed that the distribution of residuals for Model 2 was non-normal and similar to the distribution of the residuals from Model 1 (i.e., positively-skewed and having heavy tails). Finally, Figure \@ref(fig:qq-plot-randInt-loadings) showed that the estimated random effects were also not normally-distributed (similar to Model 1). The distribution of random intercepts was positively-skewed with heavy tails. As with Model 1, alternative transformations of the dependent variable were tried but did not seem to improve model fit compared to a log transformation.
+
+```{r loading_recovery_diagnostics}
+if (generate_figs) {
+  # Load the model
+  loading_model <- readRDS(here("Data", "loading_model.RDS"))
+  
+  # Create diagnostic plots
+  resid_vals <- resid(loading_model, type = "pearson")
+  fitted_vals <- fitted(loading_model)
+  loading_diagnostic <- data.frame(fitted = fitted_vals,
+                                   resid  = resid_vals)
+  ranef_vals <- ranef(loading_model, drop = TRUE, condVar = FALSE)
+  ranef_vals <- data.frame(ranef_vals = ranef_vals$id)
+  
+  resid_vs_fitted <- ggplot(loading_diagnostic, aes(x = fitted, y = resid)) +
+    geom_hex(bins = 100) +
+    scale_fill_continuous(type = "viridis") +
+    labs(x = "Fitted value",
+         y = "Standardized Residual") +
+    theme_minimal()
+  
+  resid_qq <- ggplot(loading_diagnostic, aes(sample = resid)) +
+    geom_qq(geom = "point") +
+    geom_qq_line() +
+    theme_minimal() +
+    labs(title = "QQ Plot of Residuals")
+  
+  ranef_qq <- ggplot(ranef_vals, aes(sample = ranef_vals)) +
+    geom_qq(geom = "point") +
+    geom_qq_line() +
+    theme_minimal() +
+    labs(title = "QQ Plot of Random Intercepts")
+  
+  ggsave(filename = "loading_resid_vs_fitted.png",
+         path = here("Text", "figs"),
+         plot = resid_vs_fitted,
+         dpi = "retina",
+         width = 7,
+         height = 5)
+  
+  ggsave(filename = "loading_resid_qq.png",
+         path = here("Text", "figs"),
+         plot = resid_qq,
+         dpi = "retina",
+         width = 7,
+         height = 5)
+  
+  ggsave(filename = "loading_ranef_qq.png",
+         path = here("Text", "figs"),
+         plot = ranef_qq,
+         dpi = "retina",
+         width = 7,
+         height = 5)
+}
+```
+
+```{r residuals-vs-fitted-loading-recovery, fig.width = 5.5, echo = FALSE, fig.cap = "Standardized residuals plotted against fitted values for the linear mixed-effects model predicting $\\log \\textrm{RMSE}(\\mathbf{\\Lambda}, \\hat{\\mathbf{\\Lambda}})$.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "loading_resid_vs_fitted.png"),
+  dpi = 320
+)
+```
+
+```{r qq-plot-loading-recovery, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot for the residuals from the linear mixed-effects model predicting $\\log \\textrm{RMSE}(\\mathbf{\\Lambda}, \\hat{\\mathbf{\\Lambda}})$.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "loading_resid_qq.png"),
+  dpi = 400
+)
+```
+
+```{r qq-plot-randInt-loadings, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot of random intercept terms for the for the model predicting $\\log \\textrm{RMSE}(\\mathbf{\\Lambda}, \\hat{\\mathbf{\\Lambda}})$.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "loading_ranef_qq.png"),
+  dpi = 400
+)
+```
+
+## References
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup

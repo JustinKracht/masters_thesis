@@ -1,3 +1,4 @@
+# Create and save coefficient plots for RMSE(loading) and Ds(Rpop, Rsm) models
 pacman::p_load(coefplot,
                patchwork,
                broom,

@@ -78,4 +78,3 @@ Var: id (Intercept)                                     & 0.0316                
 Var: Residual                                           & 0.0084                      &                             \\
 \end{longtable}
 \end{center}
-
