@@ -104,11 +104,17 @@ loading_coef_tab <- texreg::texreg(
   digits = 4,
   single.row = TRUE,
   stars = 0,
+  custom.note = "",
   longtable = TRUE,
   use.packages = FALSE,
   caption.above = TRUE,
   caption = "Coefficient estimates and standard errors for the linear mixed effects model using $\\log[\\RMSE]$ as the dependent variable and estimating a random intercept for each NPD correlation matrix.",
   label = "tab:loading-mod-summary"
 )
+
+# Right-align coefficient columns
+loading_coef_tab <- stringr::str_replace(loading_coef_tab, 
+                                         pattern = "\\{l c c \\}", 
+                                         replacement = "\\{l r r \\}")
 
 writeLines(loading_coef_tab, paste0(project_dir, "/Text", "/tabs", "/loading_coef_tab.txt"))

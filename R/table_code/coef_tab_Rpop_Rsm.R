@@ -39,7 +39,13 @@ extract.mira <- function(model) {
   return(tr)
 }
 
+# Load fitted models
 RpopRsm_mod <- readRDS(file = paste0(project_dir, "/Data", "/RpopRsm_model.RDS"))
+RpopRsm_imputed_model <- readRDS(
+  file = paste0(project_dir, "/Data", "/RpopRsm_imputed_model.RDS")
+)
+
+# Set pretty coef names
 coef_names <- c(
   "(Intercept)" = "Constant",
   "scale(subjects_per_item)" = "Subjects/Item",
@@ -81,6 +87,7 @@ RpopRsm_coef_tab <- texreg::texreg(
   l = list(RpopRsm_mod, extract.mira(RpopRsm_imputed_model)),
   custom.coef.names = coef_names,
   custom.model.names = c("Non-imputed", "Imputed (Pooled)"),
+  custom.note = "",
   digits = 4,
   stars = 0,
   longtable = TRUE,
@@ -89,6 +96,11 @@ RpopRsm_coef_tab <- texreg::texreg(
   caption.above = TRUE,
   caption = "Coefficient estimates and standard errors for the linear mixed effects model using $\\log[\\mathrm{D}_{\\mathrm{s}}(\\Rsm, \\Rpop)]$ as the dependent variable and estimating a random intercept for each NPD correlation matrix.",
   label = "tab:distance-mod-summary")
+
+# Right-align coefficient columns
+RpopRsm_coef_tab <- stringr::str_replace(RpopRsm_coef_tab, 
+                                         pattern = "\\{l c c \\}", 
+                                         replacement = "\\{l r r \\}")
 
 writeLines(RpopRsm_coef_tab, 
            paste0(project_dir, "/Text", "/tabs", "/RpopRsm_coef_tab.txt"))

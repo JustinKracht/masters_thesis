@@ -1,6 +1,7 @@
 loading_estimation_step <- function(conditions, data_dir, error_dir, 
-                                    cores, reps = 1:1000, 
+                                    cores, reps, 
                                     conditions_matrix = conditions_matrix, ...) {
+  reps <- 1:reps
   pbmcapply::pbmclapply(
     X = conditions,
     FUN = function(i) {

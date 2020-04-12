@@ -1,6 +1,5 @@
-
 \begin{center}
-\begin{longtable}{l c c }
+\begin{longtable}{l r r }
 \caption{Coefficient estimates and standard errors for the linear mixed effects model using $\log[\RMSE]$ as the dependent variable and estimating a random intercept for each NPD correlation matrix.}
 \label{tab:loading-mod-summary}\\
 \hline
@@ -14,67 +13,67 @@
 \hline
 \endfoot
 \hline
-\multicolumn{3}{l}{\scriptsize{$^{***}p<0.001$, $^{**}p<0.01$, $^*p<0.05$}}\\
+\\
 \endlastfoot
-Constant                                                & $-2.2408 \; (0.0007)^{***}$ & $-2.2407 \; (0.0007)^{***}$ \\
-Subjects/Item                                           & $-0.1868 \; (0.0007)^{***}$ & $-0.1844 \; (0.0007)^{***}$ \\
-Items/Factor                                            & $-0.1732 \; (0.0005)^{***}$ & $-0.1722 \; (0.0006)^{***}$ \\
-Factors                                                 & $-0.2544 \; (0.0005)^{***}$ & $-0.2560 \; (0.0006)^{***}$ \\
-Factor Loading                                          & $-0.4384 \; (0.0006)^{***}$ & $-0.4360 \; (0.0007)^{***}$ \\
-Model Error                                             & $0.1043 \; (0.0005)^{***}$  & $0.1035 \; (0.0006)^{***}$  \\
-Smoothing Method (BY)                                   & $-0.0128 \; (0.0004)^{***}$ & $-0.0026 \; (0.0005)^{***}$ \\
-Smoothing Method (KB)                                   & $-0.0055 \; (0.0004)^{***}$ & $-0.0055 \; (0.0004)^{***}$ \\
-Smoothing Method (None)                                 & $0.0057 \; (0.0004)^{***}$  & $0.0057 \; (0.0004)^{***}$  \\
-Factor Extraction (ML)                                  & $0.1156 \; (0.0004)^{***}$  & $0.1156 \; (0.0004)^{***}$  \\
-Factor Extraction (PA)                                  & $0.0030 \; (0.0004)^{***}$  & $0.0030 \; (0.0004)^{***}$  \\
-Subjects/Item $\times$ Items/Factor                     & $0.0166 \; (0.0006)^{***}$  & $0.0165 \; (0.0006)^{***}$  \\
-Subjects/Item $\times$ Factors                          & $0.0214 \; (0.0006)^{***}$  & $0.0215 \; (0.0006)^{***}$  \\
-Subjects/Item $\times$ Factor Loading                   & $-0.0170 \; (0.0007)^{***}$ & $-0.0171 \; (0.0007)^{***}$ \\
-Subjects/Item $\times$ Model Error                      & $0.0249 \; (0.0006)^{***}$  & $0.0249 \; (0.0006)^{***}$  \\
-Subjects/Item $\times$ Smoothing Method (BY)            & $0.0001 \; (0.0003)$        & $-0.0001 \; (0.0004)$       \\
-Subjects/Item $\times$ Smoothing Method (KB)            & $0.0021 \; (0.0002)^{***}$  & $0.0021 \; (0.0003)^{***}$  \\
-Subjects/Item $\times$ Smoothing Method (None)          & $-0.0026 \; (0.0002)^{***}$ & $-0.0026 \; (0.0003)^{***}$ \\
-Subjects/Item $\times$ Factor Extraction (ML)           & $0.1065 \; (0.0002)^{***}$  & $0.0994 \; (0.0002)^{***}$  \\
-Subjects/Item $\times$ Factor Extraction (PA)           & $-0.0003 \; (0.0002)$       & $-0.0002 \; (0.0002)$       \\
-Items/Factor $\times$ Factors                           & $-0.0051 \; (0.0005)^{***}$ & $-0.0051 \; (0.0005)^{***}$ \\
-Items/Factor $\times$ Factor Loading                    & $-0.0042 \; (0.0006)^{***}$ & $-0.0042 \; (0.0006)^{***}$ \\
-Items/Factor $\times$ Model Error                       & $0.0359 \; (0.0005)^{***}$  & $0.0361 \; (0.0005)^{***}$  \\
-Items/Factor $\times$ Smoothing Method (BY)             & $0.0103 \; (0.0002)^{***}$  & $0.0086 \; (0.0003)^{***}$  \\
-Items/Factor $\times$ Smoothing Method (KB)             & $-0.0000 \; (0.0002)$       & $-0.0000 \; (0.0002)$       \\
-Items/Factor $\times$ Smoothing Method (None)           & $-0.0019 \; (0.0002)^{***}$ & $-0.0019 \; (0.0002)^{***}$ \\
-Items/Factor $\times$ Factor Extraction (ML)            & $0.0826 \; (0.0002)^{***}$  & $0.0796 \; (0.0002)^{***}$  \\
-Items/Factor $\times$ Factor Extraction (PA)            & $-0.0034 \; (0.0002)^{***}$ & $-0.0033 \; (0.0002)^{***}$ \\
-Factors $\times$ Factor Loading                         & $-0.0137 \; (0.0006)^{***}$ & $-0.0136 \; (0.0006)^{***}$ \\
-Factors $\times$ Model Error                            & $0.0419 \; (0.0005)^{***}$  & $0.0419 \; (0.0005)^{***}$  \\
-Factors $\times$ Smoothing Method (BY)                  & $-0.0008 \; (0.0002)^{***}$ & $-0.0007 \; (0.0003)^{*}$   \\
-Factors $\times$ Smoothing Method (KB)                  & $-0.0004 \; (0.0002)$       & $-0.0004 \; (0.0002)$       \\
-Factors $\times$ Smoothing Method (None)                & $-0.0009 \; (0.0002)^{***}$ & $-0.0009 \; (0.0002)^{***}$ \\
-Factors $\times$ Factor Extraction (ML)                 & $-0.0899 \; (0.0002)^{***}$ & $-0.0852 \; (0.0002)^{***}$ \\
-Factors $\times$ Factor Extraction (PA)                 & $-0.0036 \; (0.0002)^{***}$ & $-0.0034 \; (0.0002)^{***}$ \\
-Factor Loading $\times$ Model Error                     & $-0.0466 \; (0.0006)^{***}$ & $-0.0463 \; (0.0006)^{***}$ \\
-Factor Loading $\times$ Smoothing Method (BY)           & $0.0210 \; (0.0002)^{***}$  & $0.0176 \; (0.0003)^{***}$  \\
-Factor Loading $\times$ Smoothing Method (KB)           & $-0.0010 \; (0.0002)^{***}$ & $-0.0010 \; (0.0003)^{***}$ \\
-Factor Loading $\times$ Smoothing Method (None)         & $-0.0002 \; (0.0002)$       & $-0.0002 \; (0.0003)$       \\
-Factor Loading $\times$ Factor Extraction (ML)          & $0.2046 \; (0.0002)^{***}$  & $0.1970 \; (0.0002)^{***}$  \\
-Factor Loading $\times$ Factor Extraction (PA)          & $-0.0033 \; (0.0002)^{***}$ & $-0.0032 \; (0.0002)^{***}$ \\
-Model Error $\times$ Smoothing Method (BY)              & $0.0009 \; (0.0002)^{***}$  & $0.0003 \; (0.0003)$        \\
-Model Error $\times$ Smoothing Method (KB)              & $-0.0002 \; (0.0002)$       & $-0.0002 \; (0.0002)$       \\
-Model Error $\times$ Smoothing Method (None)            & $-0.0001 \; (0.0002)$       & $-0.0001 \; (0.0002)$       \\
-Model Error $\times$ Factor Extraction (ML)             & $-0.0342 \; (0.0002)^{***}$ & $-0.0317 \; (0.0002)^{***}$ \\
-Model Error $\times$ Factor Extraction (PA)             & $-0.0007 \; (0.0002)^{***}$ & $-0.0006 \; (0.0002)^{**}$  \\
-Smoothing Method (BY) $\times$ Factor Extraction (ML)   & $0.0130 \; (0.0005)^{***}$  & $-0.0128 \; (0.0007)^{***}$ \\
-Smoothing Method (KB) $\times$ Factor Extraction (ML)   & $0.0055 \; (0.0005)^{***}$  & $0.0055 \; (0.0006)^{***}$  \\
-Smoothing Method (None) $\times$ Factor Extraction (ML) & $-0.0057 \; (0.0005)^{***}$ & $-0.0057 \; (0.0006)^{***}$ \\
-Smoothing Method (BY) $\times$ Factor Extraction (PA)   & $-0.0012 \; (0.0005)^{*}$   & $-0.0015 \; (0.0007)^{*}$   \\
-Smoothing Method (KB) $\times$ Factor Extraction (PA)   & $-0.0001 \; (0.0005)$       & $-0.0001 \; (0.0006)$       \\
-Smoothing Method (None) $\times$ Factor Extraction (PA) & $0.0023 \; (0.0005)^{***}$  & $0.0023 \; (0.0006)^{***}$  \\
+Constant                                                & $-2.2408 \; (0.0007)$ & $-2.2407 \; (0.0007)$ \\
+Subjects/Item                                           & $-0.1868 \; (0.0007)$ & $-0.1844 \; (0.0007)$ \\
+Items/Factor                                            & $-0.1732 \; (0.0005)$ & $-0.1722 \; (0.0006)$ \\
+Factors                                                 & $-0.2544 \; (0.0005)$ & $-0.2560 \; (0.0006)$ \\
+Factor Loading                                          & $-0.4384 \; (0.0006)$ & $-0.4360 \; (0.0007)$ \\
+Model Error                                             & $0.1043 \; (0.0005)$  & $0.1035 \; (0.0006)$  \\
+Smoothing Method (BY)                                   & $-0.0128 \; (0.0004)$ & $-0.0026 \; (0.0005)$ \\
+Smoothing Method (KB)                                   & $-0.0055 \; (0.0004)$ & $-0.0055 \; (0.0004)$ \\
+Smoothing Method (None)                                 & $0.0057 \; (0.0004)$  & $0.0057 \; (0.0004)$  \\
+Factor Extraction (ML)                                  & $0.1156 \; (0.0004)$  & $0.1156 \; (0.0004)$  \\
+Factor Extraction (PA)                                  & $0.0030 \; (0.0004)$  & $0.0030 \; (0.0004)$  \\
+Subjects/Item $\times$ Items/Factor                     & $0.0166 \; (0.0006)$  & $0.0165 \; (0.0006)$  \\
+Subjects/Item $\times$ Factors                          & $0.0214 \; (0.0006)$  & $0.0215 \; (0.0006)$  \\
+Subjects/Item $\times$ Factor Loading                   & $-0.0170 \; (0.0007)$ & $-0.0171 \; (0.0007)$ \\
+Subjects/Item $\times$ Model Error                      & $0.0249 \; (0.0006)$  & $0.0249 \; (0.0006)$  \\
+Subjects/Item $\times$ Smoothing Method (BY)            & $0.0001 \; (0.0003)$  & $-0.0001 \; (0.0004)$ \\
+Subjects/Item $\times$ Smoothing Method (KB)            & $0.0021 \; (0.0002)$  & $0.0021 \; (0.0003)$  \\
+Subjects/Item $\times$ Smoothing Method (None)          & $-0.0026 \; (0.0002)$ & $-0.0026 \; (0.0003)$ \\
+Subjects/Item $\times$ Factor Extraction (ML)           & $0.1065 \; (0.0002)$  & $0.0994 \; (0.0002)$  \\
+Subjects/Item $\times$ Factor Extraction (PA)           & $-0.0003 \; (0.0002)$ & $-0.0002 \; (0.0002)$ \\
+Items/Factor $\times$ Factors                           & $-0.0051 \; (0.0005)$ & $-0.0051 \; (0.0005)$ \\
+Items/Factor $\times$ Factor Loading                    & $-0.0042 \; (0.0006)$ & $-0.0042 \; (0.0006)$ \\
+Items/Factor $\times$ Model Error                       & $0.0359 \; (0.0005)$  & $0.0361 \; (0.0005)$  \\
+Items/Factor $\times$ Smoothing Method (BY)             & $0.0103 \; (0.0002)$  & $0.0086 \; (0.0003)$  \\
+Items/Factor $\times$ Smoothing Method (KB)             & $-0.0000 \; (0.0002)$ & $-0.0000 \; (0.0002)$ \\
+Items/Factor $\times$ Smoothing Method (None)           & $-0.0019 \; (0.0002)$ & $-0.0019 \; (0.0002)$ \\
+Items/Factor $\times$ Factor Extraction (ML)            & $0.0826 \; (0.0002)$  & $0.0796 \; (0.0002)$  \\
+Items/Factor $\times$ Factor Extraction (PA)            & $-0.0034 \; (0.0002)$ & $-0.0033 \; (0.0002)$ \\
+Factors $\times$ Factor Loading                         & $-0.0137 \; (0.0006)$ & $-0.0136 \; (0.0006)$ \\
+Factors $\times$ Model Error                            & $0.0419 \; (0.0005)$  & $0.0419 \; (0.0005)$  \\
+Factors $\times$ Smoothing Method (BY)                  & $-0.0008 \; (0.0002)$ & $-0.0007 \; (0.0003)$ \\
+Factors $\times$ Smoothing Method (KB)                  & $-0.0004 \; (0.0002)$ & $-0.0004 \; (0.0002)$ \\
+Factors $\times$ Smoothing Method (None)                & $-0.0009 \; (0.0002)$ & $-0.0009 \; (0.0002)$ \\
+Factors $\times$ Factor Extraction (ML)                 & $-0.0899 \; (0.0002)$ & $-0.0852 \; (0.0002)$ \\
+Factors $\times$ Factor Extraction (PA)                 & $-0.0036 \; (0.0002)$ & $-0.0034 \; (0.0002)$ \\
+Factor Loading $\times$ Model Error                     & $-0.0466 \; (0.0006)$ & $-0.0463 \; (0.0006)$ \\
+Factor Loading $\times$ Smoothing Method (BY)           & $0.0210 \; (0.0002)$  & $0.0176 \; (0.0003)$  \\
+Factor Loading $\times$ Smoothing Method (KB)           & $-0.0010 \; (0.0002)$ & $-0.0010 \; (0.0003)$ \\
+Factor Loading $\times$ Smoothing Method (None)         & $-0.0002 \; (0.0002)$ & $-0.0002 \; (0.0003)$ \\
+Factor Loading $\times$ Factor Extraction (ML)          & $0.2046 \; (0.0002)$  & $0.1970 \; (0.0002)$  \\
+Factor Loading $\times$ Factor Extraction (PA)          & $-0.0033 \; (0.0002)$ & $-0.0032 \; (0.0002)$ \\
+Model Error $\times$ Smoothing Method (BY)              & $0.0009 \; (0.0002)$  & $0.0003 \; (0.0003)$  \\
+Model Error $\times$ Smoothing Method (KB)              & $-0.0002 \; (0.0002)$ & $-0.0002 \; (0.0002)$ \\
+Model Error $\times$ Smoothing Method (None)            & $-0.0001 \; (0.0002)$ & $-0.0001 \; (0.0002)$ \\
+Model Error $\times$ Factor Extraction (ML)             & $-0.0342 \; (0.0002)$ & $-0.0317 \; (0.0002)$ \\
+Model Error $\times$ Factor Extraction (PA)             & $-0.0007 \; (0.0002)$ & $-0.0006 \; (0.0002)$ \\
+Smoothing Method (BY) $\times$ Factor Extraction (ML)   & $0.0130 \; (0.0005)$  & $-0.0128 \; (0.0007)$ \\
+Smoothing Method (KB) $\times$ Factor Extraction (ML)   & $0.0055 \; (0.0005)$  & $0.0055 \; (0.0006)$  \\
+Smoothing Method (None) $\times$ Factor Extraction (ML) & $-0.0057 \; (0.0005)$ & $-0.0057 \; (0.0006)$ \\
+Smoothing Method (BY) $\times$ Factor Extraction (PA)   & $-0.0012 \; (0.0005)$ & $-0.0015 \; (0.0007)$ \\
+Smoothing Method (KB) $\times$ Factor Extraction (PA)   & $-0.0001 \; (0.0005)$ & $-0.0001 \; (0.0006)$ \\
+Smoothing Method (None) $\times$ Factor Extraction (PA) & $0.0023 \; (0.0005)$  & $0.0023 \; (0.0006)$  \\
 \hline
-AIC                                                     & -2305664.7680               &                             \\
-BIC                                                     & -2305007.4656               &                             \\
-Log Likelihood                                          & 1152886.3840                &                             \\
-Num. obs.                                               & 1428687                     & 1489564                     \\
-Num. groups: id                                         & 124346                      & 124346                      \\
-Var: id (Intercept)                                     & 0.0316                      &                             \\
-Var: Residual                                           & 0.0084                      &                             \\
+AIC                                                     & -2305664.7680         &                       \\
+BIC                                                     & -2305007.4656         &                       \\
+Log Likelihood                                          & 1152886.3840          &                       \\
+Num. obs.                                               & 1428687               & 1489564               \\
+Num. groups: id                                         & 124346                & 124346                \\
+Var: id (Intercept)                                     & 0.0316                &                       \\
+Var: Residual                                           & 0.0084                &                       \\
 \end{longtable}
 \end{center}
