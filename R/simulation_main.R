@@ -39,12 +39,11 @@ items_per_factor <- c(5, 10)
 factors <- c(1, 3, 5, 10)
 factor_loading <- c(0.3, 0.5, 0.8)
 model_error <- c(0.0, 0.1, 0.3)
-test_type <- c("wide") # difficult
+test_type <- c("wide")
 
 # Set the minimum and maximum difficulty values for the wide and difficult
 # conditions
-diff_range <- list(wide = c(0.15, 0.85),
-                   difficult = c(0.05, 0.30))
+diff_range <- list(wide = c(0.15, 0.85))
 
 # Create a conditions matrix with all combinations of factor levels
 conditions_matrix <- expand.grid(subjects_per_item = subjects_per_item,
@@ -92,7 +91,7 @@ do_step(step = smoothing_step,
 
 # Estimate loading matrices -----------------------------------------------
 do_step(step = loading_estimation_step,
-        conditions = c(20, 21, 92, 93), # 1:nrow(conditions_matrix),
+        conditions = 1:nrow(conditions_matrix),
         step_dir = paste0(data_dir, "/loading_matrices"),
         data_dir = data_dir,
         error_dir = error_dir,
