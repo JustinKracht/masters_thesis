@@ -1,5 +1,6 @@
 # Ignore all data files
 *.Rproj.user
+*.Rproj
 *.Rhistory
 *.RData
 *.Ruserdata
@@ -12,4 +13,3 @@
 /Text/factor_loading_recovery_cache
 /Text/factor_loading_recovery_files
 /Text/figs
-.Rproj.user
