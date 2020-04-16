@@ -3,8 +3,8 @@ pacman::p_load(tidyverse, here)
 
 # Load data
 project_dir <- here()
-load(paste0(project_dir, "/Data", "/environment.RData"))
 data_dir <- here("Data")
+load(paste0(data_dir, "/environment.RData"))
 
 # Create a data frame with a row for each rep (observation) ---------------
 results_matrix <- slice(conditions_matrix,
@@ -88,7 +88,7 @@ extract_condition_data <- function(condition) {
 }
 
 # Add proportion of negative variance variable ----------------------------
-eigvals_list <- lapply(1:216,
+eigvals_list <- lapply(1:nrow(conditions_matrix),
                        FUN = function(i) {
                          tetcor_file <- paste0(data_dir,
                                                "/tetcor_matrices",
@@ -195,14 +195,13 @@ saveRDS(loading_results,
 # Merge the datasets to create a complete results matrix ------------------
 results_matrix <- right_join(x = smoothing_results, y = loading_results)
 results_matrix <- results_matrix %>%
-  select(id, rep, condition, subjects_per_item:test_type, npd:BY_outstatus, 
+  dplyr::select(id, rep, condition, subjects_per_item:test_type, npd:BY_outstatus, 
          smoothing_method, fa_method, fa_convergence, heywood, distance_Rpop_Rsm,
          loading_rmsd, prop_neg_var)
 
-# Add "None (PSD)" as a smoothing method to allow comparison with the other
-# methods
-results_matrix$smoothing_method[results_matrix$smoothing_method == "None" & 
-                                  results_matrix$npd == FALSE] <- "None (PSD)"
+## Make "None" the baseline level for smoothing methods
+results_matrix$smoothing_method <- fct_relevel(results_matrix$smoothing_method,
+                                               "None")
 
 ## Recoding results_matrix$factors into results_matrix$factors_rec
 results_matrix$factors_rec <- as.character(results_matrix$factors)
@@ -252,14 +251,14 @@ results_matrix$factors_rec <- factor(results_matrix$factors_rec,
                                               "Factors: 5", "Factors: 10"))
 
 ## Reordering results_matrix_npd$subjects_per_item_rec
-results_matrix_npd$subjects_per_item_rec <- factor(
-  results_matrix_npd$subjects_per_item_rec, 
+results_matrix$subjects_per_item_rec <- factor(
+  results_matrix$subjects_per_item_rec, 
   levels = c("Subjects/item: 5", "Subjects/item: 10", "Subjects/item: 15")
 )
 
 ## Reordering results_matrix_npd$items_per_factor_rec
-results_matrix_npd$items_per_factor_rec <- factor(
-  results_matrix_npd$items_per_factor_rec, 
+results_matrix$items_per_factor_rec <- factor(
+  results_matrix$items_per_factor_rec, 
   levels = c("Items/factor: 5", "Items/factor: 10")
 )
 
