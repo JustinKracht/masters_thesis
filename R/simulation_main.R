@@ -1,6 +1,6 @@
 # Factor loading recovery with smoothed NPD tetrachoric correlation matrices
 # Justin Kracht
-# November 2019
+# April 2020
 
 # Load packages -----------------------------------------------------------
 pacman::p_load(mirt,
@@ -30,7 +30,6 @@ error_dir <- here("Data", "errors.txt")
 
 # Set simulation options --------------------------------------------------
 cores <- detectCores() - 1 # increase number of cores for parallel processing
-save_image <- TRUE # save environment at the end of the simulation
 
 # Define conditions -------------------------------------------------------
 reps <- 1000
@@ -100,4 +99,6 @@ do_step(step = loading_estimation_step,
         reps = 1000,
         check_incomplete = FALSE)
 
-if (save_image) save.image(file = "environment.RDS")
+# Save conditions_matrix and reps objects to use in data processing
+save(list = c("conditions_matrix", "reps"),
+     file = paste0(data_dir, "/environment.RData"))
