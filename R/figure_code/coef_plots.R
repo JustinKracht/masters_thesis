@@ -4,11 +4,12 @@ pacman::p_load(coefplot,
                broom,
                tidyverse,
                merTools,
-               broom.mixed)
+               broom.mixed,
+               here)
 
 # Load the models
-loading_mod    <- readRDS("Data/loading_model.RDS")
-RpopRsm_mod    <- readRDS("Data/RpopRsm_model.RDS")
+loading_mod    <- readRDS(here("Data", "loading_model.RDS"))
+RpopRsm_mod    <- readRDS(here("Data", "RpopRsm_model.RDS"))
 
 # Nicely formatted coefficient names
 coef_names <- c(
@@ -90,7 +91,7 @@ p1 <- loading_mod_summary %>%
 ggsave("loadings_coefplot.png",
        plot = p1,
        device = "png",
-       path = "Text/figs/",
+       path = here("Text", "figs"),
        dpi = "retina",
        width = 8,
        height = 7)
@@ -157,7 +158,7 @@ p2 <- RpopRsm_mod_summary %>%
 ggsave("RpopRsm_coefplot.png",
        plot = p2,
        device = "png",
-       path = "Text/figs/",
+       path = here("Text", "figs"),
        dpi = "retina",
        width = 8,
        height = 7)

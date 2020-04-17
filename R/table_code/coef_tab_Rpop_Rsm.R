@@ -1,5 +1,11 @@
 # Generate Ds(Rpop, Rsm) coefficient table
 # Load fitted models
+pacman::p_load(ggplot2,
+               here,
+               magrittr,
+               dplyr,
+               tidyr,
+               texreg)
 project_dir <- here::here()
 RpopRsm_mod <- readRDS(file = paste0(project_dir, "/Data", "/RpopRsm_model.RDS"))
 

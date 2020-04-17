@@ -4,7 +4,7 @@ output: pdf_document
 
 ```{r appx-setup, echo = TRUE, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-generate_figs <- FALSE
+generate_figs <- TRUE
 
 pacman::p_load(ggplot2,
                here,

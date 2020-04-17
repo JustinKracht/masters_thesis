@@ -68,9 +68,9 @@ pacman::p_load(knitr,
 pacman::p_load_gh("crsh/papaja") # R markdown APA6 template and functions
 
 # Set the project directory
-project_dir <- "/Volumes/GoogleDrive/My Drive/School/masters_thesis"
-generate_figs <- FALSE # Do you want to regenerate all of the figures?
-generate_tabs <- FALSE # Do you want to regenerate all of the tables?
+project_dir <- here::here()
+generate_figs <- TRUE # Do you want to regenerate all of the figures?
+generate_tabs <- TRUE # Do you want to regenerate all of the tables?
 
 # Load the data (only NPD matrices)
 results_matrix_npd <- readRDS(paste0(project_dir, 

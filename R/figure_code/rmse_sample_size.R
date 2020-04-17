@@ -1,4 +1,11 @@
 # RMSE sample size scatterplot
+pacman::p_load(ggplot2,
+               here,
+               magrittr,
+               dplyr,
+               tidyr)
+results_matrix_npd <- readRDS(here("Data", "results_matrix_npd.RDS"))
+
 rmse_sample_size <- results_matrix_npd %>%
   filter(fa_convergence == TRUE) %>%
   ggplot(aes(x = as.numeric(items_per_factor * factors * subjects_per_item), 
@@ -11,7 +18,7 @@ rmse_sample_size <- results_matrix_npd %>%
 # Save png; retina gives 320 dpi
 ggsave(filename = "rmse_sample_size.png",
        plot = rmse_sample_size,
-       path = "Text/figs",
+       path = here("Text", "figs"),
        width = 6.5,
        height = 5,
        units = "in",

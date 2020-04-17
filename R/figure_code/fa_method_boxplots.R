@@ -2,6 +2,13 @@
 # loading, and number of subjects per item. The three factor extraction methods
 # (unweighted least squares, maximum likelihood, and principal axes) are denoted
 # by ULS, ML, and PA, respectively.
+pacman::p_load(ggplot2,
+               here,
+               magrittr,
+               dplyr,
+               tidyr)
+results_matrix_npd <- readRDS(here("Data", "results_matrix_npd.RDS"))
+
 rmse_fa_method <- results_matrix_npd %>%
   filter(fa_convergence == TRUE) %>%
   ggplot(aes(x = fa_method_rec, 
@@ -16,7 +23,7 @@ rmse_fa_method <- results_matrix_npd %>%
 # Save png; retina gives 320 dpi
 ggsave(filename = "fa_method_boxplots.png",
        plot = rmse_fa_method,
-       path = "Text/figs",
+       path = here("Text", "figs"),
        width = 5,
        height = 7,
        units = "in",

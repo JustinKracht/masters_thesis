@@ -1,4 +1,10 @@
 # Generate loading RMSE coefficient table
+pacman::p_load(ggplot2,
+               here,
+               magrittr,
+               dplyr,
+               tidyr,
+               texreg)
 project_dir <- here::here()
 loading_mod <- readRDS(paste0(project_dir, "/Data", "/loading_model.RDS"))
 
