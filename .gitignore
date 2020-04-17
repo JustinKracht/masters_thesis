@@ -5,10 +5,10 @@
 *.RData
 *.Ruserdata
 *.RDS
-*.fff
-*.log
-*.pdf
-*.tex
+/Text/*.fff
+/Text/*.log
+/Text/*.pdf
+/Text/*.tex
 /Misc
 /Text/factor_loading_recovery_cache
 /Text/factor_loading_recovery_files
