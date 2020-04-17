@@ -3,8 +3,7 @@
 # April 2020
 
 # Load packages -----------------------------------------------------------
-pacman::p_load(mirt,
-               here,
+pacman::p_load(here,
                parallel,
                pbmcapply,
                stringr)
