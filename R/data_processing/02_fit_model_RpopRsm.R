@@ -14,17 +14,14 @@ RpopRsm_data <- RpopRsm_data %>%
 
 # Select only the variables to be used in regression
 # Scale numeric predictors
-# Log transform distance_RpopRsm and drop original variable
 RpopRsm_data <- RpopRsm_data %>%
   dplyr::select(id:model_error, smoothing_method, distance_Rpop_Rsm) %>%
-  mutate(log_distance_Rpop_Rsm = log(distance_Rpop_Rsm)) %>%
-  dplyr::select(-distance_Rpop_Rsm) %>%
   mutate_at(.vars = vars(subjects_per_item:model_error), 
             .fun = function(x) as.vector(scale(x)))
 
 # Fit linear mixed effects model ------------------------------------------
 RpopRsm_mod <- lmer(
-  log_distance_Rpop_Rsm ~ (subjects_per_item + items_per_factor + 
+  log(distance_Rpop_Rsm) ~ (subjects_per_item + items_per_factor + 
                              factors + factor_loading + model_error +
                              smoothing_method)^2 + (1 | id),
   data = RpopRsm_data

@@ -16,7 +16,7 @@ rmse_fa_method <- results_matrix_npd %>%
 # Save png; retina gives 320 dpi
 ggsave(filename = "fa_method_boxplots.png",
        plot = rmse_fa_method,
-       path = "figs",
+       path = "Text/figs",
        width = 5,
        height = 7,
        units = "in",

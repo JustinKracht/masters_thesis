@@ -1,14 +1,14 @@
 
 \begin{center}
-\begin{longtable}{l r r }
+\begin{longtable}{l r }
 \caption{Coefficient estimates and standard errors for the linear mixed effects model using $\log[\mathrm{D}_{\mathrm{s}}(\Rsm, \Rpop)]$ as the dependent variable and estimating a random intercept for each NPD correlation matrix.}
 \label{tab:distance-mod-summary}\\
 \hline
- & Non-imputed & Imputed (Pooled) \\
+ &  \\
 \hline
 \endfirsthead
 \hline
- & Non-imputed & Imputed (Pooled) \\
+ &  \\
 \hline
 \endhead
 \hline
@@ -16,48 +16,48 @@
 \hline
 \\
 \endlastfoot
-Constant                                        & $-2.2404 \; (0.0004)$ & $-2.2403 \; (0.0005)$ \\
-Subjects/Item                                   & $-0.2066 \; (0.0005)$ & $-0.2066 \; (0.0005)$ \\
-Items/Factor                                    & $-0.1641 \; (0.0004)$ & $-0.1641 \; (0.0004)$ \\
-Factors                                         & $-0.3117 \; (0.0004)$ & $-0.3117 \; (0.0004)$ \\
-Factor Loading                                  & $-0.0420 \; (0.0005)$ & $-0.0421 \; (0.0005)$ \\
-Model Error                                     & $-0.0059 \; (0.0004)$ & $-0.0059 \; (0.0004)$ \\
-Smoothing Method (BY)                           & $-0.0484 \; (0.0001)$ & $-0.0401 \; (0.0001)$ \\
-Smoothing Method (KB)                           & $-0.0088 \; (0.0001)$ & $-0.0088 \; (0.0001)$ \\
-Smoothing Method (None)                         & $0.0240 \; (0.0001)$  & $0.0240 \; (0.0001)$  \\
-Subjects/Item $\times$ Items/Factor             & $-0.0032 \; (0.0004)$ & $-0.0033 \; (0.0004)$ \\
-Subjects/Item $\times$ Factors                  & $0.0101 \; (0.0004)$  & $0.0102 \; (0.0004)$  \\
-Subjects/Item $\times$ Factor Loading           & $0.0046 \; (0.0005)$  & $0.0045 \; (0.0005)$  \\
-Subjects/Item $\times$ Model Error              & $-0.0004 \; (0.0004)$ & $-0.0003 \; (0.0004)$ \\
-Subjects/Item $\times$ Smoothing Method (BY)    & $0.0142 \; (0.0001)$  & $0.0123 \; (0.0001)$  \\
-Subjects/Item $\times$ Smoothing Method (KB)    & $0.0061 \; (0.0001)$  & $0.0061 \; (0.0001)$  \\
-Subjects/Item $\times$ Smoothing Method (None)  & $-0.0144 \; (0.0001)$ & $-0.0144 \; (0.0001)$ \\
-Items/Factor $\times$ Factors                   & $-0.0199 \; (0.0004)$ & $-0.0199 \; (0.0004)$ \\
-Items/Factor $\times$ Factor Loading            & $-0.0033 \; (0.0004)$ & $-0.0031 \; (0.0004)$ \\
-Items/Factor $\times$ Model Error               & $0.0012 \; (0.0004)$  & $0.0015 \; (0.0004)$  \\
-Items/Factor $\times$ Smoothing Method (BY)     & $0.0134 \; (0.0001)$  & $0.0109 \; (0.0001)$  \\
-Items/Factor $\times$ Smoothing Method (KB)     & $0.0003 \; (0.0001)$  & $0.0003 \; (0.0001)$  \\
-Items/Factor $\times$ Smoothing Method (None)   & $0.0003 \; (0.0001)$  & $0.0003 \; (0.0001)$  \\
-Factors $\times$ Factor Loading                 & $0.0231 \; (0.0004)$  & $0.0233 \; (0.0004)$  \\
-Factors $\times$ Model Error                    & $0.0007 \; (0.0004)$  & $0.0008 \; (0.0004)$  \\
-Factors $\times$ Smoothing Method (BY)          & $-0.0063 \; (0.0001)$ & $-0.0065 \; (0.0001)$ \\
-Factors $\times$ Smoothing Method (KB)          & $-0.0017 \; (0.0001)$ & $-0.0017 \; (0.0001)$ \\
-Factors $\times$ Smoothing Method (None)        & $-0.0016 \; (0.0001)$ & $-0.0016 \; (0.0001)$ \\
-Factor Loading $\times$ Model Error             & $0.0059 \; (0.0004)$  & $0.0063 \; (0.0004)$  \\
-Factor Loading $\times$ Smoothing Method (BY)   & $0.0263 \; (0.0001)$  & $0.0215 \; (0.0001)$  \\
-Factor Loading $\times$ Smoothing Method (KB)   & $-0.0024 \; (0.0001)$ & $-0.0024 \; (0.0001)$ \\
-Factor Loading $\times$ Smoothing Method (None) & $0.0068 \; (0.0001)$  & $0.0068 \; (0.0001)$  \\
-Model Error $\times$ Smoothing Method (BY)      & $0.0034 \; (0.0001)$  & $0.0004 \; (0.0001)$  \\
-Model Error $\times$ Smoothing Method (KB)      & $-0.0010 \; (0.0001)$ & $-0.0010 \; (0.0001)$ \\
-Model Error $\times$ Smoothing Method (None)    & $0.0022 \; (0.0001)$  & $0.0022 \; (0.0001)$  \\
+Constant                                       & $-2.2162 \; (0.0004)$ \\
+Subjects/Item                                  & $-0.2207 \; (0.0005)$ \\
+Items/Factor                                   & $-0.1638 \; (0.0004)$ \\
+Factors                                        & $-0.3134 \; (0.0004)$ \\
+Factor Loading                                 & $-0.0354 \; (0.0005)$ \\
+Model Error                                    & $-0.0038 \; (0.0004)$ \\
+Smoothing Method (APA)                         & $-0.0240 \; (0.0001)$ \\
+Smoothing Method (BY)                          & $-0.0724 \; (0.0001)$ \\
+Smoothing Method (KB)                          & $-0.0328 \; (0.0001)$ \\
+Subjects/Item $\times$ Items/Factor            & $-0.0034 \; (0.0004)$ \\
+Subjects/Item $\times$ Factors                 & $0.0104 \; (0.0004)$  \\
+Subjects/Item $\times$ Factor Loading          & $0.0041 \; (0.0005)$  \\
+Subjects/Item $\times$ Model Error             & $-0.0004 \; (0.0004)$ \\
+Subjects/Item $\times$ Smoothing Method (APA)  & $0.0144 \; (0.0001)$  \\
+Subjects/Item $\times$ Smoothing Method (BY)   & $0.0282 \; (0.0001)$  \\
+Subjects/Item $\times$ Smoothing Method (KB)   & $0.0204 \; (0.0001)$  \\
+Items/Factor $\times$ Factors                  & $-0.0199 \; (0.0004)$ \\
+Items/Factor $\times$ Factor Loading           & $-0.0028 \; (0.0004)$ \\
+Items/Factor $\times$ Model Error              & $0.0013 \; (0.0004)$  \\
+Items/Factor $\times$ Smoothing Method (APA)   & $-0.0003 \; (0.0001)$ \\
+Items/Factor $\times$ Smoothing Method (BY)    & $0.0128 \; (0.0001)$  \\
+Items/Factor $\times$ Smoothing Method (KB)    & $0.0001 \; (0.0001)$  \\
+Factors $\times$ Factor Loading                & $0.0229 \; (0.0004)$  \\
+Factors $\times$ Model Error                   & $0.0007 \; (0.0004)$  \\
+Factors $\times$ Smoothing Method (APA)        & $0.0016 \; (0.0001)$  \\
+Factors $\times$ Smoothing Method (BY)         & $-0.0046 \; (0.0001)$ \\
+Factors $\times$ Smoothing Method (KB)         & $-0.0001 \; (0.0001)$ \\
+Factor Loading $\times$ Model Error            & $0.0060 \; (0.0004)$  \\
+Factor Loading $\times$ Smoothing Method (APA) & $-0.0068 \; (0.0001)$ \\
+Factor Loading $\times$ Smoothing Method (BY)  & $0.0193 \; (0.0001)$  \\
+Factor Loading $\times$ Smoothing Method (KB)  & $-0.0092 \; (0.0001)$ \\
+Model Error $\times$ Smoothing Method (APA)    & $-0.0022 \; (0.0001)$ \\
+Model Error $\times$ Smoothing Method (BY)     & $0.0011 \; (0.0001)$  \\
+Model Error $\times$ Smoothing Method (KB)     & $-0.0032 \; (0.0001)$ \\
 \hline
-AIC                                             & -1748340.9300         &                       \\
-BIC                                             & -1747942.2132         &                       \\
-Log Likelihood                                  & 874206.4650           &                       \\
-Num. obs.                                       & 477093                & 497384                \\
-Num. groups: id                                 & 124346                & 124346                \\
-Var: id (Intercept)                             & 0.0175                &                       \\
-Var: Residual                                   & 0.0004                &                       \\
+AIC                                            & -1808572.2960         \\
+BIC                                            & -1808172.0800         \\
+Log Likelihood                                 & 904322.1480           \\
+Num. obs.                                      & 497381                \\
+Num. groups: id                                & 124346                \\
+Var: id (Intercept)                            & 0.0175                \\
+Var: Residual                                  & 0.0004                \\
 \end{longtable}
 \end{center}
 

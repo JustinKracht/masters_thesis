@@ -11,7 +11,7 @@ rmse_sample_size <- results_matrix_npd %>%
 # Save png; retina gives 320 dpi
 ggsave(filename = "rmse_sample_size.png",
        plot = rmse_sample_size,
-       path = "figs",
+       path = "Text/figs",
        width = 6.5,
        height = 5,
        units = "in",
