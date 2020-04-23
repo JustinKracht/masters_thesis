@@ -12,6 +12,7 @@ pacman::p_load(ggplot2,
                dplyr,
                tidyr)
 
+project_dir <- here()
 results_matrix_npd <- readRDS(paste0(project_dir, 
                                      "/Data", 
                                      "/results_matrix_npd.RDS"))
@@ -46,11 +47,11 @@ RpopRsm_model <- lme4::lmer(
 )
 ```
 
-Model 1 was a linear mixed-effects model predicting the (log) scaled distance between the smoothed and model-implied population correlation matrix and was fit using the R `lme4` package  (Bates, Mächler, Bolker, & Walker, 2015). Diagnostic plots showing standardized residuals plotted against fitted values for the model, a quantile-quantile plot for the residuals, and a quantile-quantile plot for the random intercept terms are shown in Figures \@ref(fig:residuals-vs-fitted-RpopRsm), \@ref(fig:qq-plot-RpopRsm), and \@ref(fig:qq-plot-randInt-RpopRsm) respectively. These plots showed that some assumptions of the linear mixed-effects model seemed not to be reasonable for Model 1, even after using a log-transformation on the response variable.
+Model 1 was a linear mixed-effects model predicting the (log) scaled distance between the smoothed and model-implied population correlation matrix and was fit using the R *lme4* package (Version 1.1.23; Bates, Mächler, Bolker, & Walker, 2015). Diagnostic plots showing standardized residuals plotted against fitted values for the model, a quantile-quantile plot for the residuals, and a quantile-quantile plot for the random intercept terms are shown in Figures \@ref(fig:residuals-vs-fitted-RpopRsm), \@ref(fig:qq-plot-RpopRsm), and \@ref(fig:qq-plot-randInt-RpopRsm) respectively. These plots showed that some assumptions of the linear mixed-effects model seemed not to be reasonable for Model 1, even after using a log-transformation on the response variable.
 
-First, Figure \@ref(fig:residuals-vs-fitted-RpopRsm) showed that the variance of the residuals was not constant over the range of fitted values. In particular, there was little variation near the edges of the range of fitted values and a large amount of variation near the center of the distribution of fitted values. Therefore, the homoscedasticity assumption of the linear mixed-effects model seemed to have been violated. Moreover, Figure \@ref(fig:qq-plot-RpopRsm) showed that the assumption of normally-distributed errors also seemed likely to have been violated. In particular, Figure \@ref(fig:qq-plot-RpopRsm) showed that the distribution of residuals had heavy tails and was positively skewed. Finally, Figure \@ref(fig:qq-plot-randInt-RpopRsm) shows that the random effects (random intercepts) were also not normally distributed --- the distribution was positively skewed. To address these violations of the model assumptions, I first attempted to fit a robust linear mixed-effects model using `rlmer` function in the R `robustlmm` package (Koller, 2016). Unfortunately, the data were too large for the `rlmer` function to handle. I also tried a more complex transformation of the dependent variable (using a Box-Cox power transformation; Box & Cox, 1964), but it produced no discernable benefit compared to a log transformation.
+First, Figure \@ref(fig:residuals-vs-fitted-RpopRsm) showed that the variance of the residuals was not constant over the range of fitted values. In particular, there was little variation near the edges of the range of fitted values and a large amount of variation near the center of the distribution of fitted values. Therefore, the homoscedasticity assumption of the linear mixed-effects model seemed to have been violated. Moreover, Figure \@ref(fig:qq-plot-RpopRsm) showed that the assumption of normally-distributed errors also seemed likely to have been violated. In particular, Figure \@ref(fig:qq-plot-RpopRsm) showed that the distribution of residuals had heavy tails and was positively skewed. Finally, Figure \@ref(fig:qq-plot-randInt-RpopRsm) shows that the random effects (random intercepts) were also not normally distributed --- the distribution was positively skewed. To address these violations of the model assumptions, I first attempted to fit a robust linear mixed-effects model using `rlmer` function in the R *robustlmm* package (Version 2.3; Koller, 2016). Unfortunately, the data were too large for the `rlmer` function to handle. I also tried a more complex transformation of the dependent variable (using a Box-Cox power transformation; Box & Cox, 1964), but it produced no discernable benefit compared to a log transformation.
 
-The apparent violations of the assumptions of the linear mixed-effects model were concerning. However, inference for the fixed effects in mixed-effects models seems to be somewhat robust to these violations. In particular, Jacqmin-Gadda, Sibillot, Proust, Molina, & Thiébaut (2007) showed that inference for fixed effects was robust for non-Gaussian and heteroscedastic errors. Moreover,  Jacqmin-Gadda et al. (2007) cite several studies that indicate that inference for fixed effects are also robust to non-Gaussian random effects  (Butler & Louis, 1992; Verbeke & Lesaffre, 1997; Zhang & Davidian, 2001). Finally, the purpose of this analysis was to obtain rough estimates of the (relative) effects of matrix smoothing methods (and the interactions between smoothing methods and the other design factors) on population correlation matrix recovery. Neither $p$-values nor confidence intervals were of primary concern. Therefore, the apparent violation of some model assumptions likely did not affect the main results of the study.
+The apparent violations of the assumptions of the linear mixed-effects model were concerning. However, inference for the fixed effects in mixed-effects models seems to be somewhat robust to these violations. In particular, Jacqmin-Gadda, Sibillot, Proust, Molina, & Thiébaut (2007) showed that inference for fixed effects was robust for non-Gaussian and heteroscedastic errors. Moreover,  Jacqmin-Gadda et al. (2007) cite several studies that indicate that inference for fixed effects are also robust to non-Gaussian random effects  (Butler & Louis, 1992; Verbeke & Lesaffre, 1997; Zhang & Davidian, 2001). Finally, the purpose of this analysis was to obtain estimates of the fixed effects of matrix smoothing methods (and the interactions between smoothing methods and the other design factors) on population correlation matrix recovery. Neither $p$-values nor confidence intervals were of primary concern. Therefore, the apparent violation of some model assumptions likely did not affect the main results of the study.
 
 ```{r RpopRsm-diagnostics, echo = FALSE, warning = FALSE, message = FALSE}
 if (generate_figs) {
@@ -111,21 +112,21 @@ if (generate_figs) {
 }
 ```
 
-```{r residuals-vs-fitted-RpopRsm, fig.width = 5.5, echo = FALSE, fig.cap = "Standardized residuals plotted against fitted values for the linear mixed-effects model predicting $\\log \\textrm{D}_{s}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$.", fig.align = "center"}
+```{r residuals-vs-fitted-RpopRsm, fig.width = 5.5, echo = FALSE, fig.cap = "Standardized residuals plotted against fitted values for Model 1.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "RpopRsm_resid_vs_fitted.png"),
   dpi = 320
 )
 ```
 
-```{r qq-plot-RpopRsm, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot of residuals for the linear mixed-effects model predicting $\\log \\textrm{D}_{s}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$.", fig.align = "center"}
+```{r qq-plot-RpopRsm, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot of residuals for Model 1.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "RpopRsm_resid_qq.png"),
   dpi = 400
 )
 ```
 
-```{r qq-plot-randInt-RpopRsm, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot of random intercept terms for the for the model predicting $\\log \\textrm{D}_{s}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$.", fig.align = "center"}
+```{r qq-plot-randInt-RpopRsm, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot of random intercept terms for Model 1.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "RpopRsm_ranef_qq.png"),
   dpi = 400
@@ -159,7 +160,7 @@ loading_model <- lme4::lmer(
 )
 ```
 
-Model 2 was a linear mixed-effects model predicting $\log \textrm{RMSE}(\mathbf{\Lambda}, \hat{\mathbf{\Lambda}})$ fit using the R `lme4` package. As with Model 1, diagnostic plots showing standardized residuals plotted against fitted values for the model, a quantile-quantile plot for the residuals, and a quantile-quantile plot for the random intercept terms are shown in Figures \@ref(fig:residuals-vs-fitted-RpopRsm), \@ref(fig:qq-plot-loading-recovery), and \@ref(fig:qq-plot-randInt-loadings) respectively. These plots indicate many of the same issues in Model 2 as were seen for Model 1. First, Figure \@ref(fig:residuals-vs-fitted-RpopRsm) shows clear evidence of non-homogenous conditional error variance. The residual variance seemed generally to be larger for larger fitted values. Second, Figure \@ref(fig:qq-plot-loading-recovery) showed that the distribution of residuals for Model 2 was non-normal and similar to the distribution of the residuals from Model 1 (i.e., positively-skewed and having heavy tails). Finally, Figure \@ref(fig:qq-plot-randInt-loadings) showed that the estimated random effects were also not normally-distributed (similar to Model 1). The distribution of random intercepts was positively-skewed with heavy tails. Alternative transformations of the dependent variable were tried but did not seem to improve model fit compared to a log transformation. As with Model 1, these violations of the model assumptions are somewhat concerning and indicate that the estimated parameters---the estimated standard errors, in particular---should be treated with some degree of skepticism. However, the main results of the study are unlikely to have been affected greatly by these violations of the model assumptions.
+Model 2 was a linear mixed-effects model predicting $\log \textrm{RMSE}(\mathbf{\Lambda}, \hat{\mathbf{\Lambda}})$ fit using the R *lme4* package (Bates, Mächler, Bolker, & Walker, 2015). As with Model 1, diagnostic plots showing standardized residuals plotted against fitted values for the model, a quantile-quantile plot for the residuals, and a quantile-quantile plot for the random intercept terms are shown in Figures \@ref(fig:residuals-vs-fitted-RpopRsm), \@ref(fig:qq-plot-loading-recovery), and \@ref(fig:qq-plot-randInt-loadings) respectively. These plots indicate many of the same issues in Model 2 as were seen for Model 1. First, Figure \@ref(fig:residuals-vs-fitted-RpopRsm) shows clear evidence of non-homogenous conditional error variance. The residual variance seemed generally to be larger for larger fitted values. Second, Figure \@ref(fig:qq-plot-loading-recovery) showed that the distribution of residuals for Model 2 was non-normal and similar to the distribution of the residuals from Model 1 (i.e., positively-skewed and having heavy tails). Finally, Figure \@ref(fig:qq-plot-randInt-loadings) showed that the estimated random effects were also not normally-distributed (similar to Model 1). The distribution of random intercepts was positively-skewed with heavy tails. Alternative transformations of the dependent variable were tried but did not seem to improve model fit compared to a log transformation. As with Model 1, these violations of the model assumptions are somewhat concerning and indicate that the estimated parameters---the estimated standard errors, in particular---should be treated with some degree of skepticism. However, the main results of the study are unlikely to have been affected greatly by these violations of the model assumptions.
 
 ```{r loading_recovery_diagnostics}
 if (generate_figs) {
@@ -220,21 +221,21 @@ if (generate_figs) {
 }
 ```
 
-```{r residuals-vs-fitted-loading-recovery, fig.width = 5.5, echo = FALSE, fig.cap = "Standardized residuals plotted against fitted values for the linear mixed-effects model predicting $\\log \\textrm{RMSE}(\\mathbf{\\Lambda}, \\hat{\\mathbf{\\Lambda}})$.", fig.align = "center"}
+```{r residuals-vs-fitted-loading-recovery, fig.width = 5.5, echo = FALSE, fig.cap = "Standardized residuals plotted against fitted values for Model 2.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "loading_resid_vs_fitted.png"),
   dpi = 320
 )
 ```
 
-```{r qq-plot-loading-recovery, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot for the residuals from the linear mixed-effects model predicting $\\log \\textrm{RMSE}(\\mathbf{\\Lambda}, \\hat{\\mathbf{\\Lambda}})$.", fig.align = "center"}
+```{r qq-plot-loading-recovery, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot of residuals for Model 2.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "loading_resid_qq.png"),
   dpi = 400
 )
 ```
 
-```{r qq-plot-randInt-loadings, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot of random intercept terms for the for the model predicting $\\log \\textrm{RMSE}(\\mathbf{\\Lambda}, \\hat{\\mathbf{\\Lambda}})$.", fig.align = "center"}
+```{r qq-plot-randInt-loadings, fig.width = 4.5, echo = FALSE, fig.cap = "Quantile-quantile plot of random intercept terms for Model 2.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "loading_ranef_qq.png"),
   dpi = 400

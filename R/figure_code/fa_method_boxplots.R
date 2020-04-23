@@ -6,8 +6,13 @@ pacman::p_load(ggplot2,
                here,
                magrittr,
                dplyr,
-               tidyr)
+               tidyr,
+               latex2exp)
 results_matrix_npd <- readRDS(here("Data", "results_matrix_npd.RDS"))
+results_matrix_npd$fa_method_rec <- recode(results_matrix_npd$fa_method,
+               "fapa" = "PA",
+               "fals" = "OLS",
+               "faml" = "ML")
 
 rmse_fa_method <- results_matrix_npd %>%
   filter(fa_convergence == TRUE) %>%
