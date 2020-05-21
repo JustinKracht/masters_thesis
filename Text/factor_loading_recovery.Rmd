@@ -101,7 +101,42 @@ Following on these results, Debelak and Tran (2016) extended their simulation st
 
 Both Debelak and Tran (2013) and Debelak and Tran (2016) concluded that the Bentler-Yuan (2011) smoothing algorithm led to the most accurate results (in terms of dimesionality recovery) when applied to indefinite tetrachoric or polychoric correlation matrices. However, neither study attempted to explain why the Bentler-Yuan algorithm led to better dimensionality recovery relative to the other smoothing methods they investigated. One intriguing possibility is that the smoothed correlation matrices produced by the Bentler-Yuan algorithm were better approximations of population correlation matrix than either the smoothed matrices produced by the Knol-Berger (1991) and Higham algorithms (2002), and also better approximations than the original indefinite tetrachoric or polychoric correlation matrices. If this is true, one might also expect that Bentler-Yuan smoothed tetrachoric correlation matrices will also lead to more accurate factor loading estimates compared to the alternatives. 
 
-The purpose of the present study was to address two questions related to these hypotheses. First, are smoothed indefinite tetrachoric correlation matrices better estimates of their corresponding population correlation matrices than the original indefinite tetrachoric correlation matrices and, if so, which smoothing method produces the best estimates? Second, do smoothed indefinite tetrachoric correlation matrices lead to better factor loading estimates compared to the unsmoothed tetrachoric matrices when used in exploratory factor analysis and, if so, which smoothing algorithm leads to the best factor loading estimates? To answer these questions, I conducted a simulation study in which I generated `r prettyNum(length(unique(results_matrix_npd$id)), big.mark = ",")` indefinite tetrachoric correlation matrices from a variety of realistic data scenarios. Before describing the simulation design, I first introduce the three matrix smoothing algorithms under investigation, the common factor model, and the three factor analysis algorithms included in this study.
+The purpose of the present study was to address two questions related to these hypotheses. First, are smoothed indefinite tetrachoric correlation matrices better estimates of their corresponding population correlation matrices than the original indefinite tetrachoric correlation matrices and, if so, which smoothing method produces the best estimates? Second, do smoothed indefinite tetrachoric correlation matrices lead to better factor loading estimates compared to the unsmoothed tetrachoric matrices when used in exploratory factor analysis and, if so, which smoothing algorithm leads to the best factor loading estimates? To answer these questions, I conducted a simulation study in which I generated `r prettyNum(length(unique(results_matrix_npd$id)), big.mark = ",")` indefinite tetrachoric correlation matrices from a variety of realistic data scenarios. Before describing the simulation design, I first introduce tetrachoric correlations, the three matrix smoothing algorithms under investigation, the common factor model, and the three factor analysis algorithms included in this study.
+
+## Tetrachoric Correlations
+
+A tetrachoric correlation is an estimate of the linear association between two continuous, normally-distributed latent variables, $y_1^*$ and $y_2^*$ obtained using dichotomous, observed manifestations of those variables, $y_1$ and $y_2$. The variables $y_1^*$ and $y_2^*$ are assumed to follow a bivariate standard normal distribution, 
+
+\begin{equation}
+\left(\begin{array}{l}
+y_{1}^* \\
+y_{2}^*
+\end{array}\right) \sim N\left[\left(\begin{array}{l}
+0 \\
+0
+\end{array}\right),\left(\begin{array}{cc}
+1 & r \\
+r & 1
+\end{array}\right)\right],
+(\#eq:bivariate-normal)
+\end{equation}
+
+where $r$ is the true correlation between $y_1^*$ and $y_2^*$ that is estimated by the tetrachoric correlation, $\hat{r}$. To compute the tetrachoric correlation, a $2 \times 2$ contingency table is first created using $y_1$ and $y_2$ as described in @brown1977mean. If any of the cell frequencies in the contingency table are zero, it is common to replace them with 0.5 and adjust the other elements in order to leave the marginal sums unchanged [@brown1997mean]. The proportions of correct responses for $y_1^*$ and $y_2^*$ are represented by the marginals $p_1$ and $p_2$. The standard normal deviate thresholds *h* and *k* used to dichotomize $y_1$ and $y_2$ are then defined by $F(h) = p_1$ and $F(k) = p_2$ where $F(z)$ is the area under the standard normal curve from 0 to $\infty$ [@divgi1979]. Given \@ref(eq:bivariate-normal), *h*, and *k*, the likelihood function can be written as
+
+\begin{equation}
+$$
+L(h, k, r)=\frac{1}{2 \pi \sqrt{1-r^{2}}} \int_{k}^{\infty} \int_{h}^{\infty} \exp \left(-\frac{y_1^{*2}+y_2^{*2}-2 r y_1^* y_2^*}{2\left(1-r^{2}\right)}\right) d y_1^* d y_2^*.
+$$
+(\#eq:likelihood-fn)
+\end{equation}
+
+The Newton-Raphson method can then be used to obtain successive approximations of $r$ given an initial estimate, $\hat{r}_0$:
+
+$$
+\hat{r}_{i + 1} = \hat{r}_i - \frac{L(h,k,\hat{r}_i) - p_{ii}}{L^\prime(h,k,\hat{r}_i)}
+$$ 
+
+where $p_{11}$ is the proportion of correct responses on both $y_1^*$ and $y_2^*$ and $L^\prime(h,k,\hat{r}_i)$ is the first derivative of \@ref(eq:likelihood-fn) [@divgi1979]. Iteration continues until convergence is acheived (when $\hat{r}_{i+1} - \hat{r}_i < \delta$ for some small value of delta) or until some maximum number of iterations occur. For $p$ dichotomous variables, the matrix $\hat{\mathbf{R}}_{p \times p}$ with a unit diagonal and off-diagonal elements $\hat{r}_{jk}, \: j,k \in \{1, \dots p \}$ is called the tetrachoric correlation matrix.
 
 ## Matrix Smoothing Algorithms
 
