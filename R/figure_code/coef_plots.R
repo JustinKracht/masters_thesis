@@ -80,7 +80,7 @@ p1 <- loading_mod_summary %>%
   ggplot(aes(y = exp(estimate), x = fct_reorder(term, estimate, max))) +
   geom_point() +
   labs(title = "Model coefficient estimates",
-       y = latex2exp::TeX("$\\exp{(\\hat{\\beta})}$"),
+       y = latex2exp::TeX("$\\exp{(\\hat{b})}$"),
        x = "") +
   coord_flip() +
   geom_hline(yintercept = 1,
@@ -148,7 +148,7 @@ p2 <- RpopRsm_mod_summary %>%
   ggplot(aes(y = exp(estimate), x = fct_reorder(term, estimate, max))) +
   geom_point() +
   labs(title = "Model coefficient estimates",
-       y = latex2exp::TeX("$\\exp{(\\hat{\\beta})}$"),
+       y = latex2exp::TeX("$\\exp{(\\hat{b})}$"),
        x = "") +
   coord_flip() +
   geom_hline(yintercept = 1,

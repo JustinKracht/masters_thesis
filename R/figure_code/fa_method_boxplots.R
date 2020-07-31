@@ -21,7 +21,7 @@ rmse_fa_method <- results_matrix_npd %>%
   geom_boxplot(outlier.size = 0.5, na.rm = TRUE, outlier.alpha = 0.5) +
   facet_grid(subjects_per_item_rec ~ factor_loading_rec) +
   labs(x = "Extraction Method",
-       y = TeX("$RMSE(\\mathbf{\\Lambda}, \\hat{\\mathbf{\\Lambda}})$")) +
+       y = TeX("$RMSE(\\mathbf{F}, \\hat{\\mathbf{F}})$")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 

@@ -3,7 +3,8 @@ pacman::p_load(ggplot2,
                here,
                magrittr,
                dplyr,
-               tidyr)
+               tidyr,
+               hexbin)
 results_matrix_npd <- readRDS(here("Data", "results_matrix_npd.RDS"))
 
 rmse_sample_size <- results_matrix_npd %>%
@@ -12,7 +13,7 @@ rmse_sample_size <- results_matrix_npd %>%
              y = log(loading_rmsd))) +
   geom_hex() +
   labs(x = "Sample size",
-       y = TeX("$\\log \\; RMSE(\\mathbf{\\Lambda}, \\hat{\\mathbf{\\Lambda}})$")) +
+       y = TeX("$\\log \\; RMSE(\\mathbf{F}, \\hat{\\mathbf{F}})$")) +
   theme_minimal()
 
 # Save png; retina gives 320 dpi
