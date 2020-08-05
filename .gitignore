@@ -10,3 +10,8 @@
 /Text/factor_loading_recovery_files
 /Text/figs
 .Rproj.user
+*.png
+*.ttt
+*.tex
+*.log
+*.bib~
