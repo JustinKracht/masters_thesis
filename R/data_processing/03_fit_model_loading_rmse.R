@@ -20,7 +20,7 @@ loading_data <- loading_data %>%
 
 # Scale variables
 loading_data <- loading_data %>%
-  mutate_at(.vars = vars(subjects_per_item:model_error), 
+  mutate_at(.vars = vars(subjects_per_item:model_error),
             .fun = function(x) as.vector(scale(x)))
 
 # Fit mixed-effects model -------------------------------------------------
