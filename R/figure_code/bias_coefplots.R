@@ -1,4 +1,4 @@
-# Create and save coefficient plots for RMSE(loading) and Ds(Rpop, Rsm) models
+# Create and save coefficient plots for loading bias and correlation bias models
 pacman::p_load(coefplot,
                patchwork,
                broom,
@@ -7,10 +7,9 @@ pacman::p_load(coefplot,
                broom.mixed,
                here)
 
-# RMSE(F, Fhat) Coefficient Plot ------------------------------------------
 # Load the fitted models
-loading_mod <- readRDS(here("Data", "loading_model.RDS"))
-loading_mod_poly <- readRDS(here("Data", "loading_model_poly.RDS"))
+loading_bias_mod <- readRDS(here("Data", "loading_bias_mod_linear.RDS"))
+loading_bias_mod_poly <- readRDS(here("Data", "loading_bias_mod_poly.RDS"))
 
 coef_names <- c(
   "(Intercept)" = "Constant",
@@ -114,43 +113,43 @@ coef_names <- c(
   "I(factors^2):I(model_error^2)" = "Factors^2 x Model Error^2"
 )
 
+# Loading bias coefplot ----
 # Extract model summaries
 # Linear model
-loading_mod_linear_summary <- tidy(loading_mod,
-                            exponentiate = TRUE,
-                            conf.int = TRUE,
-                            conf.level = 0.99)
-loading_mod_linear_summary <- loading_mod_linear_summary %>%
+loading_bias_mod_linear_summary <- tidy(loading_bias_mod,
+                                        conf.int = TRUE,
+                                        conf.level = 0.99)
+loading_bias_mod_linear_summary <- loading_bias_mod_linear_summary %>%
   filter(effect == "fixed") %>%
   dplyr::select(term, estimate, conf.low, conf.high) %>%
   mutate(model_type = "linear")
 # Replace term names with nice ones from coef_names
-loading_mod_linear_summary$term <- coef_names[loading_mod_linear_summary$term]
+loading_bias_mod_linear_summary$term <- coef_names[loading_bias_mod_linear_summary$term]
 
 # Polynomial model
-loading_mod_poly_summary <- tidy(loading_mod_poly,
-                                 exponentiate = TRUE,
-                                 conf.int = TRUE,
-                                 conf.level = 0.99)
-loading_mod_poly_summary <- loading_mod_poly_summary %>%
+loading_bias_mod_poly_summary <- tidy(loading_bias_mod_poly,
+                                      conf.int = TRUE,
+                                      conf.level = 0.99)
+loading_bias_mod_poly_summary <- loading_bias_mod_poly_summary %>%
   filter(effect == "fixed") %>%
   dplyr::select(term, estimate, conf.low, conf.high) %>%
   mutate(model_type = "polynomial")
 # Replace term names with nice ones from coef_names
-loading_mod_poly_summary$term <- coef_names[loading_mod_poly_summary$term]
+loading_bias_mod_poly_summary$term <- coef_names[loading_bias_mod_poly_summary$term]
 
 # Join the model summary tables
-loading_mod_summary <- full_join(loading_mod_linear_summary,
-                                 loading_mod_poly_summary)
+loading_bias_mod_summary <- full_join(loading_bias_mod_linear_summary,
+                                      loading_bias_mod_poly_summary)
 
 # Remove the loading mod objects to free up memory
-remove(loading_mod, loading_mod_poly)
+remove(loading_bias_mod, loading_bias_mod_poly)
 
 # Plot coefficients (back-transformed)
-p1_data <- loading_mod_summary %>% 
-  filter(model_type == "polynomial", 
-         estimate >= 1.01 | estimate <= 0.99,
-         term != "Constant")
+p1_data <- loading_bias_mod_summary
+p1_data <- filter(p1_data,
+                  model_type == "polynomial",
+                  estimate >= 0.01 | estimate <= -0.01,
+                  term != "Constant")
 p1_data$term <- fct_reorder(.f = p1_data$term,
                             .x = p1_data$estimate,
                             .fun = median)
@@ -159,15 +158,16 @@ p1 <- ggplot(p1_data, aes(y = estimate, x = term)) +
   geom_point() +
   scale_x_discrete(label = latex2exp::TeX(levels(p1_data$term))) +
   geom_linerange(aes(ymax = conf.high, ymin = conf.low)) +
-  labs(title = "Exponentiated coefficient estimates",
-       y = latex2exp::TeX("$\\exp{(\\hat{b})}$"),
+  labs(title = "Coefficient estimates",
+       y = latex2exp::TeX("$\\hat{b}$"),
        x = "") +
   coord_flip() +
-  geom_hline(yintercept = 1,
+  geom_hline(yintercept = 0,
              lty = 2,
-             col = "grey50")
+             col = "grey50") +
+  theme_minimal()
 
-ggsave("loadings_coefplot.png",
+ggsave("loading_bias_coefplot.png",
        plot = p1,
        device = "png",
        path = here("Text", "figs"),
@@ -176,49 +176,46 @@ ggsave("loadings_coefplot.png",
        width = 11,
        height = 10)
 
-# D(Rpop, Rsm) Coefficient Plot -------------------------------------------
+# Correlation bias coefplot ----
 # Load the fitted models
-RpopRsm_mod <- readRDS(here("Data", "RpopRsm_model.RDS"))
-RpopRsm_mod_poly <- readRDS(here("Data", "RpopRsm_model_poly.RDS"))
+RpopRsm_bias_mod <- readRDS(here("Data", "RpopRsm_bias_mod_linear.RDS"))
+RpopRsm_bias_mod_poly <- readRDS(here("Data", "RpopRsm_bias_mod_poly.RDS"))
 
 # Linear model
-RpopRsm_mod_linear_summary <- tidy(RpopRsm_mod,
-                                   exponentiate = TRUE,
-                                   conf.int = TRUE,
-                                   conf.level = 0.99)
-RpopRsm_mod_linear_summary <- RpopRsm_mod_linear_summary %>%
+RpopRsm_bias_mod_linear_summary <- tidy(RpopRsm_bias_mod,
+                                        conf.int = TRUE,
+                                        conf.level = 0.99)
+
+RpopRsm_bias_mod_linear_summary <- RpopRsm_bias_mod_linear_summary %>%
   filter(effect == "fixed") %>%
   dplyr::select(term, estimate, conf.low, conf.high) %>%
   mutate(model_type = "linear")
 # Replace term names with nice ones from coef_names
-RpopRsm_mod_linear_summary$term <- coef_names[RpopRsm_mod_linear_summary$term]
+RpopRsm_bias_mod_linear_summary$term <- coef_names[RpopRsm_bias_mod_linear_summary$term]
 
 # Polynomial model
-RpopRsm_mod_poly_summary <- tidy(RpopRsm_mod_poly,
-                                 exponentiate = TRUE,
-                                 conf.int = TRUE,
-                                 conf.level = 0.99)
-RpopRsm_mod_poly_summary <- RpopRsm_mod_poly_summary %>%
+RpopRsm_bias_mod_poly_summary <- tidy(RpopRsm_bias_mod_poly,
+                                      conf.int = TRUE,
+                                      conf.level = 0.99)
+RpopRsm_bias_mod_poly_summary <- RpopRsm_bias_mod_poly_summary %>%
   filter(effect == "fixed") %>%
   dplyr::select(term, estimate, conf.low, conf.high) %>%
   mutate(model_type = "polynomial")
 # Replace term names with nice ones from coef_names
-RpopRsm_mod_poly_summary$term <- coef_names[RpopRsm_mod_poly_summary$term]
+RpopRsm_bias_mod_poly_summary$term <- coef_names[RpopRsm_bias_mod_poly_summary$term]
 
 # Join the model summary tables
-RpopRsm_mod_summary <- full_join(RpopRsm_mod_linear_summary,
-                                 RpopRsm_mod_poly_summary)
+RpopRsm_bias_mod_summary <- full_join(RpopRsm_bias_mod_linear_summary,
+                                      RpopRsm_bias_mod_poly_summary)
 
 # Remove the loading mod objects to free up memory
-remove(RpopRsm_mod, RpopRsm_mod_poly)
+remove(RpopRsm_bias_mod, RpopRsm_bias_mod_poly)
 
 # Plot coefficients (back-transformed)
-p2_data <- RpopRsm_mod_summary %>%
-  filter(
-    model_type == "polynomial",
-    estimate <= .99 | estimate >= 1.01,
-    term != "Constant"
-  ) %>%
+p2_data <- RpopRsm_bias_mod_summary %>%
+  filter(model_type == "polynomial",
+         estimate <= -0.01 | estimate >= 0.01,
+         term != "Constant") %>%
   mutate(term = fct_reorder(term, estimate, median))
 
 p2 <- ggplot(p2_data, aes(y = estimate, 
@@ -227,15 +224,16 @@ p2 <- ggplot(p2_data, aes(y = estimate,
   geom_linerange(aes(ymin = conf.low,
                      ymax = conf.high)) +
   scale_x_discrete(label = TeX(levels(p2_data$term))) +
-  labs(title = "Exponentiated coefficient estimates",
-       y = latex2exp::TeX("$\\exp{(\\hat{b})}$"),
+  labs(title = "Coefficient estimates",
+       y = latex2exp::TeX("$\\hat{b}$"),
        x = "") +
   coord_flip() +
-  geom_hline(yintercept = 1,
+  geom_hline(yintercept = 0,
              lty = 2,
-             col = "grey50")
+             col = "grey50") +
+  theme_minimal()
 
-ggsave("RpopRsm_coefplot.png",
+ggsave("RpopRsm_bias_coefplot.png",
        plot = p2,
        device = "png",
        path = here("Text", "figs"),

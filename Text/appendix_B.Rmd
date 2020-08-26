@@ -1,0 +1,224 @@
+---
+output: pdf_document
+---
+
+```{r appx-b-setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+pacman::p_load(tidyverse,
+               here,
+               latex2exp,
+               knitr,
+               kableExtra)
+
+generate_figs <- FALSE # Set TRUE to regenerate figures
+dpi <- 475 # 320 # Set figure dpi; default is 320 (retina)
+```
+
+# Supplemental Tables and Figures
+
+## Indefinite Matrix Frequency
+
+The percent of indefinite tetrachoric correlation matrices differed from condition to condition. Table \@ref(tab:percent-indefinite) reports the percent of indefinite matrices for each of the 216 conditions of the study design. One of the more obvious trends in this table is that conditions with more (major) factors tended to produce more indefinite tetrachoric correlation matrices. Based on the results reported by Debelak and Tran (2013; 2016), who found that indefinite tetrachoric and polychoric correlation matrices were much more common for data sets with many items, this is likely due to the correlation of factor number with total number of items. (See Lorenzo-Seva and Ferrando, 2020, for further discussion of the relationship between the number of items and matrix indefiniteness.) Moreover, the results in Table \@ref(tab:percent-indefinite) indicate that indefinite matrices were more common for conditions with more items per factor,  fewer subjects per item, and higher factor loadings. All of these trends corroborate the similar results by Debelak and Tran (2013; 2016) and their conclusions about which variables most affected the frequency of indefinite tetrachoric or polychoric correlation matrices.
+
+```{r read-data}
+results_matrix <- readRDS("~/Documents/masters_thesis/Data/results_matrix.RDS")
+```
+\pagebreak
+```{r percent-indefinite}
+npd_freq <- results_matrix %>%
+  filter(fa_method == "fals",
+         smoothing_method == "KB") %>%
+  group_by(subjects_per_item,
+           items_per_factor,
+           factors,
+           factor_loading,
+           model_error) %>%
+  summarise(npd_percent = mean(npd, na.rm = TRUE) * 100) %>%
+  pivot_wider(names_from = "factors", values_from = "npd_percent")
+
+kable(npd_freq,
+      booktabs = TRUE,
+      linesep = "",
+      caption = "(ref:percent-indefinite)",
+      escape = FALSE,
+      col.names = c("$N/p$",
+                    "$p/m$",
+                    "Loading",
+                    "$\\upsilon_{\\textrm{E}}$",
+                    "1", "3", "5", "10"),
+      longtable = TRUE) %>%
+  add_header_above(header = c(" " = 4,
+                              "Factors" = 4))
+```
+(ref:percent-indefinite) Percent of indefinite tetrachoric correlation matrices by Number of Subjects Per Item ($N/p$), Number of Items per Factor ($p/m$), Factor Loading, Model Error ($\upsilon_\textrm{E}$), and Number of Factors.
+
+\pagebreak
+
+## Observed $\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Pop}}, \mathbf{R}_{\textrm{Sm}})$ Values
+
+In addition to the estimated marginal means shown in the main text, the following figures (Figures \@ref(fig:ds-one-factor)--\@ref(fig:ds-ten-factor)) show box-plots of $\Ds$ for each condition in the simulation design. These box-plots match well with the estimated marginal means shown in the main text. However, notice that some conditions in these figures are missing box-plots (e.g., three factors, 15 subjects per item, 10 items per factor, $\upsilon_\textrm{E} = 0$, and Loading = 0.3) because no indefinite tetrachoric correlation matrices were produced for those conditions.
+
+```{r}
+RpopRsm_data <- results_matrix %>%
+  dplyr::filter(npd == TRUE) %>% # only keep npd matrices
+  dplyr::distinct(id, rep, condition, smoothing_method, 
+                  .keep_all = TRUE) # keep unique observations of smoothed matrices
+
+if (generate_figs == TRUE) {
+  RpopRsm_data$model_error_rec <- factor(
+    as.factor(RpopRsm_data$model_error),
+    labels = c(latex2exp::TeX("$\\upsilon_{E}$: 0.0"),
+               latex2exp::TeX("$\\upsilon_{E}$: 0.1"),
+               latex2exp::TeX("$\\upsilon_{E}$: 0.3"))
+  )
+
+  ds_plots <- purrr::walk(
+    .x = c(1,3,5,10),
+    ~ ggsave(
+      filename = paste0("ds_boxplot_", formatC(.x, width = 2, 
+                                               flag = 0), "_factor.png"),
+      plot = RpopRsm_data %>%
+        filter(factors == .x,
+               npd == TRUE,
+               !is.na(distance_Rpop_Rsm)) %>%
+        ggplot(aes(y = distance_Rpop_Rsm,
+                   x = as.factor(factor_loading))) +
+        geom_boxplot(outlier.size = 0.7, 
+                     outlier.alpha = 0.2,
+                     aes(fill = smoothing_method)) +
+        facet_grid(model_error_rec ~ 
+                     subjects_per_item_rec * items_per_factor_rec,
+                   scales = "fixed",
+                   labeller = label_parsed) +
+        labs(x = "Factor Loading",
+             y = latex2exp::TeX("$D_{s}(\\mathbf{R}_{Pop}, \\mathbf{R}_{Sm})$"),
+             fill = "Smoothing Method",
+             title = paste("Factors:", .x)),
+      path = here::here("Text", "figs"),
+      dpi = dpi,
+      height = 8,
+      width = 10
+    )
+  )
+}
+```
+
+```{r ds-one-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for one-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "ds_boxplot_01_factor.png"),
+  dpi = dpi
+)
+```
+
+
+```{r ds-three-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for three-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "ds_boxplot_03_factor.png"),
+  dpi = dpi
+)
+```
+
+
+```{r ds-five-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for five-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "ds_boxplot_05_factor.png"),
+  dpi = dpi
+)
+```
+
+
+```{r ds-ten-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for ten-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "ds_boxplot_10_factor.png"),
+  dpi = dpi
+)
+```
+
+\pagebreak
+
+## Observed $\textrm{RMSE}(\mathbf{F}, \hat{\mathbf{F}})$ Values
+
+Figures \@ref(fig:rmse-one-factor)--\@ref(fig:rmse-ten-factor) in this section show box-plots of $\textrm{RMSE}(\mathbf{F}, \hat{\mathbf{F}})$ for each condition in the study design. Similar to the figures in the previous section, these box-plots for the most part agree well with the estimated marginal means presented in the main text, but are missing data for conditions with no indefinite tetrachoric correlation matrices.
+
+```{r}
+loading_data <- results_matrix %>%
+  filter(npd == TRUE) %>%
+  filter((fa_convergence == TRUE | is.na(fa_convergence)))
+
+if (generate_figs == TRUE) {
+  loading_data$fa_method_rec <- factor(
+    as.factor(loading_data$fa_method),
+    labels = c("OLS",
+               "ML",
+               "PA")
+  )
+  
+  loading_data$model_error_rec <- factor(
+    as.factor(loading_data$model_error),
+    labels = c(latex2exp::TeX("$\\upsilon_{E}$: 0.0"),
+               latex2exp::TeX("$\\upsilon_{E}$: 0.1"),
+               latex2exp::TeX("$\\upsilon_{E}$: 0.3"))
+  )
+  
+  rmse_plots <- purrr::walk(
+    .x = c(1,3,5,10),
+    ~ ggsave(
+      filename = paste0("rmse_boxplot_", formatC(.x, width = 2, 
+                                               flag = 0), "_factor.png"),
+      plot = loading_data %>%
+        filter(factors == .x,
+               fa_convergence == TRUE,
+               npd == TRUE,
+               !is.na(distance_Rpop_Rsm)) %>%
+        ggplot(aes(y = loading_rmsd,
+                   x = as.factor(factor_loading))) +
+        geom_boxplot(outlier.size = 0.7, 
+                     outlier.alpha = 0.2,
+                     aes(fill = smoothing_method)) +
+        facet_grid(model_error_rec * fa_method_rec ~ 
+                     subjects_per_item_rec * items_per_factor_rec,
+                   scales = "fixed",
+                   labeller = label_parsed) +
+        labs(x = "Factor Loading",
+             y = latex2exp::TeX("$RMSE(\\mathbf{F}, \\hat{\\mathbf{F}})$"),
+             fill = "Smoothing Method",
+             title = paste("Factors:", .x)),
+      path = here::here("Text", "figs"),
+      dpi = dpi,
+      height = 11,
+      width = 10
+    )
+  )
+}
+```
+
+```{r rmse-one-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for one-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "rmse_boxplot_01_factor.png"),
+  dpi = dpi
+)
+```
+
+
+```{r rmse-three-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for three-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "rmse_boxplot_03_factor.png"),
+  dpi = dpi
+)
+```
+
+
+```{r rmse-five-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for five-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "rmse_boxplot_05_factor.png"),
+  dpi = dpi
+)
+```
+
+
+```{r rmse-ten-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for ten-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+knitr::include_graphics(
+  path = here("Text", "figs", "rmse_boxplot_10_factor.png"),
+  dpi = dpi
+)
+```
