@@ -15,3 +15,4 @@
 *.tex
 *.log
 *.bib~
+.Rprofile
