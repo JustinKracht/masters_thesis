@@ -103,7 +103,7 @@ if (generate_figs == TRUE) {
 }
 ```
 
-```{r ds-one-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for one-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r ds-one-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for one-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "ds_boxplot_01_factor.png"),
   dpi = dpi
@@ -111,7 +111,7 @@ knitr::include_graphics(
 ```
 
 
-```{r ds-three-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for three-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r ds-three-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for three-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "ds_boxplot_03_factor.png"),
   dpi = dpi
@@ -119,7 +119,7 @@ knitr::include_graphics(
 ```
 
 
-```{r ds-five-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for five-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r ds-five-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for five-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "ds_boxplot_05_factor.png"),
   dpi = dpi
@@ -127,7 +127,7 @@ knitr::include_graphics(
 ```
 
 
-```{r ds-ten-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for ten-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r ds-ten-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for ten-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "ds_boxplot_10_factor.png"),
   dpi = dpi
@@ -192,7 +192,7 @@ if (generate_figs == TRUE) {
 }
 ```
 
-```{r rmse-one-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for one-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r rmse-one-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for one-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "rmse_boxplot_01_factor.png"),
   dpi = dpi
@@ -200,7 +200,7 @@ knitr::include_graphics(
 ```
 
 
-```{r rmse-three-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for three-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r rmse-three-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for three-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "rmse_boxplot_03_factor.png"),
   dpi = dpi
@@ -208,7 +208,7 @@ knitr::include_graphics(
 ```
 
 
-```{r rmse-five-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for five-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r rmse-five-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for five-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "rmse_boxplot_05_factor.png"),
   dpi = dpi
@@ -216,7 +216,7 @@ knitr::include_graphics(
 ```
 
 
-```{r rmse-ten-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for ten-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = No smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r rmse-ten-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{RMSE}(\\mathbf{F}, \\hat{\\mathbf{F}})$ values for ten-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; OLS = Ordinary least squares; ML = Maximum likelihood; PA = Principal axis; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
 knitr::include_graphics(
   path = here("Text", "figs", "rmse_boxplot_10_factor.png"),
   dpi = dpi

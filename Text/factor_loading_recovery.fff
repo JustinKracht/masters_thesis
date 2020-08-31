@@ -2,49 +2,49 @@
 \ifnextchar[{\eatarg}{}
 
 
-{\centering \includegraphics[width=1\linewidth]{/Volumes/GoogleDrive/My Drive/School/masters_thesis/Text/figs/RpopRsm_coefplot}
+{\centering \includegraphics[width=1\linewidth]{/home/justin/Documents/masters_thesis/Text/figs/RpopRsm_coefplot}
 
 }
 
-\caption{Exponentiated coefficient estimates for the linear mixed effects model using $\log[\mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})]$ as the dependent variable and estimating a random intercept for each indefinite correlation matrix. The Higham (2002), Bentler-Yuan (2011) and Knol-Berger (1991) algorithms are denoted as APA, BY, and KB, respectively. The effect of the condition where no smoothing was applied is subsumed within the Constant term.}\label{fig:coefplot-RpopRsm}
+\caption{Exponentiated coefficient estimates for the mixed effects model using $\log[\mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})]$ as the dependent variable (Model 1B). APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991). The effect of the condition where no smoothing was applied is subsumed within the Constant term.}\label{fig:coefplot-RpopRsm}
 \end{figure*}
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
 
-{\centering \includegraphics[width=1\linewidth]{/Volumes/GoogleDrive/My Drive/School/masters_thesis/Text/figs/distance_Rpop_Rsm}
+{\centering \includegraphics[width=1\linewidth]{/home/justin/Documents/masters_thesis/Text/figs/RpopRsm_fitted_vals}
 
 }
 
-\caption{Scaled distance between the smoothed ($\mathbf{R}_{\textrm{Sm}}$) and model-implied ($\mathbf{R}_{\textrm{Pop}}$) correlation matrices for the Higham (APA; 2002), Bentler-Yuan (BY; 2011), and Knol-Berger (KB; 1991) smoothing methods and when no smoothing was applied (None).}\label{fig:distance-Rpop-Rsm}
+\caption{Scaled distance between the smoothed ($\mathbf{R}_{\textrm{Sm}}$) and model-implied ($\mathbf{R}_{\textrm{Pop}}$) correlation matrices. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing.}\label{fig:RpopRsm-fitted-vals}
 \end{figure*}
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
 
-{\centering \includegraphics[width=5in]{/Volumes/GoogleDrive/My Drive/School/masters_thesis/Text/figs/fa_method_boxplots}
+{\centering \includegraphics[width=1\linewidth]{/home/justin/Documents/masters_thesis/Text/figs/loadings_coefplot}
 
 }
 
-\caption{Box plots of $\textrm{RMSE}(\mathbf{\Lambda}, \hat{\mathbf{\Lambda}})$ for all combinations of factor analysis method, factor loading, and number of subjects per item. The three factor analysis methods (ordinary least squares, maximum likelihood, and principal axes) are denoted by OLS, ML, and PA, respectively.}\label{fig:fa-method-boxplots}
+\caption{Exponentiated coefficient estimates for the mixed effects model using $\mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})$ as the dependent variable (Model 2B). APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); ML = Maximum likelihood; PA = Principal axis. The effects of no smoothing and ordinary least squares factor analysis are subsumed within the Constant term.}\label{fig:coefplot-loading-recovery}
 \end{figure*}
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
 
-{\centering \includegraphics[width=6.5in]{/Volumes/GoogleDrive/My Drive/School/masters_thesis/Text/figs/rmse_sample_size}
+{\centering \includegraphics[width=1\linewidth]{/home/justin/Documents/masters_thesis/Text/figs/loading_fitted_vals}
 
 }
 
-\caption{Log root-mean-square error (RMSE) between the true and estimated factor loading matrices as a function of sample size. Due to the large number of data points, hexagonal bins were used to group observations with the density of each hexagon represented by its color.}\label{fig:RMSE-sample-size}
+\caption{Estimated marginal mean $\textrm{RMSE}(\mathbf{F}, \hat{\mathbf{F}})$ values and 99\% confidence intervals. To conserve space, the intermediate values of model error and subjects per item have been omitted. The principal axis factor extraction method was also omitted because it led to nearly identical results compared to ordinary least squares. OLS = ordinary least squares; ML = maximum likelihood; APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991).}\label{fig:loading-mm}
 \end{figure*}
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
 
-{\centering \includegraphics[width=1\linewidth]{/Volumes/GoogleDrive/My Drive/School/masters_thesis/Text/figs/loadings_coefplot}
+{\centering \includegraphics[width=6.5in]{/home/justin/Documents/masters_thesis/Text/figs/rmse_sample_size}
 
 }
 
-\caption{Exponentiated coefficient estimates for the linear mixed effects model using $\log[\textrm{RMSE}(\mathbf{\Lambda}, \hat{\mathbf{\Lambda}})]$ as the dependent variable and estimating a random intercept for each indefinite correlation matrix. The Higham (2002), Bentler-Yuan (2011) and Knol-Berger (1991) algorithms are denoted as APA, BY, and KB, respectively. Maximum likelihood factor analysis is denoted by ML and principal axis factor analysis is denoted by PA. The effects of no smoothing and ordinary least squares factor analysis are subsumed within the Constant term.}\label{fig:coefplot-loading-recovery}
+\caption{Log root-mean-square error (RMSE) between the true and estimated factor loading matrices as a function of sample size.}\label{fig:RMSE-sample-size}
 \end{figure*}
