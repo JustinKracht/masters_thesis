@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.7.29)  31 AUG 2020 16:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.7.29)  1 SEP 2020 11:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -850,7 +850,7 @@ Overfull \hbox (12.25479pt too wide) in alignment at lines 237--242
  []
 
 [45]) [46] (./factor_loading_recovery.fff
-</home/justin/Documents/masters_thesis/Text/figs/RpopRsm_coefplot.png, id=502, 
+</home/justin/Documents/masters_thesis/Text/figs/RpopRsm_coefplot.png, id=501, 
 578.16pt x 404.712pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/RpopRsm_coefplot.png Grap
 hic file (type png)
@@ -865,14 +865,14 @@ ef-fi-cient es-ti-mates for the mixed ef-fects model us-ing
  []
 
 </home/justin/Documents/masters_thesis/Text/figs/RpopRsm_fitted_vals.png, id=50
-3, 578.16pt x 578.16pt>
+2, 578.16pt x 578.16pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/RpopRsm_fitted_vals.png G
 raphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/RpopRsm_fitted_vals.png>
 Package pdftex.def Info: /home/justin/Documents/masters_thesis/Text/figs/RpopRs
 m_fitted_vals.png  used on input line 15.
 (pdftex.def)             Requested size: 469.75385pt x 469.75385pt.
-</home/justin/Documents/masters_thesis/Text/figs/loadings_coefplot.png, id=504,
+</home/justin/Documents/masters_thesis/Text/figs/loadings_coefplot.png, id=503,
  635.976pt x 578.16pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/loadings_coefplot.png Gra
 phic file (type png)
@@ -881,14 +881,14 @@ Package pdftex.def Info: /home/justin/Documents/masters_thesis/Text/figs/loadin
 gs_coefplot.png  used on input line 25.
 (pdftex.def)             Requested size: 469.75119pt x 427.04654pt.
 </home/justin/Documents/masters_thesis/Text/figs/loading_fitted_vals.png, id=50
-5, 607.068pt x 578.16pt>
+4, 607.068pt x 578.16pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/loading_fitted_vals.png G
 raphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/loading_fitted_vals.png>
 Package pdftex.def Info: /home/justin/Documents/masters_thesis/Text/figs/loadin
 g_fitted_vals.png  used on input line 35.
 (pdftex.def)             Requested size: 469.75032pt x 447.38126pt.
-</home/justin/Documents/masters_thesis/Text/figs/rmse_sample_size.png, id=506, 
+</home/justin/Documents/masters_thesis/Text/figs/rmse_sample_size.png, id=505, 
 469.755pt x 361.35pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/rmse_sample_size.png Grap
 hic file (type png)
@@ -904,7 +904,7 @@ y)>] [49 </home/justin/Documents/masters_thesis/Text/figs/loadings_coefplot.png
 >] [50 </home/justin/Documents/masters_thesis/Text/figs/loading_fitted_vals.png
  (PNG copy)>] [51 </home/justin/Documents/masters_thesis/Text/figs/rmse_sample_
 size.png (PNG copy)>]
-</home/justin/Documents/masters_thesis/Text/figs/RpopRsm_resid_qq.png, id=534, 
+</home/justin/Documents/masters_thesis/Text/figs/RpopRsm_resid_qq.png, id=533, 
 476.982pt x 238.491pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/RpopRsm_resid_qq.png Grap
 hic file (type png)
@@ -917,7 +917,7 @@ Overfull \hbox (7.23306pt too wide) in paragraph at lines 1039--1040
  [][] 
  []
 
-</home/justin/Documents/masters_thesis/Text/figs/RpopRsm_ranef_qq.png, id=535, 
+</home/justin/Documents/masters_thesis/Text/figs/RpopRsm_ranef_qq.png, id=534, 
 476.982pt x 238.491pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/RpopRsm_ranef_qq.png Grap
 hic file (type png)
@@ -936,7 +936,7 @@ Overfull \hbox (7.23306pt too wide) in paragraph at lines 1048--1049
 y)>] [53 </home/justin/Documents/masters_thesis/Text/figs/RpopRsm_ranef_qq.png 
 (PNG copy)>]
 </home/justin/Documents/masters_thesis/Text/figs/RpopRsm_resid_vs_fitted.png, i
-d=554, 476.982pt x 238.491pt>
+d=553, 476.982pt x 238.491pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/RpopRsm_resid_vs_fitted.p
 ng Graphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/RpopRsm_resid_vs_fitted.pn
@@ -952,7 +952,7 @@ Overfull \hbox (7.23306pt too wide) in paragraph at lines 1081--1082
 [54 </home/justin/Documents/masters_thesis/Text/figs/RpopRsm_resid_vs_fitted.pn
 g (PNG copy)>]
 </home/justin/Documents/masters_thesis/Text/figs/loading_resid_vs_fitted.png, i
-d=563, 476.982pt x 238.491pt>
+d=562, 476.982pt x 238.491pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/loading_resid_vs_fitted.p
 ng Graphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/loading_resid_vs_fitted.pn
@@ -965,7 +965,7 @@ Overfull \hbox (7.23306pt too wide) in paragraph at lines 1124--1125
  [][] 
  []
 
-</home/justin/Documents/masters_thesis/Text/figs/loading_resid_qq.png, id=564, 
+</home/justin/Documents/masters_thesis/Text/figs/loading_resid_qq.png, id=563, 
 476.982pt x 238.491pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/loading_resid_qq.png Grap
 hic file (type png)
@@ -978,7 +978,7 @@ Overfull \hbox (7.23306pt too wide) in paragraph at lines 1133--1134
  [][] 
  []
 
-</home/justin/Documents/masters_thesis/Text/figs/loading_ranef_qq.png, id=565, 
+</home/justin/Documents/masters_thesis/Text/figs/loading_ranef_qq.png, id=564, 
 476.982pt x 238.491pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/loading_ranef_qq.png Grap
 hic file (type png)
@@ -1004,7 +1004,7 @@ s been already used, duplicate ignored
 l.1207 \begin{longtable}[t]{rrrrrrrr}
                                       [59] [60]
 </home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_01_factor.png, id=6
-06, 722.7pt x 578.16pt>
+05, 722.7pt x 578.16pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_01_factor.png 
 Graphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_01_factor.png>
@@ -1017,7 +1017,7 @@ Overfull \hbox (17.3517pt too wide) in paragraph at lines 1299--1300
  []
 
 </home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_03_factor.png, id=6
-07, 722.7pt x 578.16pt>
+06, 722.7pt x 578.16pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_03_factor.png 
 Graphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_03_factor.png>
@@ -1030,7 +1030,7 @@ Overfull \hbox (17.3517pt too wide) in paragraph at lines 1308--1309
  []
 
 </home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_05_factor.png, id=6
-08, 722.7pt x 578.16pt>
+07, 722.7pt x 578.16pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_05_factor.png 
 Graphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_05_factor.png>
@@ -1043,7 +1043,7 @@ Overfull \hbox (17.3517pt too wide) in paragraph at lines 1317--1318
  []
 
 </home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_10_factor.png, id=6
-09, 722.7pt x 578.16pt>
+08, 722.7pt x 578.16pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_10_factor.png 
 Graphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_10_factor.png>
@@ -1061,7 +1061,7 @@ factor.png (PNG copy)>] [63 </home/justin/Documents/masters_thesis/Text/figs/ds
 _boxplot_05_factor.png (PNG copy)>] [64 </home/justin/Documents/masters_thesis/
 Text/figs/ds_boxplot_10_factor.png (PNG copy)>]
 </home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_01_factor.png, id
-=636, 722.7pt x 794.97pt>
+=635, 722.7pt x 794.97pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_01_factor.pn
 g Graphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_01_factor.png
@@ -1075,7 +1075,7 @@ Overfull \hbox (17.3517pt too wide) in paragraph at lines 1350--1351
  []
 
 </home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_03_factor.png, id
-=637, 722.7pt x 794.97pt>
+=636, 722.7pt x 794.97pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_03_factor.pn
 g Graphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_03_factor.png
@@ -1089,7 +1089,7 @@ Overfull \hbox (17.3517pt too wide) in paragraph at lines 1359--1360
  []
 
 </home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_05_factor.png, id
-=638, 722.7pt x 794.97pt>
+=637, 722.7pt x 794.97pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_05_factor.pn
 g Graphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_05_factor.png
@@ -1103,7 +1103,7 @@ Overfull \hbox (17.3517pt too wide) in paragraph at lines 1368--1369
  []
 
 </home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_10_factor.png, id
-=639, 722.7pt x 794.97pt>
+=638, 722.7pt x 794.97pt>
 File: /home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_10_factor.pn
 g Graphic file (type png)
 <use /home/justin/Documents/masters_thesis/Text/figs/rmse_boxplot_10_factor.png
@@ -1129,11 +1129,11 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1385.
 Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1385.
  ) 
 Here is how much of TeX's memory you used:
- 17775 strings out of 481239
- 271181 string characters out of 5920377
+ 17773 strings out of 481239
+ 271157 string characters out of 5920377
  590505 words of memory out of 5000000
  32266 multiletter control sequences out of 15000+600000
- 630709 words of font info for 158 fonts, out of 8000000 for 9000
+ 630580 words of font info for 157 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  49i,13n,55p,2347b,629s stack positions out of 5000i,500n,10000p,200000b,80000s
 pdfTeX warning (dest): name{Hfootnote.7} has been referenced but does not exi
@@ -1173,10 +1173,10 @@ b></usr/share/texmf/fonts/type1/public/lm/lmss8.pfb></usr/share/texmf/fonts/typ
 e1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr
 /share/texmf/fonts/type1/public/lm/lmtt12.pfb></usr/share/texlive/texmf-dist/fo
 nts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on factor_loading_recovery.pdf (69 pages, 6968331 bytes).
+Output written on factor_loading_recovery.pdf (69 pages, 6968295 bytes).
 PDF statistics:
- 868 PDF objects out of 1000 (max. 8388607)
- 749 compressed objects within 8 object streams
+ 867 PDF objects out of 1000 (max. 8388607)
+ 748 compressed objects within 8 object streams
  256 named destinations out of 1000 (max. 500000)
  12576 words of extra memory for PDF output out of 14400 (max. 10000000)
 
