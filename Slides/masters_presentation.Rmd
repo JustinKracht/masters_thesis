@@ -1,0 +1,326 @@
+---
+title: "Factor Loading Recovery for Smoothed Tetrachoric Correlation Matrices"
+author: "Justin D. Kracht"
+date: "Fall 2020"
+output: 
+  beamer_presentation:
+    latex_engine: xelatex
+bibliography: "../Text/references.bib"
+csl: "apa7.csl"
+header-includes:
+  - \usepackage[ruled]{algorithm2e}
+  - \usetheme{metropolis}
+  - \definecolor{outer-space-crayola}{RGB}{34, 51, 51}
+  - \definecolor{cadmium-orange}{RGB}{235, 129, 27}
+  - \definecolor{light-slate-grey}{RGB}{110, 136, 152}
+  - \definecolor{twilight-lavender}{RGB}{119, 76, 96}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+pacman::p_load(
+  tidyverse,
+  fungible,
+  reshape2,
+  bookdown
+)
+```
+
+\newcommand{\Rsm}{\mathbf{R}_{\textrm{Sm}}}
+\newcommand{\Rpop}{\mathbf{R}_{\textrm{Pop}}}
+\newcommand{\Rnpd}{\mathbf{R}_{-}}
+\newcommand{\Rapa}{\mathbf{R}_{\textrm{APA}}}
+\newcommand{\Rtet}{\mathbf{R}_{\textrm{tet}}}
+\newcommand{\Rby}{\mathbf{R}_{\textrm{BY}}}
+\newcommand{\Rkb}{\mathbf{R}_{\textrm{KB}}}
+\newcommand{\dg}{\textrm{dg}}
+\newcommand{\RMSE}{\textrm{RMSE}(\mathbf{F}, \hat{\mathbf{F}})}
+\newcommand{\Ds}{\mathrm{D}_{\mathrm{s}}(\Rsm, \Rpop)}
+
+# Introduction
+
+## Item Factor Analysis
+
+We often want to conduct exploratory factor analysis on binary response data
+
+- The assumption of continuous outcomes required by the common linear factor model is violated when data are binary
+
+- \textcolor{cadmium-orange}{Tetrachoric correlation matrices} [@divgi1979; @brown1977mean] are often used to estimate the correlations between the normally-distributed, continuous latent variables often assumed to underlie observed binary data
+
+## Indefinite Tetrachoric Correlation Matrices
+
+- Tetrachoric correlation matrices can be \textcolor{cadmium-orange}{indefinite}, particularly when computed from data sets with:
+  - Few subjects
+  - Many items
+  - Extreme items (high factor loadings, extreme item difficulties)
+  
+## Proper Correlation Matrices
+
+A correlation matrix, $\mathbf{R}_{p \times p}$ with elements $r_{ij} = r_{ji}$, $i, j \in \{1, \dots, p\}$, is a symmetric matrix that:
+
+1. Has unit diagonal
+2. Has all $|r_{ij}| \leq 1$
+3. Is positive semidefinite (PSD), having eigenvalues $\lambda_i \geq 0$ $\forall \: i \in \{1, \dots, p\}$
+
+## The Problem with Indefinite Correlation Matrices
+
+$\Rtet$: The tetrachoric correlation matrix  
+$\Rpop$: The population correlation matrix estimated by $\Rtet$  
+
+Problems:
+
+- An indefinite $\Rtet$ is not in the set of possible $\Rpop$ matrices
+- Some multivariate analysis procedures do not work with indefinite correlation matrices (i.e., maximum likelihood factor analysis)
+- Can lead to nonsensical interpretations (e.g., negative component variance in PCA) 
+
+## Matrix Smoothing Algorithms
+
+A \textcolor{cadmium-orange}{matrix smoothing algorithm} is a procedure that modifies an indefinite correlation matrix to produce a correlation matrix that is at least PSD.
+
+- The Higham Alternating Projections algorithm [APA; @higham2002]
+- The Bentler-Yuan algorithm [BY; @bentler2011]
+- The Knol-Berger algorithm [KB; @knol1991]
+
+## The Higham Alternating Projections Algorithm (2002)
+
+Intuition: Find the closest PSD correlation matrix ($\Rapa$) to a given indefinite correlation matrix ($\Rnpd$) by iteratively projecting between two sets:
+
+- $\mathcal{S}$: The set containing all possible $p \times p$ symmetric matrices that are PSD  
+
+- $\mathcal{U}$: The set containing all possible $p \times p$ symmetric matrices that have a unit diagonal  
+
+## The Higham Alternating Projections Algorithm (2002)
+
+For symmetric matrix $\mathbf{A} \in \mathbb{R}^{p \times p}$, define two projection functions:  
+
+- $P_{S}(\mathbf{A}) = \mathbf{V} \mathrm{diag}(\max(\lambda_i, 0)) \mathbf{V}^\prime$: Project $\mathbf{A}$ onto $\mathcal{S}$ by replacing all negative eigenvalues with zero in the eigendecomposition.  
+
+- $P_{U}(\mathbf{A})$: Project $\mathbf{A}$ onto $\mathcal{U}$ by replacing the diagonal elements of $\mathbf{A}$ with ones.
+
+## The Higham Alternating Projections Algorithm (2002)
+
+Initialize $\mathbf{A}_0$ as the indefinite correlation matrix $\Rnpd$. Repeat the operation
+$$
+\mathbf{A}_{k + 1} = P_{U}(P_{S}(\mathbf{A}_k))
+$$
+until convergence occurs or the maximum number of iterations is exceeded.
+
+```{r, fig.align='center', fig.cap = "Simplified illustration of the method of alternating projections."}
+knitr::include_graphics(
+  here::here("Slides", "figures", "alternating_projections.png"), 
+  dpi = 1000
+)
+```
+
+## The Bentler-Yuan Algorithm (2011)
+
+Intuition: Shrink the correlations involving variables with minimum trace factor analysis [MTFA; @jamshidian1998] estimated communalities $\geq 1$.
+
+## The Bentler-Yuan Algorithm (2011)
+
+$$
+\Rby = \boldsymbol{\Delta} \mathbf{R}_0 \boldsymbol{\Delta} + \mathbf{I}
+$$
+
+$\mathbf{R}_0 = \Rnpd - \mathbf{I}$  
+$\boldsymbol{\Delta}^2$ is a diagonal matrix with elements $\delta^2_i$,  
+
+$$
+\delta^2_i = \begin{cases} 
+  1 \quad &\text{if} \; h_i < 1 \\
+  k / h_i \quad & \text{if} \: h_i \geq 1. \\
+\end{cases}
+$$
+
+$k \in (0, 1)$ is a constant chosen by the user  
+$h_i$ is the MTFA communality estimate for the $i$th item
+
+## The Knol-Berger Algorithm (1991)
+
+Intuition: Replace all negative eigenvalues with a small positive constant in the eigenvalue decomposition and then scale the result to a correlation matrix.
+
+## The Knol-Berger Algorithm (1991)
+
+$$ \Rnpd = \mathbf{V} \boldsymbol{\Lambda} \mathbf{V}^\prime$$
+
+$$ \boldsymbol{\Lambda}_{+} = \text{diag}[\text{max}(\lambda_i, 0)], \: i \in \{1, \dots, p \}$$
+
+$$\Rkb = [\dg(\mathbf{V} \boldsymbol{\Lambda}_+ \mathbf{V}^\prime)]^{-1/2} \mathbf{V} \boldsymbol{\Lambda}_+ \mathbf{V}^\prime [\dg(\mathbf{V} \boldsymbol{\Lambda}_+ \mathbf{V}^\prime)]^{-1/2}$$
+
+## Example: Matrix Smoothing Algorithms
+
+$$
+\Rnpd = \begin{bmatrix}
+  1 & 0.48 & 0.64 & 0.48 & 0.65 & 0.83 \\ 
+  0.48 & 1 & 0.52 & 0.23 & 0.68 & 0.75 \\ 
+  0.64 & 0.52 & 1 & 0.60 & 0.58 & 0.74 \\ 
+  0.48 & 0.23 & 0.60 & 1 & 0.74 & 0.80 \\ 
+  0.65 & 0.68 & 0.58 & 0.74 & 1 & 0.80 \\ 
+  0.83 & 0.75 & 0.74 & 0.80 & 0.80 & 1 \\ 
+\end{bmatrix}
+$$
+
+Eigenvalues: (4.21,  0.77,  0.52, 0.38, 0.18, -0.06)  
+
+Communalities: (\textcolor{cadmium-orange}{1.029}, \textcolor{cadmium-orange}{1.122}, 0.557, \textcolor{cadmium-orange}{1.299}, 0.823, 0.997)  
+
+Variables 1, 2, and 4 have estimated communalities $>1$.
+
+## Example: Matrix Smoothing Algorithms
+
+```{r smoothing-method-deltas, fig.asp=.35, fig.cap="Differences between the elements of the $\\Rsm$ and $\\Rnpd$ matrices for the Higham, Bentler-Yuan, and Knol-Berger algorithms."}
+# Load Knol & tenBerge indefinite correlation matrix
+data(BadRKtB)
+
+# Smooth using BY
+BY_solution <- smoothBY(BadRKtB, const = 1)
+BY_glb <- BY_solution$glb
+RBY <- BY_solution$RBY
+
+# Smooth using APA
+RAPA <- smoothAPA(BadRKtB)$RAPA
+
+# Smooth using KB
+RKB <- smoothKB(BadRKtB)$RKB
+
+# Compute difference between smoothed and indefinite matrices
+BY_diff <- RBY - BadRKtB
+APA_diff <- RAPA - BadRKtB
+KB_diff <- RKB - BadRKtB
+
+# Set diagonal elements to NA and combine into one data set
+diag(BY_diff) <- diag(APA_diff) <- diag(KB_diff) <- NA
+smooth_diffs <- as.data.frame(rbind(melt(APA_diff), 
+                                    melt(BY_diff), 
+                                    melt(KB_diff)))
+smooth_diffs$smoothing_method <- rep(c("APA", 
+                                       "BY", 
+                                       "KB"), 
+                                     each = 36)
+smooth_diffs$Var1 <- 7 - smooth_diffs$Var1
+
+# Plot a heat-map of the differences
+ggplot(smooth_diffs, aes(Var1, Var2, fill = value)) +
+  geom_tile() +
+  facet_grid(. ~ smoothing_method,
+             labeller = label_parsed) +
+  scale_x_continuous(breaks = 1:6) +
+  scale_y_continuous(breaks = 1:6) +
+  scale_fill_distiller(type = "div",
+                       na.value = "white",
+                       limits = c(-.1, .1),
+                       palette = "BrBG") +
+  theme_void() +
+  theme(text = element_text(size = 18),
+        strip.text.x = element_text(size = 26))
+```
+
+## Common Factor Model
+
+\begin{equation} 
+\mathbf{P} = \mathbf{F} \boldsymbol{\Phi} \mathbf{F}^\prime + \boldsymbol{\Theta}^2
+\end{equation}
+
+- $\mathbf{P}$: $p \times p$ population correlation matrix  
+- $\mathbf{F}$: $p \times m$ factor loading matrix  
+- $\boldsymbol{\Phi}$: $m \times m$ factor correlation matrix  
+- $\boldsymbol{\Theta}^2$: $p \times p$ matrix of unique item variances  
+
+## Common Factor Model with Model Approximation Error
+
+\begin{equation}
+\mathbf{P} = \mathbf{F} \boldsymbol{\Phi} \mathbf{F}^\prime + \boldsymbol{\Theta}^2 + \mathbf{WW}^\prime
+\end{equation}
+
+- $\mathbf{P}$: $p \times p$ population correlation matrix  
+- $\mathbf{F}$: $p \times m$ factor loading matrix  
+- $\boldsymbol{\Phi}$: $m \times m$ factor correlation matrix  
+- $\boldsymbol{\Theta}^2$: $p \times p$ matrix of unique item variances  
+- $\mathbf{W}$: $p \times q$ minor factor loading matrix for the $q \gg p$ minor common factors
+
+# Methods
+
+## Simulation Conditions
+
+- Major common factors: $m \in \{1, 3, 5, 10 \}$  
+- Items per factor: $p/m \in \{5, 10 \}$  
+- Subjects per item: $N/p \in \{5, 10, 15 \}$  
+- Factor Loading: Loading $\in \{0.4, 0.6, 0.8 \}$  
+- Model Error: $\upsilon_E \in \{0.0, 0.1, 0.3 \}$
+  - Proportion of uniqueness variance apportioned to minor common factors
+  
+Fully-crossed design with \alert{216} unique conditions
+
+## Simulation Procedure
+
+For each of the 216 unique conditions, conduct 1,000 replications of the following steps:
+
+1. Generate binary response data using Equation (1)
+2. Compute the tetrachoric correlation matrix  
+3. If the matrix is PSD, next; Else, smooth using:  
+    - Higham (2002)  
+    - Bentler-Yuan (2011)  
+    - Knol-Berger (1991)   
+4. For each of the three smoothed correlation matrices and the unsmoothed matrix, estimate factor loadings using:  
+    - Principal Axes factor extraction (PA)  
+    - Ordinary Least Squares (OLS)  
+    - Maximum Likelihood (ML)
+
+## $\Rpop$ Recovery Criterion
+
+Given two $p \times p$ symmetric matrices, $\mathbf{A} = \{a_{ij} \}$ and $\mathbf{B} = \{ b_{ij} \}$,
+
+$$\mathrm{D}_{\mathrm{s}}(\mathbf{A}, \mathbf{B})=\sqrt{\sum_{i=1}^{p-1} \sum_{j=i+1}^{p} \frac{\left(a_{i j}-b_{i j}\right)^{2}}{p(p-1) / 2}}.$$
+
+\begin{itemize}
+\item $\Rsm \in \{\Rnpd, \Rapa, \Rby, \Rkb \}$  
+\item $\Rpop = \mathbf{F} \boldsymbol{\Phi} \mathbf{F}^\prime + \boldsymbol{\Theta}^2 + \mathbf{WW}^\prime$  
+\end{itemize}
+
+Evaluate recovery of $\Rpop$ using $\mathrm{D_s}(\Rpop, \Rsm)$
+
+## $\mathbf{F}$ Recovery Criterion
+
+Evaluate how well the factor loading matrix, $\mathbf{F}$, was recovered using:
+
+$$\operatorname{RMSE}(\mathbf{F}, \hat{\mathbf{F}})=\sqrt{\sum_{i=1}^{p} \sum_{j=1}^{m} \frac{\left(f_{i j}-\hat{f}_{i j}\right)^{2}}{p m}}$$
+
+# Results
+
+## $\Rpop$ Recovery
+
+```{r Rpop-Rsm-fitted-vals, fig.align='right', out.width='100%'}
+knitr::include_graphics(
+  path = "figures/RpopRsm_fitted_vals.png",
+  dpi = 800
+)
+```
+
+## $\mathbf{F}$ Recovery
+
+```{r loading-fitted-values, out.height="100%"}
+knitr::include_graphics(
+  path = "figures/loading_fitted_vals.png",
+  dpi = 800
+)
+```
+
+# Appendix
+
+## Higham's Algorithm (2002) with Dykstra's Correction
+
+\begin{algorithm}[H]
+\caption{For an indefinite correlation matrix $\Rnpd$, find the nearest PSD correlation matrix\label{APA}}
+  Initialize $\mathbf{S}_0 = 0$; $\mathbf{Y}_0 = \Rnpd$ \\
+  \For{$k = 1, 2, \dots$}{
+    $\mathbf{Z}_k = \mathbf{Y}_{k-1} - \mathbf{S}_{k-1}$ \\
+    $\mathbf{X}_k = P_S(\mathbf{Z}_k)$ \\
+    $\mathbf{S}_k = \mathbf{X}_k - \mathbf{Z}_k$ \\
+    $\mathbf{Y}_k = P_U(\mathbf{X}_k)$
+  }
+\end{algorithm}
+
+The algorithm continues until convergence occurs or the maximum number of iterations is exceeded. If the algorithm converges, $\Rapa = \mathbf{Y}_k$.
+
+## References {.allowframebreaks}

@@ -21,7 +21,7 @@ abstract: |
   Researchers commonly use tetrachoric correlation matrices in item factor analysis. Unfortunately, tetrachoric correlation matrices are often indefinite (i.e., having one or more negative eigenvalues). These indefinite correlation matrices are problematic because the corresponding population correlation matrices they estimate are definitionally positive semidefinite (PSD; i.e., having strictly non-negative eigenvalues). Therefore, when used in procedures such as factor analysis, indefinite tetrachoric correlation matrices may result in poor estimates of factor loadings. Matrix smoothing algorithms attempt to remedy this problem by finding a PSD correlation matrix that is close, in some sense, to a given indefinite correlation matrix. However, little research has been done on the effectiveness of matrix smoothing for recovering the population correlation matrix, or for recovering factor loadings when smoothed matrices were used in exploratory factor analysis. In the present simulation study, indefinite tetrachoric correlation matrices were calculated from simulated binary data sets. Three matrix smoothing algorithms---the Higham (2002), Bentler-Yuan (2011), and Knol-Berger algorithms (1991)---were applied to the indefinite tetrachoric correlation matrices. Factor analysis was then conducted on the smoothed and unsmoothed correlation matrices. The results show that smoothed matrices were slightly better estimates of their population counterparts compared to unsmoothed indefinite correlation matrices. However, using smoothed compared to unsmoothed indefinite correlation matrices for item factor analysis did not meaningfully improve factor loading recovery. Matrix smoothing should therefore be considered only as a tool to facilitate factor analysis of indefinite correlation matrices and not as a statistical remedy for the root causes of matrix indefiniteness.
   
 keywords          : "matrix smoothing, item factor analysis, factor loading recovery, indefinite"
-wordcount         : "X"
+wordcount         : "8,292"
 
 bibliography      : ["references.bib"]
 
@@ -110,7 +110,7 @@ pretty_coefs <- function(tidy_mod, name, digits = 2) {
 \newcommand{\Rby}{\mathbf{R}_{\textrm{BY}}}
 \newcommand{\Rkb}{\mathbf{R}_{\textrm{KB}}}
 \newcommand{\dg}{\textrm{dg}}
-\newcommand{\Diag}{\textrm{Diag}}
+<!-- \newcommand{\Diag}{\textrm{Diag}} -->
 \newcommand{\RMSE}{\textrm{RMSE}(\mathbf{F}, \hat{\mathbf{F}})}
 \newcommand{\Ds}{\mathrm{D}_{\mathrm{s}}(\Rsm, \Rpop)}
 
@@ -174,12 +174,14 @@ P_U(\mathbf{A}) = (p_{ij}), \: p_{ij} =
 \end{cases}
 (\#eq:proj-U)
 \end{equation}
-Stated simply, $P_U(\mathbf{A})$ replaces all elements of the diagonal of $\mathbf{A}$ with ones. The projection onto $\mathcal{S}$ is less straightforward. @higham2002 outlines the steps as follows. For some symmetric, indefinite matrix $\mathbf{A} \in \mathbb{R}^{p \times p}$, let $\mathbf{A} = \mathbf{V} \mathbf{\Lambda}_- \mathbf{V}^{\textrm{T}}$ be the eigendecomposition of $\mathbf{A}$, where $\mathbf{V}$ is the orthonormal matrix of eigenvectors and $\mathbf{\Lambda_-} = \textrm{diag}(\lambda_i)$ is a diagonal matrix with the eigenvalues of $\mathbf{A}$, $\lambda_i, \: i \in \{1, \dots, p \}$, ordered from largest to smallest on the diagonal ($\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p$, $\lambda_p < 0$). Also let $\mathbf{\Lambda}_+ = \textrm{diag}(\max(\lambda_i, 0))$. Then the projection of $\mathbf{A}$ onto $\mathcal{S}$ can be written as
+Stated simply, $P_U(\mathbf{A})$ replaces all elements of the diagonal of $\mathbf{A}$ with ones. The projection onto $\mathcal{S}$ is less straightforward. @higham2002 outlines the steps as follows. For some symmetric, indefinite matrix $\mathbf{A} \in \mathbb{R}^{p \times p}$, let $\mathbf{A} = \mathbf{V} \mathbf{\Lambda} \mathbf{V}^{\textrm{T}}$ be the eigendecomposition of $\mathbf{A}$, where $\mathbf{V}$ is the orthonormal matrix of eigenvectors and $\mathbf{\Lambda} = \textrm{diag}(\lambda_i)$ is a diagonal matrix with the eigenvalues of $\mathbf{A}$, $\lambda_i, \: i \in \{1, \dots, p \}$, ordered from largest to smallest on the diagonal ($\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p$, $\lambda_p < 0$). Also let $\mathbf{\Lambda}_+ = \textrm{diag}(\max(\lambda_i, 0))$, where the $\textrm{diag}$ operator takes a vector and returns a diagonal matrix with the input vector on the diagonal. Then the projection of $\mathbf{A}$ onto $\mathcal{S}$ can be written as
 \begin{equation}
 P_S(\mathbf{A}) = \mathbf{V} \mathbf{\Lambda_+} \mathbf{V}^{\textrm{T}}.
 (\#eq:proj-S)
 \end{equation}
-Starting with $\mathbf{A} = \Rnpd$, $\Rapa$ can be obtained by repeatedly applying the operation $\mathbf{A} \leftarrow P_U(P_S(\mathbf{A}))$ until convergence occurs or until some maximum number of iterations is reached [@higham2002, p. 337].
+Starting with $\mathbf{A} = \Rnpd$, $\Rapa$ can be obtained by repeatedly applying the operation $\mathbf{A} \leftarrow P_U(P_S(\mathbf{A}))$ until convergence occurs or until some maximum number of iterations is reached [@higham2002, p. 337].[^apa-correction]
+
+[^apa-correction]: This is a somewhat simplified explanation of Higham's algorithm. The full algorithm includes a correction to each projection [see @higham2002, Algorithm 3.3, p. 337].
 
 ### Bentler-Yuan Algorithm (BY; 2011)
 
@@ -191,7 +193,7 @@ Similar to the Higham algorithm, the Bentler-Yuan algorithm sometimes fails to p
 
 ### Knol-Berger Algorithm (KB; 1991)
 
-In contrast to the Higham (2002) and Bentler-Yuan (2011) smoothing algorithms, the Knol-Berger algorithm is a non-iterative procedure in which the negative eigenvalues of $\Rnpd$ are replaced with some small positive value. The first step in the Knol-Berger algorithm is to compute the eigendecomposition of the $p \times p$ indefinite correlation matrix, as defined in the previous section. Next, a matrix $\mathbf{\Lambda_+}$ is created by setting all negative elements of $\mathbf{\Lambda}_-$ equal to some user-specified small, positive constant. Finally, a smoothed, PSD correlation matrix, $\Rkb$, is constructed by replacing $\mathbf{\Lambda}$ with $\mathbf{\Lambda_+}$ in the eigendecomposition of $\Rnpd$ and then scaling to ensure a unit diagonal and that the absolute value of all off-diagonal elements is less than or equal to one:
+In contrast to the Higham (2002) and Bentler-Yuan (2011) smoothing algorithms, the Knol-Berger algorithm is a non-iterative procedure in which the negative eigenvalues of $\Rnpd$ are replaced with some small positive value. The first step in the Knol-Berger algorithm is to compute the eigendecomposition of the $p \times p$ indefinite correlation matrix, as defined in the previous section. Next, a matrix $\mathbf{\Lambda_+}$ is created by setting all negative elements of $\mathbf{\Lambda}$ equal to some user-specified small, positive constant. Finally, a smoothed, PSD correlation matrix, $\Rkb$, is constructed by replacing $\mathbf{\Lambda}$ with $\mathbf{\Lambda_+}$ in the eigendecomposition of $\Rnpd$ and then scaling to ensure a unit diagonal and that the absolute value of all off-diagonal elements is less than or equal to one:
 
 \begin{equation}
 \Rkb = [\dg(\mathbf{V \Lambda_+ V}^\prime)]^{-1/2} \mathbf{V \Lambda_+ V}^\prime [\dg(\mathbf{V \Lambda_+ V}^\prime)]^{-1/2},
@@ -279,7 +281,7 @@ where $\dg(\mathbf{F}\mathbf{F}^\prime)$ is to be read as the diagonal matrix fo
 \mathbf{W} = (\dg(\mathbf{W}^* \mathbf{W}^{*\prime})^{-1} \mathbf{\Theta}^* \upsilon_\textrm{E})^{1/2} \mathbf{W}^*.
 (\#eq:W-matrix)
 \end{equation}
-This process ensured that the $q$ minor common factors accounted for the specified proportion of the variance not accounted for by the major common factors. The $\mathbf{W}$ matrix was then used to create the diagonal matrix of unique variances, $\mathbf{\Theta}^2 = \mathbf{I}_p - \Diag(\mathbf{FF}^\prime + \mathbf{WW}^\prime)$. The $\mathbf{F}$, $\mathbf{\Theta}^2$, and $\mathbf{W}$ matrices were then used to construct population correlation matrix, $\Rpop$, as shown in Equation \@ref(eq:sim-mod).
+This process ensured that the $q$ minor common factors accounted for the specified proportion of the variance not accounted for by the major common factors. The $\mathbf{W}$ matrix was then used to create the diagonal matrix of unique variances, $\mathbf{\Theta}^2 = \mathbf{I}_p - \dg(\mathbf{FF}^\prime + \mathbf{WW}^\prime)$. The $\mathbf{F}$, $\mathbf{\Theta}^2$, and $\mathbf{W}$ matrices were then used to construct population correlation matrix, $\Rpop$, as shown in Equation \@ref(eq:sim-mod).
 
 Having specified the elements of the population common factor model, the next step in the data-generation procedure was to draw a sample correlation matrix, $\mathbf{R}$, (for a given sample size, *N*) from $\Rpop$ using the method of @kshirsagar1959bartlett [see also @browne1968comparison]. The sample correlation matrix was then used to generate a matrix of continuous data, $\mathbf{X}_{N \times p} = (X_1, \dots, X_N)^\prime$, where $X \sim \mathcal{N}_p(\mathbf{0}_p, \mathbf{R})$. To obtain binary responses from the continuous data, items were assigned classical item difficulties [$d$; i.e., the expected proportion of correct responses, @CrockerAlgina] at equal intervals between 0.15 and 0.85. For example, items in a five-item data set were assigned classical item difficulties of .150, .325, .500, .675, and .850. The classical item difficulties were used to obtain threshold values, $t$, such that $1 - \Phi(t) = d$. Using these thresholds, the continuous data were converted to binary data. If a data set had any homogeneous item response vectors (i.e., had one or more items with zero variance), the data set was discarded and a new sample of data was generated until all items had non-homogeneous response vectors. Homogeneous response vectors were not allowed because such response vectors can lead to poorly-estimated tetrachoric correlations [@brown1977mean].
 
@@ -455,7 +457,7 @@ Moving next to model error, Model 2B indicated that increasing the proportion of
 
 Another notable effect involving model approximation error was the interaction between model error and ML factor extraction (`r pretty_coefs(rmse_mod, "model_error:fa_methodfaml")`). This result indicated that, of the three factor extraction methods, ML was less affected by model error than OLS or PA. Moreover, the main effect of ML indicated that it led to lower overall $\RMSE$ values than OLS or PA when all other variables were held constant (`r pretty_coefs(rmse_mod, "fa_methodfaml")`). However, the previously-discussed interactions between ML and factor loading, number of items per factor, and number of subjects per item indicated that ML led to better results than PA or OLS only when the numbers of subjects per item and items per factor were small and factor loadings were low. In conditions with higher numbers of subjects and items, OLS and PA led to better (and highly similar) results in terms of $\RMSE$ values.
 <!-- c -->
-```{r coefplot-loading-recovery, eval = TRUE, echo = FALSE, fig.cap = "Exponentiated coefficient estimates for the mixed effects model using $\\Ds$ as the dependent variable (Model 2B). APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); ML = Maximum likelihood; PA = Principal axis. The effects of no smoothing and ordinary least squares factor analysis are subsumed within the Constant term.", out.width='100%', fig.align="center"}
+```{r coefplot-loading-recovery, eval = TRUE, echo = FALSE, fig.cap = "Exponentiated coefficient estimates for the mixed effects model using $\\log[\\RMSE]$ as the dependent variable (Model 2B). APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); ML = Maximum likelihood; PA = Principal axis. The effects of no smoothing and ordinary least squares factor analysis are subsumed within the Constant term.", out.width='100%', fig.align="center"}
 knitr::include_graphics(path = paste0(project_dir, 
                                       "/Text/figs/loadings_coefplot.png"),
                         dpi = 320)
