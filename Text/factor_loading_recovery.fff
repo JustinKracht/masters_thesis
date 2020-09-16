@@ -26,7 +26,7 @@
 
 }
 
-\caption{Exponentiated coefficient estimates for the mixed effects model using $\mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})$ as the dependent variable (Model 2B). APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); ML = Maximum likelihood; PA = Principal axis. The effects of no smoothing and ordinary least squares factor analysis are subsumed within the Constant term.}\label{fig:coefplot-loading-recovery}
+\caption{Exponentiated coefficient estimates for the mixed effects model using $\log[\textrm{RMSE}(\mathbf{F}, \hat{\mathbf{F}})]$ as the dependent variable (Model 2B). APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); ML = Maximum likelihood; PA = Principal axis. The effects of no smoothing and ordinary least squares factor analysis are subsumed within the Constant term.}\label{fig:coefplot-loading-recovery}
 \end{figure*}
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}

@@ -29,7 +29,7 @@ generate_figs <- FALSE
 
 # Regression Diagnostics
 
-## Models 1A and 1B: Regression models predicting $\log \textrm{D}_s(\mathbf{R}_{\textrm{Pop}}, \mathbf{R}_{\textrm{Sm}})$
+## Models 1A and 1B: Regression models predicting $\log \textrm{D}_s(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})$
 
 ```{r RpopRsm-mod-fit, echo = FALSE, eval = FALSE}
 # Import simulation data

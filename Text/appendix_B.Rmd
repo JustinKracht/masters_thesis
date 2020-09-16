@@ -54,7 +54,7 @@ kable(npd_freq,
 
 \pagebreak
 
-## Observed $\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Pop}}, \mathbf{R}_{\textrm{Sm}})$ Values
+## Observed $\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})$ Values
 
 In addition to the estimated marginal means shown in the main text, the following figures (Figures \@ref(fig:ds-one-factor)--\@ref(fig:ds-ten-factor)) show box-plots of $\Ds$ for each condition in the simulation design. These box-plots match well with the estimated marginal means shown in the main text. However, notice that some conditions in these figures are missing box-plots (e.g., three factors, 15 subjects per item, 10 items per factor, $\upsilon_\textrm{E} = 0$, and Loading = 0.3) because no indefinite tetrachoric correlation matrices were produced for those conditions.
 
@@ -91,7 +91,7 @@ if (generate_figs == TRUE) {
                    scales = "fixed",
                    labeller = label_parsed) +
         labs(x = "Factor Loading",
-             y = latex2exp::TeX("$D_{s}(\\mathbf{R}_{Pop}, \\mathbf{R}_{Sm})$"),
+             y = latex2exp::TeX("$D_{s}(\\mathbf{R}_{Sm}, \\mathbf{R}_{Pop})$"),
              fill = "Smoothing Method",
              title = paste("Factors:", .x)),
       path = here::here("Text", "figs"),
@@ -103,34 +103,30 @@ if (generate_figs == TRUE) {
 }
 ```
 
-```{r ds-one-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for one-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r ds-one-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Sm}}, \\mathbf{R}_{\\textrm{Pop}})$ values for one-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center", out.width = '\\textwidth'}
 knitr::include_graphics(
-  path = here("Text", "figs", "ds_boxplot_01_factor.png"),
-  dpi = dpi
+  path = here("Text", "figs", "ds_boxplot_01_factor.png")
 )
 ```
 
 
-```{r ds-three-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for three-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r ds-three-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Sm}}, \\mathbf{R}_{\\textrm{Pop}})$ values for three-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center", out.width = '\\textwidth'}
 knitr::include_graphics(
-  path = here("Text", "figs", "ds_boxplot_03_factor.png"),
-  dpi = dpi
+  path = here("Text", "figs", "ds_boxplot_03_factor.png")
 )
 ```
 
 
-```{r ds-five-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for five-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r ds-five-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Sm}}, \\mathbf{R}_{\\textrm{Pop}})$ values for five-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center", out.width = '\\textwidth'}
 knitr::include_graphics(
-  path = here("Text", "figs", "ds_boxplot_05_factor.png"),
-  dpi = dpi
+  path = here("Text", "figs", "ds_boxplot_05_factor.png")
 )
 ```
 
 
-```{r ds-ten-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Pop}}, \\mathbf{R}_{\\textrm{Sm}})$ values for ten-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center"}
+```{r ds-ten-factor, fig.width = 4, echo = FALSE, fig.cap = "$\\textrm{D}_{\\textrm{s}}(\\mathbf{R}_{\\textrm{Sm}}, \\mathbf{R}_{\\textrm{Pop}})$ values for ten-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\\upsilon_{\\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.", fig.align = "center", out.width = '\\textwidth'}
 knitr::include_graphics(
-  path = here("Text", "figs", "ds_boxplot_10_factor.png"),
-  dpi = dpi
+  path = here("Text", "figs", "ds_boxplot_10_factor.png")
 )
 ```
 

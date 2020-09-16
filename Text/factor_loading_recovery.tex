@@ -112,7 +112,7 @@
   {}{\typeout{Failed to patch title.}}
 \makeatother
 \shorttitle{Factor Loading Recovery for Smoothed Matrices}
-\keywords{matrix smoothing, item factor analysis, factor loading recovery, indefinite\newline\indent Word count: X}
+\keywords{matrix smoothing, item factor analysis, factor loading recovery, indefinite\newline\indent Word count: 8,292}
 \DeclareDelayedFloatFlavor{ThreePartTable}{table}
 \DeclareDelayedFloatFlavor{lltable}{table}
 \DeclareDelayedFloatFlavor*{longtable}{table}
@@ -176,7 +176,7 @@ Researchers commonly use tetrachoric correlation matrices in item factor analysi
 \newcommand{\Rby}{\mathbf{R}_{\textrm{BY}}}
 \newcommand{\Rkb}{\mathbf{R}_{\textrm{KB}}}
 \newcommand{\dg}{\textrm{dg}}
-\newcommand{\Diag}{\textrm{Diag}}
+
 \newcommand{\RMSE}{\textrm{RMSE}(\mathbf{F}, \hat{\mathbf{F}})}
 \newcommand{\Ds}{\mathrm{D}_{\mathrm{s}}(\Rsm, \Rpop)}
 
@@ -243,12 +243,12 @@ P_U(\mathbf{A}) = (p_{ij}), \: p_{ij} =
 \end{cases}
 \label{eq:proj-U}
 \end{equation}
-Stated simply, \(P_U(\mathbf{A})\) replaces all elements of the diagonal of \(\mathbf{A}\) with ones. The projection onto \(\mathcal{S}\) is less straightforward. Higham (2002) outlines the steps as follows. For some symmetric, indefinite matrix \(\mathbf{A} \in \mathbb{R}^{p \times p}\), let \(\mathbf{A} = \mathbf{V} \mathbf{\Lambda}_- \mathbf{V}^{\textrm{T}}\) be the eigendecomposition of \(\mathbf{A}\), where \(\mathbf{V}\) is the orthonormal matrix of eigenvectors and \(\mathbf{\Lambda_-} = \textrm{diag}(\lambda_i)\) is a diagonal matrix with the eigenvalues of \(\mathbf{A}\), \(\lambda_i, \: i \in \{1, \dots, p \}\), ordered from largest to smallest on the diagonal (\(\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p\), \(\lambda_p < 0\)). Also let \(\mathbf{\Lambda}_+ = \textrm{diag}(\max(\lambda_i, 0))\). Then the projection of \(\mathbf{A}\) onto \(\mathcal{S}\) can be written as
+Stated simply, \(P_U(\mathbf{A})\) replaces all elements of the diagonal of \(\mathbf{A}\) with ones. The projection onto \(\mathcal{S}\) is less straightforward. Higham (2002) outlines the steps as follows. For some symmetric, indefinite matrix \(\mathbf{A} \in \mathbb{R}^{p \times p}\), let \(\mathbf{A} = \mathbf{V} \mathbf{\Lambda} \mathbf{V}^{\textrm{T}}\) be the eigendecomposition of \(\mathbf{A}\), where \(\mathbf{V}\) is the orthonormal matrix of eigenvectors and \(\mathbf{\Lambda} = \textrm{diag}(\lambda_i)\) is a diagonal matrix with the eigenvalues of \(\mathbf{A}\), \(\lambda_i, \: i \in \{1, \dots, p \}\), ordered from largest to smallest on the diagonal (\(\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_p\), \(\lambda_p < 0\)). Also let \(\mathbf{\Lambda}_+ = \textrm{diag}(\max(\lambda_i, 0))\), where the \(\textrm{diag}\) operator takes a vector and returns a diagonal matrix with the input vector on the diagonal. Then the projection of \(\mathbf{A}\) onto \(\mathcal{S}\) can be written as
 \begin{equation}
 P_S(\mathbf{A}) = \mathbf{V} \mathbf{\Lambda_+} \mathbf{V}^{\textrm{T}}.
 \label{eq:proj-S}
 \end{equation}
-Starting with \(\mathbf{A} = \mathbf{R}_{-}\), \(\mathbf{R}_{\textrm{APA}}\) can be obtained by repeatedly applying the operation \(\mathbf{A} \leftarrow P_U(P_S(\mathbf{A}))\) until convergence occurs or until some maximum number of iterations is reached (Higham, 2002, p. 337).
+Starting with \(\mathbf{A} = \mathbf{R}_{-}\), \(\mathbf{R}_{\textrm{APA}}\) can be obtained by repeatedly applying the operation \(\mathbf{A} \leftarrow P_U(P_S(\mathbf{A}))\) until convergence occurs or until some maximum number of iterations is reached (Higham, 2002, p. 337).\footnote{This is a somewhat simplified explanation of Higham's algorithm. The full algorithm includes a correction to each projection (see Higham, 2002, Algorithm 3.3, p.~337).}
 
 \hypertarget{bentler-yuan-algorithm-by-2011}{%
 \subsubsection{Bentler-Yuan Algorithm (BY; 2011)}\label{bentler-yuan-algorithm-by-2011}}
@@ -260,7 +260,7 @@ Similar to the Higham algorithm, the Bentler-Yuan algorithm sometimes fails to p
 \hypertarget{knol-berger-algorithm-kb-1991}{%
 \subsubsection{Knol-Berger Algorithm (KB; 1991)}\label{knol-berger-algorithm-kb-1991}}
 
-In contrast to the Higham (2002) and Bentler-Yuan (2011) smoothing algorithms, the Knol-Berger algorithm is a non-iterative procedure in which the negative eigenvalues of \(\mathbf{R}_{-}\) are replaced with some small positive value. The first step in the Knol-Berger algorithm is to compute the eigendecomposition of the \(p \times p\) indefinite correlation matrix, as defined in the previous section. Next, a matrix \(\mathbf{\Lambda_+}\) is created by setting all negative elements of \(\mathbf{\Lambda}_-\) equal to some user-specified small, positive constant. Finally, a smoothed, PSD correlation matrix, \(\mathbf{R}_{\textrm{KB}}\), is constructed by replacing \(\mathbf{\Lambda}\) with \(\mathbf{\Lambda_+}\) in the eigendecomposition of \(\mathbf{R}_{-}\) and then scaling to ensure a unit diagonal and that the absolute value of all off-diagonal elements is less than or equal to one:
+In contrast to the Higham (2002) and Bentler-Yuan (2011) smoothing algorithms, the Knol-Berger algorithm is a non-iterative procedure in which the negative eigenvalues of \(\mathbf{R}_{-}\) are replaced with some small positive value. The first step in the Knol-Berger algorithm is to compute the eigendecomposition of the \(p \times p\) indefinite correlation matrix, as defined in the previous section. Next, a matrix \(\mathbf{\Lambda_+}\) is created by setting all negative elements of \(\mathbf{\Lambda}\) equal to some user-specified small, positive constant. Finally, a smoothed, PSD correlation matrix, \(\mathbf{R}_{\textrm{KB}}\), is constructed by replacing \(\mathbf{\Lambda}\) with \(\mathbf{\Lambda_+}\) in the eigendecomposition of \(\mathbf{R}_{-}\) and then scaling to ensure a unit diagonal and that the absolute value of all off-diagonal elements is less than or equal to one:
 
 \begin{equation}
 \mathbf{R}_{\textrm{KB}}= [\textrm{dg}(\mathbf{V \Lambda_+ V}^\prime)]^{-1/2} \mathbf{V \Lambda_+ V}^\prime [\textrm{dg}(\mathbf{V \Lambda_+ V}^\prime)]^{-1/2},
@@ -350,9 +350,9 @@ where \(\textrm{dg}(\mathbf{F}\mathbf{F}^\prime)\) is to be read as the diagonal
 \mathbf{W} = (\textrm{dg}(\mathbf{W}^* \mathbf{W}^{*\prime})^{-1} \mathbf{\Theta}^* \upsilon_\textrm{E})^{1/2} \mathbf{W}^*.
 \label{eq:W-matrix}
 \end{equation}
-This process ensured that the \(q\) minor common factors accounted for the specified proportion of the variance not accounted for by the major common factors. The \(\mathbf{W}\) matrix was then used to create the diagonal matrix of unique variances, \(\mathbf{\Theta}^2 = \mathbf{I}_p - \textrm{Diag}(\mathbf{FF}^\prime + \mathbf{WW}^\prime)\). The \(\mathbf{F}\), \(\mathbf{\Theta}^2\), and \(\mathbf{W}\) matrices were then used to construct population correlation matrix, \(\mathbf{R}_{\textrm{Pop}}\), as shown in Equation \eqref{eq:sim-mod}.
+This process ensured that the \(q\) minor common factors accounted for the specified proportion of the variance not accounted for by the major common factors. The \(\mathbf{W}\) matrix was then used to create the diagonal matrix of unique variances, \(\mathbf{\Theta}^2 = \mathbf{I}_p - \textrm{dg}(\mathbf{FF}^\prime + \mathbf{WW}^\prime)\). The \(\mathbf{F}\), \(\mathbf{\Theta}^2\), and \(\mathbf{W}\) matrices were then used to construct population correlation matrix, \(\mathbf{R}_{\textrm{Pop}}\), as shown in Equation \eqref{eq:sim-mod}.
 
-Having specified the elements of the population common factor model, the next step in the data-generation procedure was to draw a sample correlation matrix, \(\mathbf{R}\), (for a given sample size, \emph{N}) from \(\mathbf{R}_{\textrm{Pop}}\) using the method of Kshirsagar (1959; see also, Browne, 1968). The sample correlation matrix was then used to generate a matrix of continuous data, \(\mathbf{X}_{N \times p} = (X_1, \dots, X_N)^\prime\), where \(X \sim \mathcal{N}_p(\mathbf{0}_p, \mathbf{R})\). To obtain binary responses from the continuous data, items were assigned classical item difficulties (\(d\); i.e., the expected proportion of correct responses, Crocker \& Algina, 1986) at equal intervals between 0.15 and 0.85. For example, items in a five-item data set were assigned classical item difficulties of .150, .325, .500, .675, and .850. The classical item difficulties were used to obtain threshold values, \(t\), such that \(1 - \Phi(t) = d\). Using these thresholds, the continuous data were converted to binary data. If a data set had any homogeneous item response vectors (i.e., had one or more items with zero variance), the data set was discarded and a new sample of data was generated until all items had non-homogeneous response vectors. Homogeneous response vectors were not allowed because such response vectors can lead to poorly-estimated tetrachoric correlations (Brown \& Benedetti, 1977).
+Having specified the elements of the population common factor model, the next step in the data-generation procedure was to draw a sample correlation matrix, \(\mathbf{R}\), (for a given sample size, \emph{N}) from \(\mathbf{R}_{\textrm{Pop}}\) using the method of Kshirsagar (1959; see also Browne, 1968). The sample correlation matrix was then used to generate a matrix of continuous data, \(\mathbf{X}_{N \times p} = (X_1, \dots, X_N)^\prime\), where \(X \sim \mathcal{N}_p(\mathbf{0}_p, \mathbf{R})\). To obtain binary responses from the continuous data, items were assigned classical item difficulties (\(d\); i.e., the expected proportion of correct responses, Crocker \& Algina, 1986) at equal intervals between 0.15 and 0.85. For example, items in a five-item data set were assigned classical item difficulties of .150, .325, .500, .675, and .850. The classical item difficulties were used to obtain threshold values, \(t\), such that \(1 - \Phi(t) = d\). Using these thresholds, the continuous data were converted to binary data. If a data set had any homogeneous item response vectors (i.e., had one or more items with zero variance), the data set was discarded and a new sample of data was generated until all items had non-homogeneous response vectors. Homogeneous response vectors were not allowed because such response vectors can lead to poorly-estimated tetrachoric correlations (Brown \& Benedetti, 1977).
 
 Next, a tetrachoric correlation matrix was computed for each simulated binary data set. Tetrachoric correlation matrices were calculated using the \texttt{tetcor()} function in the R \emph{fungible} package (Waller, 2019), which computes maximum likelihood tetrachoric correlation coefficients (Brown \& Benedetti, 1977; Olsson, 1979). If a tetrachoric correlation matrix was indefinite, the Higham (2002), Bentler-Yuan (2011), and Knol-Berger (1991) matrix smoothing algorithms were applied to the indefinite tetrachoric correlation matrix to produce three smoothed, PSD correlation matrices. Matrix smoothing was done using the \texttt{smoothAPA()}, \texttt{smoothBY()}, and \texttt{smoothKB()} implementations of the Higham (2002), Bentler-Yuan (2011), and Knol-Berger (1991) algorithms in the \emph{fungible} package.
 
@@ -403,7 +403,7 @@ One of the primary reasons for conducting the present simulation study was to de
 \label{eq:scaled-distance}
 \end{equation}
 
-To understand which of the smoothing algorithms most often produced a smoothed correlation matrix, \(\mathbf{R}_{\textrm{Sm}}\), that was closest to the model-implied correlation matrix, \(\mathbf{R}_{\textrm{Pop}}\), I calculated \(\mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})\) for each \(\mathbf{R}_{\textrm{Sm}}\) obtained from the 124,346 indefinite tetrachoric correlation matrices.\footnote{A table reporting the percent of tetrachoric correlation matrices that were indefinite can be found in Appendix B.} Small values of \(\mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})\) indicated that the smoothed correlation matrix was a good approximation of \(\mathbf{R}_{\textrm{Pop}}\), whereas large values indicated that \(\mathbf{R}_{\textrm{Sm}}\) was a poor approximation of \(\mathbf{R}_{\textrm{Pop}}\). After excluding three cases where the Higham (2002) algorithm failed to converge, I fit a linear mixed-effects model (Model 1A) regressing \(\log \mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})\) on all of the simulation design variables and their two-way interactions. Additionally, a random intercept was estimated for every unique indefinite correlation matrix to account for the correlation between observations corresponding the same indefinite correlation matrix.\footnote{All numeric predictors were scaled to have a mean of zero and variance of one prior to analysis. Diagnostic plots are shown in Appendix A.} The estimated fixed-effect coefficients are shown in Figure \ref{fig:coefplot-RpopRsm}. A full summary table for the model is contained in Table \ref{tab:distance-mod-summary}. Figure \ref{fig:coefplot-RpopRsm} and Table \ref{tab:distance-mod-summary} also summarize the results of a second model (Model 1B) that included second-degree polynomial terms for number of factors, factor loading, and subjects per item in addition to the terms included in Model 1A. The results in Table \ref{tab:distance-mod-summary} indicated that Model 1B should be preferred based on the AIC (Akaike, 1973) and BIC (e.g., Hastie, Tibshirani, \& Friedman, 2009) criteria. Therefore, coefficient estimates and estimated marginal means reported in this section were obtained using Model 1B.
+To understand which of the smoothing algorithms most often produced a smoothed correlation matrix, \(\mathbf{R}_{\textrm{Sm}}\), that was closest to the model-implied correlation matrix, \(\mathbf{R}_{\textrm{Pop}}\), I calculated \(\mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})\) for each \(\mathbf{R}_{\textrm{Sm}}\) obtained from the 124,346 indefinite tetrachoric correlation matrices.\footnote{A table reporting the percent of tetrachoric correlation matrices in each condition that were indefinite can be found in Appendix B.} Small values of \(\mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})\) indicated that the smoothed correlation matrix was a good approximation of \(\mathbf{R}_{\textrm{Pop}}\), whereas large values indicated that \(\mathbf{R}_{\textrm{Sm}}\) was a poor approximation of \(\mathbf{R}_{\textrm{Pop}}\). After excluding three cases where the Higham (2002) algorithm failed to converge, I fit a linear mixed-effects model (Model 1A) regressing \(\log \mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})\) on all of the simulation design variables and their two-way interactions. Additionally, a random intercept was estimated for every unique indefinite correlation matrix to account for the correlation between observations corresponding the same indefinite correlation matrix.\footnote{All numeric predictors were scaled to have a mean of zero and variance of one prior to analysis. Diagnostic plots are shown in Appendix A.} The estimated fixed-effect coefficients are shown in Figure \ref{fig:coefplot-RpopRsm}. A full summary table for the model is contained in Table \ref{tab:distance-mod-summary}. Figure \ref{fig:coefplot-RpopRsm} and Table \ref{tab:distance-mod-summary} also summarize the results of a second model (Model 1B) that included second-degree polynomial terms for number of factors, factor loading, and subjects per item in addition to the terms included in Model 1A. The results in Table \ref{tab:distance-mod-summary} indicated that Model 1B should be preferred based on the AIC (Akaike, 1973) and BIC (e.g., Hastie, Tibshirani, \& Friedman, 2009) criteria. Therefore, coefficient estimates and estimated marginal means reported in this section were obtained using Model 1B.
 
 The design variables that most influenced \(\mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})\) values can be seen in Figure \ref{fig:coefplot-RpopRsm}, which shows coefficient estimates with 99\% confidence intervals, ordered by size. Note that exponentiated coefficients less than 1.01 and greater than 0.99 were omitted from the figure to conserve space. Figure \ref{fig:coefplot-RpopRsm} shows that only a few variables had non-trivial effects on population matrix recovery. In particular, the three largest effects were for number of factors (\(\hat{b} = -0.52\), \(SE = 0.00\), \(e^{-0.52} = 0.59\)), number of items per factor (\(\hat{b} = -0.26\), \(SE = 0.00\), \(e^{-0.26} = 0.77\)), and number of subjects per item (\(\hat{b} = -0.25\), \(SE = 0.00\), \(e^{-0.25} = 0.78\)). These estimated effects were all negative, indicating better recovery of the population correlation matrix for models with larger numbers of major factors, larger numbers of items per factor, and larger numbers of subjects per item. The effects of number of factors and number of subjects per item were somewhat offset, however, by large (positive) estimated effects for the squared number of factors (\(\hat{b} = 0.19\), \(SE = 0.00\), \(e^{0.19} = 1.21\)) and squared number of subjects per item (\(\hat{b} = 0.08\), \(SE = 0.00\), \(e^{0.08} = 1.08\)) terms. The effects of all of the independent variables can be more easily understood by looking at Figure \ref{fig:RpopRsm-fitted-vals}, which shows estimated marginal mean \(D_s(\mathbf{R}_{\textrm{Pop}},\mathbf{R}_{\textrm{Sm}})\) values (and 99\% confidence intervals) at each level of number of factors, number of subjects per item, number of items per factor, factor loading, and smoothing method.\footnote{Estimated marginal means were used to summarize results because the data were unbalanced (due to only using indefinite tetrachoric correlation matrices in the analyses). Additional tables and figures showing results from the raw data can be found in Appendix B.}
 
@@ -548,7 +548,7 @@ Another notable effect involving model approximation error was the interaction b
 
 }
 
-\caption{Exponentiated coefficient estimates for the mixed effects model using $\mathrm{D}_{\mathrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})$ as the dependent variable (Model 2B). APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); ML = Maximum likelihood; PA = Principal axis. The effects of no smoothing and ordinary least squares factor analysis are subsumed within the Constant term.}\label{fig:coefplot-loading-recovery}
+\caption{Exponentiated coefficient estimates for the mixed effects model using $\log[\textrm{RMSE}(\mathbf{F}, \hat{\mathbf{F}})]$ as the dependent variable (Model 2B). APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); ML = Maximum likelihood; PA = Principal axis. The effects of no smoothing and ordinary least squares factor analysis are subsumed within the Constant term.}\label{fig:coefplot-loading-recovery}
 \end{figure}
 
 \begin{center}
@@ -1013,10 +1013,10 @@ Zhang, D., \& Davidian, M. (2001). Linear mixed models with flexible distributio
 \hypertarget{regression-diagnostics}{%
 \section{Regression Diagnostics}\label{regression-diagnostics}}
 
-\hypertarget{models-1a-and-1b-regression-models-predicting-log-textrmd_smathbfr_textrmpop-mathbfr_textrmsm}{%
+\hypertarget{models-1a-and-1b-regression-models-predicting-log-textrmd_smathbfr_textrmsm-mathbfr_textrmpop}{%
 \subsection{\texorpdfstring{Models 1A and 1B: Regression models
 predicting
-\(\log \textrm{D}_s(\mathbf{R}_{\textrm{Pop}}, \mathbf{R}_{\textrm{Sm}})\)}{Models 1A and 1B: Regression models predicting \textbackslash log \textbackslash textrm\{D\}\_s(\textbackslash mathbf\{R\}\_\{\textbackslash textrm\{Pop\}\}, \textbackslash mathbf\{R\}\_\{\textbackslash textrm\{Sm\}\})}}\label{models-1a-and-1b-regression-models-predicting-log-textrmd_smathbfr_textrmpop-mathbfr_textrmsm}}
+\(\log \textrm{D}_s(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})\)}{Models 1A and 1B: Regression models predicting \textbackslash log \textbackslash textrm\{D\}\_s(\textbackslash mathbf\{R\}\_\{\textbackslash textrm\{Sm\}\}, \textbackslash mathbf\{R\}\_\{\textbackslash textrm\{Pop\}\})}}\label{models-1a-and-1b-regression-models-predicting-log-textrmd_smathbfr_textrmsm-mathbfr_textrmpop}}
 
 Models 1A and 1B were a linear mixed-effects models predicting the (log)
 scaled distance between the smoothed and model-implied population
@@ -1278,10 +1278,10 @@ $N/p$ & $p/m$ & Loading & $\upsilon_{\textrm{E}}$ & 1 & 3 & 5 & 10\\
 
 \pagebreak
 
-\hypertarget{observed-textrmd_textrmsmathbfr_textrmpop-mathbfr_textrmsm-values}{%
+\hypertarget{observed-textrmd_textrmsmathbfr_textrmsm-mathbfr_textrmpop-values}{%
 \subsection{\texorpdfstring{Observed
-\(\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Pop}}, \mathbf{R}_{\textrm{Sm}})\)
-Values}{Observed \textbackslash textrm\{D\}\_\{\textbackslash textrm\{s\}\}(\textbackslash mathbf\{R\}\_\{\textbackslash textrm\{Pop\}\}, \textbackslash mathbf\{R\}\_\{\textbackslash textrm\{Sm\}\}) Values}}\label{observed-textrmd_textrmsmathbfr_textrmpop-mathbfr_textrmsm-values}}
+\(\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})\)
+Values}{Observed \textbackslash textrm\{D\}\_\{\textbackslash textrm\{s\}\}(\textbackslash mathbf\{R\}\_\{\textbackslash textrm\{Sm\}\}, \textbackslash mathbf\{R\}\_\{\textbackslash textrm\{Pop\}\}) Values}}\label{observed-textrmd_textrmsmathbfr_textrmsm-mathbfr_textrmpop-values}}
 
 In addition to the estimated marginal means shown in the main text, the
 following figures (Figures
@@ -1296,38 +1296,38 @@ conditions.
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.74in]{/home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_01_factor} 
+{\centering \includegraphics[width=\textwidth]{/home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_01_factor} 
 
 }
 
-\caption{$\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Pop}}, \mathbf{R}_{\textrm{Sm}})$ values for one-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\upsilon_{\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.}\label{fig:ds-one-factor}
+\caption{$\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})$ values for one-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\upsilon_{\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.}\label{fig:ds-one-factor}
 \end{figure}
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.74in]{/home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_03_factor} 
+{\centering \includegraphics[width=\textwidth]{/home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_03_factor} 
 
 }
 
-\caption{$\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Pop}}, \mathbf{R}_{\textrm{Sm}})$ values for three-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\upsilon_{\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.}\label{fig:ds-three-factor}
+\caption{$\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})$ values for three-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\upsilon_{\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.}\label{fig:ds-three-factor}
 \end{figure}
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.74in]{/home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_05_factor} 
+{\centering \includegraphics[width=\textwidth]{/home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_05_factor} 
 
 }
 
-\caption{$\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Pop}}, \mathbf{R}_{\textrm{Sm}})$ values for five-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\upsilon_{\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.}\label{fig:ds-five-factor}
+\caption{$\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})$ values for five-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\upsilon_{\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.}\label{fig:ds-five-factor}
 \end{figure}
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.74in]{/home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_10_factor} 
+{\centering \includegraphics[width=\textwidth]{/home/justin/Documents/masters_thesis/Text/figs/ds_boxplot_10_factor} 
 
 }
 
-\caption{$\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Pop}}, \mathbf{R}_{\textrm{Sm}})$ values for ten-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\upsilon_{\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.}\label{fig:ds-ten-factor}
+\caption{$\textrm{D}_{\textrm{s}}(\mathbf{R}_{\textrm{Sm}}, \mathbf{R}_{\textrm{Pop}})$ values for ten-factor models. APA = Higham (2002); BY = Bentler-Yuan (2011); KB = Knol-Berger (1991); None = no smoothing; $\upsilon_{\textrm{E}}$ = Proportion of uniqueness variance redistributed to the minor common factors representing model approximation error.}\label{fig:ds-ten-factor}
 \end{figure}
 
 \pagebreak

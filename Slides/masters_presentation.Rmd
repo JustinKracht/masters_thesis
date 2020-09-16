@@ -9,7 +9,7 @@ bibliography: "../Text/references.bib"
 csl: "apa7.csl"
 header-includes:
   - \usepackage[ruled]{algorithm2e}
-  - \usetheme{metropolis}
+  - \usetheme[progressbar=foot]{metropolis}
   - \definecolor{outer-space-crayola}{RGB}{34, 51, 51}
   - \definecolor{cadmium-orange}{RGB}{235, 129, 27}
   - \definecolor{light-slate-grey}{RGB}{110, 136, 152}
@@ -27,6 +27,10 @@ pacman::p_load(
 )
 ```
 
+# Introduction
+
+## Item Factor Analysis
+
 \newcommand{\Rsm}{\mathbf{R}_{\textrm{Sm}}}
 \newcommand{\Rpop}{\mathbf{R}_{\textrm{Pop}}}
 \newcommand{\Rnpd}{\mathbf{R}_{-}}
@@ -37,10 +41,6 @@ pacman::p_load(
 \newcommand{\dg}{\textrm{dg}}
 \newcommand{\RMSE}{\textrm{RMSE}(\mathbf{F}, \hat{\mathbf{F}})}
 \newcommand{\Ds}{\mathrm{D}_{\mathrm{s}}(\Rsm, \Rpop)}
-
-# Introduction
-
-## Item Factor Analysis
 
 We often want to conduct exploratory factor analysis on binary response data
 
@@ -71,7 +71,7 @@ $\Rpop$: The population correlation matrix estimated by $\Rtet$
 Problems:
 
 - An indefinite $\Rtet$ is not in the set of possible $\Rpop$ matrices
-- Some multivariate analysis procedures do not work with indefinite correlation matrices (i.e., maximum likelihood factor analysis)
+- Some multivariate analysis procedures require PSD correlation matrices (i.e., maximum likelihood factor analysis)
 - Can lead to nonsensical interpretations (e.g., negative component variance in PCA) 
 
 ## Matrix Smoothing Algorithms
@@ -229,6 +229,8 @@ ggplot(smooth_diffs, aes(Var1, Var2, fill = value)) +
 
 ## Common Factor Model with Model Approximation Error
 
+@tucker1969  
+
 \begin{equation}
 \mathbf{P} = \mathbf{F} \boldsymbol{\Phi} \mathbf{F}^\prime + \boldsymbol{\Theta}^2 + \mathbf{WW}^\prime
 \end{equation}
@@ -237,7 +239,7 @@ ggplot(smooth_diffs, aes(Var1, Var2, fill = value)) +
 - $\mathbf{F}$: $p \times m$ factor loading matrix  
 - $\boldsymbol{\Phi}$: $m \times m$ factor correlation matrix  
 - $\boldsymbol{\Theta}^2$: $p \times p$ matrix of unique item variances  
-- $\mathbf{W}$: $p \times q$ minor factor loading matrix for the $q \gg p$ minor common factors
+- $\mathbf{W}$: $p \times q$ minor factor loading matrix for the $q \gg m$ minor common factors  
 
 # Methods
 
@@ -288,7 +290,7 @@ $$\operatorname{RMSE}(\mathbf{F}, \hat{\mathbf{F}})=\sqrt{\sum_{i=1}^{p} \sum_{j
 
 # Results
 
-## $\Rpop$ Recovery
+## Population Correlation Matrix ($\Rpop$) Recovery
 
 ```{r Rpop-Rsm-fitted-vals, fig.align='right', out.width='100%'}
 knitr::include_graphics(
@@ -297,14 +299,36 @@ knitr::include_graphics(
 )
 ```
 
-## $\mathbf{F}$ Recovery
+## Factor Loading Recovery
 
-```{r loading-fitted-values, out.height="100%"}
+```{r loading-fitted-values, out.width="100%"}
 knitr::include_graphics(
   path = "figures/loading_fitted_vals.png",
   dpi = 800
 )
 ```
+
+# Discussion
+
+## Summary: Population Correlation Matrix ($\Rpop$) Recovery
+
+- $\Rpop$ recovery was better in conditions with:  
+  - High factor loadings  
+  - Many major factors  
+  - Many items per factor  
+  - Many subjects per item  
+
+- The Bentler-Yuan (2011) algorithm led to slightly better recovery in conditions with:  
+  - Low factor loadings  
+  - Few major factors  
+  - Few items per factor  
+  - Few subjects per item  
+
+## Summary: Factor Loading Recovery
+
+## Limitations
+
+## Future Directions
 
 # Appendix
 

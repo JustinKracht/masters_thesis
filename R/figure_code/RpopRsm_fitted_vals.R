@@ -73,7 +73,7 @@ ggplot(Ds_emm,
                factors_rec,
              scales = "fixed",
              labeller = label_parsed) +
-  labs(y = TeX("$D_s(\\mathbf{R}_{Pop}, \\mathbf{R}_{Sm})$"),
+  labs(y = TeX("$D_s(\\mathbf{R}_{Sm}, \\mathbf{R}_{Pop})$"),
        x = "Factor Loading",
        color = "Smoothing Method",
        shape = "Smoothing Method",
