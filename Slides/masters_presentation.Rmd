@@ -9,6 +9,7 @@ bibliography: "../Text/references.bib"
 csl: "apa7.csl"
 header-includes:
   - \usepackage[ruled]{algorithm2e}
+  - \usepackage{booktabs}
   - \usetheme[progressbar=foot]{metropolis}
   - \definecolor{outer-space-crayola}{RGB}{34, 51, 51}
   - \definecolor{cadmium-orange}{RGB}{235, 129, 27}
@@ -23,13 +24,14 @@ pacman::p_load(
   tidyverse,
   fungible,
   reshape2,
-  bookdown
+  bookdown,
+  kableExtra
 )
 ```
 
 # Introduction
 
-## Item Factor Analysis
+## Overview
 
 \newcommand{\Rsm}{\mathbf{R}_{\textrm{Sm}}}
 \newcommand{\Rpop}{\mathbf{R}_{\textrm{Pop}}}
@@ -46,22 +48,46 @@ We often want to conduct exploratory factor analysis on binary response data
 
 - The assumption of continuous outcomes required by the common linear factor model is violated when data are binary
 
-- \textcolor{cadmium-orange}{Tetrachoric correlation matrices} [@divgi1979; @brown1977mean] are often used to estimate the correlations between the normally-distributed, continuous latent variables often assumed to underlie observed binary data
+- \textcolor{cadmium-orange}{Tetrachoric correlation matrices} [@divgi1979; @brown1977mean] are often used to estimate the correlations between the normally-distributed, continuous latent variables often assumed to underlie observed binary data 
 
-## Indefinite Tetrachoric Correlation Matrices
+- Tetrachoric correlation matrices are sometimes \alert{indefinite}
 
-- Tetrachoric correlation matrices can be \textcolor{cadmium-orange}{indefinite}, particularly when computed from data sets with:
-  - Few subjects
-  - Many items
-  - Extreme items (high factor loadings, extreme item difficulties)
+- \alert{Matrix smoothing algorithms} produce a proper "smoothed" matrix from and indefinite matrix
+
+## Previous Work
+
+- @knol1991 found no significant differences between factor solutions from smoothed and unsmoothed (indefinite) tetrachoric correlation matrices
+  - Very small study; 10 indefinite correlation matrices with 250 subjects and 15 items
   
+- @debelak2013 and @debelak2016: Smoothed vs. unsmoothed tetrachoric correlation matrices for parallel analysis
+  - Smoothing improved dimensionality recovery (best results for Bentler-Yuan)
+  - Differences were small
+
+- Kracht and Waller (under review): Smoothed tetrachoric correlation matrices for parallel analysis
+  - Only slight differences between smoothing algorithms
+  - Bentler-Yuan led to slightly better results in some conditions
+
+## Three Questions
+
+1. Are smoothed matrices better approximations of their corresponding population correlation matrices than indefinite tetrachoric correlation matrices?
+
+2. When used in factor analysis, do smoothed correlation matrices lead to better factor loading estimates than indefinite tetrachoric correlation matrices?
+
+3. Do three commonly-used smoothing algorithms differ with respect to Questions (1) and (2)?
+    - Higham (2002)
+    - Bentler-Yuan (2011)
+    - Knol-Berger (1991)
+
+# Background
+
 ## Proper Correlation Matrices
 
-A correlation matrix, $\mathbf{R}_{p \times p}$ with elements $r_{ij} = r_{ji}$, $i, j \in \{1, \dots, p\}$, is a symmetric matrix that:
+By definition, a proper correlation matrix, $\mathbf{R}_{p \times p} = \{r_{ij} \}$, satisfies:
 
-1. Has unit diagonal
-2. Has all $|r_{ij}| \leq 1$
-3. Is positive semidefinite (PSD), having eigenvalues $\lambda_i \geq 0$ $\forall \: i \in \{1, \dots, p\}$
+- $r_{ij} = r_{ji}$ \hfill (symmetry)
+- $\textrm{diag}(\mathbf{R}) = \mathbf{I}$ \hfill (unit diagonal)
+- $r_{ij} \in [-1, 1]$ \hfill (elements bounded by $-1$ and $1$)
+- $\mathbf{R} \succcurlyeq 0$ \hfill (positive semidefinite)
 
 ## The Problem with Indefinite Correlation Matrices
 
@@ -109,7 +135,7 @@ until convergence occurs or the maximum number of iterations is exceeded.
 ```{r, fig.align='center', fig.cap = "Simplified illustration of the method of alternating projections."}
 knitr::include_graphics(
   here::here("Slides", "figures", "alternating_projections.png"), 
-  dpi = 1000
+  dpi = 1200
 )
 ```
 
@@ -138,7 +164,7 @@ $h_i$ is the MTFA communality estimate for the $i$th item
 
 ## The Knol-Berger Algorithm (1991)
 
-Intuition: Replace all negative eigenvalues with a small positive constant in the eigenvalue decomposition and then scale the result to a correlation matrix.
+Intuition: Replace all negative eigenvalues with a small non-negative constant in the eigenvalue decomposition and then scale the result to a correlation matrix.
 
 ## The Knol-Berger Algorithm (1991)
 
@@ -216,17 +242,6 @@ ggplot(smooth_diffs, aes(Var1, Var2, fill = value)) +
         strip.text.x = element_text(size = 26))
 ```
 
-## Common Factor Model
-
-\begin{equation} 
-\mathbf{P} = \mathbf{F} \boldsymbol{\Phi} \mathbf{F}^\prime + \boldsymbol{\Theta}^2
-\end{equation}
-
-- $\mathbf{P}$: $p \times p$ population correlation matrix  
-- $\mathbf{F}$: $p \times m$ factor loading matrix  
-- $\boldsymbol{\Phi}$: $m \times m$ factor correlation matrix  
-- $\boldsymbol{\Theta}^2$: $p \times p$ matrix of unique item variances  
-
 ## Common Factor Model with Model Approximation Error
 
 @tucker1969  
@@ -280,7 +295,7 @@ $$\mathrm{D}_{\mathrm{s}}(\mathbf{A}, \mathbf{B})=\sqrt{\sum_{i=1}^{p-1} \sum_{j
 \item $\Rpop = \mathbf{F} \boldsymbol{\Phi} \mathbf{F}^\prime + \boldsymbol{\Theta}^2 + \mathbf{WW}^\prime$  
 \end{itemize}
 
-Evaluate recovery of $\Rpop$ using $\mathrm{D_s}(\Rpop, \Rsm)$
+Evaluate recovery of $\Rpop$ using $\mathrm{D_s}(\Rsm, \Rpop)$
 
 ## $\mathbf{F}$ Recovery Criterion
 
@@ -289,6 +304,40 @@ Evaluate how well the factor loading matrix, $\mathbf{F}$, was recovered using:
 $$\operatorname{RMSE}(\mathbf{F}, \hat{\mathbf{F}})=\sqrt{\sum_{i=1}^{p} \sum_{j=1}^{m} \frac{\left(f_{i j}-\hat{f}_{i j}\right)^{2}}{p m}}$$
 
 # Results
+
+## Indefinite Matrix Frequency
+
+124,346 (57.6%) of 216,000 tetrachoric correlation matrices were indefinite  
+
+Indefinite matrices were most common in conditions with:
+
+- Many factors/items per factor (i.e., total number of items)
+- Few subjects per item
+- Large factor loadings
+
+## Indefinite Matrix Frequency
+
+```{r indefinite-matrix-frequency, message = FALSE, warning = FALSE}
+results_matrix <- readRDS("~/Documents/masters_thesis/Data/results_matrix.RDS")
+
+ind_freq <- results_matrix %>%
+  filter(fa_method == "fals") %>%
+  group_by(factors, subjects_per_item, factor_loading) %>%
+  summarise(perc_npd = mean(npd == TRUE, na.rm = TRUE) * 100) %>%
+  pivot_wider(names_from = factors,
+              values_from = perc_npd)
+
+knitr::kable(ind_freq,
+             format = "latex",
+             digits = 1,
+             col.names = c("$N/p$", "Loading", "1", "3", "5", "10"),
+             booktabs = TRUE,
+             linesep = "",
+             escape = FALSE) %>%
+  add_header_above(header = c(" " = 2, "Factors" = 4)) %>%
+  kable_styling(position = "center")
+```
+*Note*: Percent of indefinite matrices conditioned on number of subjects per item ($N/p$), factor loading, and number of factors.
 
 ## Population Correlation Matrix ($\Rpop$) Recovery
 
@@ -305,6 +354,14 @@ knitr::include_graphics(
 knitr::include_graphics(
   path = "figures/loading_fitted_vals.png",
   dpi = 800
+)
+```
+
+## Factor Loading Recovery
+
+```{r loading-fitted-values-smooth-method, out.width="100%"}
+knitr::include_graphics(
+  path = "figures/loading_fitted_vals_smooth_method.png"
 )
 ```
 
@@ -326,11 +383,35 @@ knitr::include_graphics(
 
 ## Summary: Factor Loading Recovery
 
-## Limitations
+- Factor loading recovery was better in conditions with:  
+  - High factor loadings  
+  - Many major factors  
+  - Many items per factor  
+  - Small amounts of model approximation error  
+  - Under these conditions, OLS and PA led to better results than ML  
 
-## Future Directions
+- Bentler-Yuan (2011) led to slightly better results in conditions with:  
+  - Low factor loadings  
+  - Few items per factor  
+  - ML factor extraction  
 
-# Appendix
+## Limitations & Future Directions
+
+- Only orthogonal models with fixed factor loadings  
+- Investigated only indefinite tetrachoric correlation matrices  
+  - Polychoric correlation matrices  
+  - Composite correlation matrices  
+  - Correlation matrices calculated from missing data  
+- Investigate methods that avoid the problem  
+  - Remove problematic items  
+  - Full-information factor analysis  
+  - Bayesian/penalized tetrachoric estimation  
+  
+## Simulation Code
+
+\center https://github.umn.edu/krach018/masters_thesis
+
+# Backup Slides
 
 ## Higham's Algorithm (2002) with Dykstra's Correction
 
@@ -346,5 +427,54 @@ knitr::include_graphics(
 \end{algorithm}
 
 The algorithm continues until convergence occurs or the maximum number of iterations is exceeded. If the algorithm converges, $\Rapa = \mathbf{Y}_k$.
+
+## Minimum Trace Factor Analysis
+
+Given a population covariance (correlation) matrix, $\boldsymbol{\Sigma}$, minimum trace factor analysis seeks to find the diagonal matrix of unique variances, $\boldsymbol{\Psi} = \operatorname{diag}(\Psi_{11}, \dots, \Psi_{pp})$ to solve the optimization problem:
+
+\begin{equation}
+\underset{\boldsymbol{\Psi}}{\operatorname{Min}} \operatorname{tr}(\boldsymbol{\Sigma}-\boldsymbol{\Psi}) \text { subject to } \boldsymbol{\Sigma}-\boldsymbol{\Psi} \succeq 0
+\end{equation}
+
+The greatest lower bound of reliability is then defined as:
+
+$$\rho:=1-\frac{ \operatorname{tr} \bar{\boldsymbol{\Psi}}}{1_{p}^{\prime} \Sigma 1_{p}}$$
+where $\bar{\boldsymbol{\Psi}} = \bar{\boldsymbol{\Psi}}(\boldsymbol{\Sigma})$ is the optimal solution of Equation (3) [@shapiro2002].
+
+## Principal Axis Factor Extraction
+
+$\mathbf{H}_0 = \operatorname{diag}(h_1, \dots, h_p)$  
+- $h_i$ is the estimated communality for Item $i$
+
+\begin{algorithm}[H]
+\caption{Extract principal axes factor solution\label{PA}}
+  Initialize $\mathbf{R}^*_0 = \mathbf{R} - \mathbf{I} + \mathbf{H}_0$ \\
+  \For{$k = 1, 2, \dots$}{
+    $\mathbf{R}^*_{k-1} = \mathbf{V}_{k-1} \boldsymbol{\Lambda}_{k-1} \mathbf{V}_{k-1}^\prime$ \\
+    $\mathbf{R}^*_{k} = \mathbf{R}^*_{k-1} - \mathbf{I} + \boldsymbol{\Lambda}_{k-1}$ \\
+    $\epsilon = |\operatorname{diag}\boldsymbol{\Lambda}_{k} - \operatorname{diag}\boldsymbol{\Lambda}_{k - 1}|$
+  }
+  Stop when $\epsilon \leq \delta$.
+\end{algorithm}
+
+## Ordinary Least Squares Factor Extraction
+
+$\hat{\mathbf{P}}$: Implied correlation matrix from the estimated factor model  
+$\mathbf{R}$: Observed correlation matrix  
+
+Minimize the discrepancy function:  
+
+$$
+F_{O L S}(\mathbf{R}, \hat{\mathbf{P}})=\frac{1}{2}\operatorname{tr}\left[(\mathbf{R}-\hat{\mathbf{P}})^{2}\right]
+$$
+  
+## Maximum Likelihood Factor Extraction
+
+Minimize the discrepancy function:  
+
+$$
+F_{M L}(\mathbf{R}, \hat{\mathbf{P}})=\log |\hat{\mathbf{P}}|-\log |\mathbf{R}|+\operatorname{tr}\left(\mathbf{S} \hat{\mathbf{P}}^{-1}\right)-p
+$$
+
 
 ## References {.allowframebreaks}

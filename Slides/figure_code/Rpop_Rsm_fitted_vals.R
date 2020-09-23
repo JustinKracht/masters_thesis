@@ -74,7 +74,7 @@ ggplot(Ds_emm,
              scales = "fixed",
              labeller = label_parsed) +
   scale_x_continuous(breaks = c(0.3, 0.5, 0.7)) +
-  labs(y = TeX("$D_s(\\mathbf{R}_{Pop}, \\mathbf{R}_{Sm})$"),
+  labs(y = TeX("$D_s(\\mathbf{R}_{Sm}, \\mathbf{R}_{Pop})$"),
        x = "Factor Loading",
        color = "Smoothing \nMethod",
        shape = "Smoothing \nMethod",
