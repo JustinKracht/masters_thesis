@@ -52,7 +52,7 @@ We often want to conduct exploratory factor analysis on binary response data
 
 - Tetrachoric correlation matrices are sometimes \alert{indefinite}
 
-- \alert{Matrix smoothing algorithms} produce a proper "smoothed" matrix from and indefinite matrix
+- \alert{Matrix smoothing algorithms} produce a proper "smoothed" matrix from an indefinite matrix
 
 ## Previous Work
 
