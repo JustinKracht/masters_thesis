@@ -1,4 +1,4 @@
-# Factor Loading Recovery of Smoothed Non-positive Definite Correlation Matrices
+# Factor Loading Recovery of Smoothed Indefinite Correlation Matrices
 
 This repo contains all of the code to reproduce the simulation, analyses, figures, and tables for my master's thesis (as well as the manuscript itself). To do so, follow these steps:
 
